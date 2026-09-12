@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="fondo_principal">#F5F7FA</color>
-    <color name="color_primario">#1976D2</color>
-    <color name="color_primario_oscuro">#0D47A1</color>
-    <color name="texto_principal">#212121</color>
-    <color name="texto_secundario">#757575</color>
-    <color name="fondo_input">#FFFFFF</color>
-    <color name="borde_input">#BDBDBD</color>
-    <color name="blanco">#FFFFFF</color>
+    <color name="fondo_principal">#F5F7FA</color>             <!-- Fondo general de la pantalla -->
+    <color name="color_primario">#1976D2</color>              <!-- Botones y elementos principales -->
+    <color name="color_primario_oscuro">#0D47A1</color>       <!-- Detalles o elemnetos destacados -->
+    <color name="texto_principal">#212121</color>             <!-- Titulos y textos importantes -->
+    <color name="texto_secundario">#757575</color>            <!-- Textos menos importantes -->
+    <color name="fondo_input">#FFFFFF</color>                 <!-- Fondo de los campos -->
+    <color name="borde_input">#BDBDBD</color>                 <!-- Borde de los campos -->
+    <color name="blanco">#FFFFFF</color>                      <!-- Texto blanco -->
 
 </resources>
