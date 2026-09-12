@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/fondo_principal"
+    android:gravity="center_vertical">
+
+    <!-- Titulo Principal -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrate"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"
+        android:textColor="@color/texto_principal"
+        android:layout_gravity="center_horizontal"/>
+
+    <!-- Campo Nombre Completo-->
+    <EditText
+        android:id="@+id/etNombreCompleto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="Nombre Completo"
+        android:textColorHint="@color/texto_secundario"
+        android:textColor="@color/texto_principal"
+        android:inputType="textPersonName"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/input_fondo" />
+
+    <!-- Campo Correo Electronico -->
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="Correo Electonico"
+        android:textColorHint="@color/texto_secundario"
+        android:textColor="@color/texto_principal"
+        android:inputType="textEmailAddress"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/input_fondo" />
+
+    <!-- Campo DNI -->
+    <EditText
+        android:id="@+id/etDNI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="DNI"
+        android:textColorHint="@color/texto_secundario"
+        android:textColor="@color/texto_principal"
+        android:inputType="number"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/input_fondo" />
+
+    <!-- Campo Contraseña -->
+    <EditText
+        android:id="@+id/etContrasena"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="Contraseña"
+        android:textColorHint="@color/texto_secundario"
+        android:textColor="@color/texto_principal"
+        android:inputType="textPassword"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/input_fondo" />
+
+    <!-- Campo Ubicacion -->
+    <EditText
+        android:id="@+id/etUbicacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="Ubicacion"
+        android:textColorHint="@color/texto_secundario"
+        android:textColor="@color/texto_principal"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/input_fondo" />
+
+    <!-- Campo Oficio -->
+    <EditText
+        android:id="@+id/etOficio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="Oficio (opcional)"
+        android:textColorHint="@color/texto_secundario"
+        android:textColor="@color/texto_principal"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/input_fondo" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRegistrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="Registrarse"
+        android:background="@drawable/boton_redondeado"
+        android:textColor="@color/blanco"/>
+
+</LinearLayout>
