@@ -1,5 +1,6 @@
 package com.ispc.servimatch;
 
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,20 +45,60 @@ public class RegistroActivity extends AppCompatActivity {
                 String oficio = etOficio.getText().toString().trim();
 
                 // Validamos que los campos obligatorios no esten vacios
-                                if (nombre.isEmpty() || email.isEmpty() || dni.isEmpty()
-                                        || contrasena.isEmpty() || ubicacion.isEmpty()) {
+                if (nombre.isEmpty() || email.isEmpty() || dni.isEmpty()
+                        || contrasena.isEmpty() || ubicacion.isEmpty()) {
 
-                                    Toast.makeText(RegistroActivity.this,
-                                            "Complete todos los campos obligatorios",
-                                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroActivity.this,
+                            "Complete todos los campos obligatorios",
+                            Toast.LENGTH_SHORT).show();
 
-                                    return;
-                                }
+                    return;
+                }
 
-                // Si los datos son correctos
-                                Toast.makeText(RegistroActivity.this,
-                                        "Registro exitoso",
-                                        Toast.LENGTH_SHORT).show();
+                // Validamos el campo Nombre Completo
+                if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+")) {
+
+                    Toast.makeText(RegistroActivity.this,
+                            "El nombre solo puede contener letras",
+                            Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+
+                // Validamos el campo Correo Electronico
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+
+                    Toast.makeText(RegistroActivity.this,
+                            "Ingrese un correo electronico valido",
+                            Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+
+                // Validamos el campo DNI
+                if (dni.length() != 8) {
+
+                    Toast.makeText(RegistroActivity.this,
+                            "El DNI debe tener 8 digitos",
+                            Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+
+                // Validamos el campo Contrasena
+                if (contrasena.length() < 6) {
+
+                    Toast.makeText(RegistroActivity.this,
+                            "La contraseña debe tener al menos 6 caracteres",
+                            Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+
+                // Si todas las validaciones son correctas
+                Toast.makeText(RegistroActivity.this,
+                        "Registro exitoso",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
