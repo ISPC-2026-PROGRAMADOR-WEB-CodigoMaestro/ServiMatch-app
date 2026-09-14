@@ -33,3 +33,4 @@ De esta manera, la plataforma busca fortalecer la conexión entre clientes y tra
 | Franco Daniel Gimenez Benitez | Developer |
 | Emilce Agustina Torres | Developer |
 | Kevin Cristofer Lorea Tannfeld | Developer |
+| Fernando Guillermo Cazon | Developer |
