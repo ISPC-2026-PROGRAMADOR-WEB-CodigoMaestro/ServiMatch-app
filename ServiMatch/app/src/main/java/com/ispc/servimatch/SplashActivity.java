@@ -1,4 +1,4 @@
-package com.servimatch;
+package com.ispc.servimatch;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +11,25 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Espera 3 segundos y abre MainActivity
-        new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            finish();
-        }, 3000);
+        // Temporizador para cambiar de pantalla automáticamente
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+
+                // Crear el Intent explícito hacia LoginActivity
+                Intent intent = new Intent(
+                        SplashActivity.this,
+                        LoginActivity.class
+                );
+
+                startActivity(intent);
+
+                // Cerrar SplashActivity para que el usuario
+                // no vuelva a ella con el botón Atrás
+                finish();
+            }
+
+        }, 2500); // Tiempo en milisegundos
     }
 }
