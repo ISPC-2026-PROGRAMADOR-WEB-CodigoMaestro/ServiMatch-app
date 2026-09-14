@@ -9,5 +9,5 @@
     <color name="fondo_input">#FFFFFF</color>                 <!-- Fondo de los campos -->
     <color name="borde_input">#BDBDBD</color>                 <!-- Borde de los campos -->
     <color name="blanco">#FFFFFF</color>                      <!-- Texto blanco -->
-
+    <color name="fondo_splash">#082B59</color>                <!-- Fondo del Splash -->
 </resources>

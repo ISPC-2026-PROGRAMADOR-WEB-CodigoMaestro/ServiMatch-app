@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.content.Intent;
 
 public class RegistroActivity extends AppCompatActivity {
 
@@ -99,6 +100,17 @@ public class RegistroActivity extends AppCompatActivity {
                 Toast.makeText(RegistroActivity.this,
                         "Registro exitoso",
                         Toast.LENGTH_SHORT).show();
+
+                //Redirigimos al Login
+                Intent intent = new Intent(
+                        RegistroActivity.this,
+                        LoginActivity.class
+                );
+
+                startActivity(intent);
+
+                 // Cerramos RegistroActivity
+                finish();
             }
         });
     }
