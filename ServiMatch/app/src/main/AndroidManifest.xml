@@ -13,22 +13,25 @@
         android:theme="@style/Theme.ServiMatch"
         tools:targetApi="31">
 
+        <!-- SplashActivity como pantalla inicial -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- MainActivity (pantalla principal) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+
+        <!-- DashboardActivity -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
-
     </application>
-
 </manifest>
