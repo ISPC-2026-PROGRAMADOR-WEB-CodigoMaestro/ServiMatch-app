@@ -72,6 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/color_primario"
                 android:text="Electricistas" />
 
             <Button
@@ -79,6 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/color_primario"
                 android:text="Plomeros" />
 
             <Button
@@ -86,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/color_primario"
                 android:text="Carpinteros" />
 
             <Button
@@ -93,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/color_primario"
                 android:text="Pintores" />
 
             <!-- Sección de cuenta -->
@@ -111,12 +115,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/color_primario_oscuro"
                 android:text="Mi perfil" />
 
             <Button
                 android:id="@+id/btnCerrarSesion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_primario_oscuro"
                 android:text="Cerrar sesión" />
 
         </LinearLayout>
