@@ -31,7 +31,17 @@ public class LoginActivity extends AppCompatActivity {
             String usuario = etUsuario.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (!usuario.isEmpty() && !password.isEmpty()) {
+            if (usuario.isEmpty()) {
+
+                etUsuario.setError("Ingresá tu usuario");
+                etUsuario.requestFocus();
+
+            } else if (password.isEmpty()) {
+
+                etPassword.setError("Ingresá tu contraseña");
+                etPassword.requestFocus();
+
+            } else {
 
                 Intent intent = new Intent(
                         LoginActivity.this,
@@ -41,16 +51,9 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("usuario", usuario);
 
                 startActivity(intent);
-
-            } else {
-
-                Toast.makeText(
-                        LoginActivity.this,
-                        "Completá todos los campos",
-                        Toast.LENGTH_SHORT
-                ).show();
-
             }
+
+
 
         });
 
