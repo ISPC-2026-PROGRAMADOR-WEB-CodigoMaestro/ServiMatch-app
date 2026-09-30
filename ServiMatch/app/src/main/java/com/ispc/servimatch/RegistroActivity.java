@@ -73,6 +73,12 @@ public class RegistroActivity extends AppCompatActivity {
                 String dni = etDNI.getText().toString().trim();
                 String contrasena = etContrasena.getText().toString().trim();
 
+                String ubicacion = "";
+
+                if (spUbicacion.getSelectedItemPosition() != 0) {
+                    ubicacion = spUbicacion.getSelectedItem().toString();
+                }
+
                 String oficio = "";
 
                 if (spOficio.getSelectedItemPosition() != 0) {
@@ -111,7 +117,7 @@ public class RegistroActivity extends AppCompatActivity {
                 }
 
                 // Validamos el campo DNI
-                if (dni.length() != 8) {
+                if (!dni.matches("\\d{8}")) {
 
                     Toast.makeText(RegistroActivity.this,
                             "El DNI debe tener 8 digitos",
@@ -125,6 +131,16 @@ public class RegistroActivity extends AppCompatActivity {
 
                     Toast.makeText(RegistroActivity.this,
                             "La contraseña debe tener al menos 6 caracteres",
+                            Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+
+                // Validamos que se haya seleccionado una ubicacion
+                if (spUbicacion.getSelectedItemPosition() == 0) {
+
+                    Toast.makeText(RegistroActivity.this,
+                            "Seleccione una ubicación",
                             Toast.LENGTH_SHORT).show();
 
                     return;
