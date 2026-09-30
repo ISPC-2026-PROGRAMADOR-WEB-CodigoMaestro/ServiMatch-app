@@ -1,3 +1,25 @@
 <resources>
+
     <string name="app_name">ServiMatch</string>
+
+    <string-array name="ubicaciones">
+        <item>Seleccione una ubicación</item>
+        <item>Córdoba</item>
+        <item>Jesús María</item>
+        <item>Colonia Caroya</item>
+        <item>Villa Allende</item>
+        <item>La Calera</item>
+    </string-array>
+
+    <string-array name="oficios">
+        <item>Seleccione un oficio (opcional)</item>
+        <item>Electricista</item>
+        <item>Plomero</item>
+        <item>Gasista</item>
+        <item>Albañil</item>
+        <item>Carpintero</item>
+        <item>Pintor</item>
+        <item>Jardinero</item>
+    </string-array>
+
 </resources>

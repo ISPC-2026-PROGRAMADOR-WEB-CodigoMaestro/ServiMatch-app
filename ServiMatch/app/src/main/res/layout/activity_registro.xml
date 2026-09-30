@@ -80,34 +80,28 @@
         android:background="@drawable/input_fondo" />
 
     <!-- Campo Ubicacion -->
-    <EditText
-        android:id="@+id/etUbicacion"
+    <Spinner
+        android:id="@+id/spUbicacion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:hint="Ubicacion"
-        android:textColorHint="@color/texto_secundario"
-        android:textColor="@color/texto_principal"
-        android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:layout_marginBottom="12dp"
-        android:background="@drawable/input_fondo" />
+        android:background="@drawable/input_fondo"
+        android:popupBackground="@color/blanco" />
 
     <!-- Campo Oficio -->
-    <EditText
-        android:id="@+id/etOficio"
+    <Spinner
+        android:id="@+id/spOficio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:hint="Oficio (opcional)"
-        android:textColorHint="@color/texto_secundario"
-        android:textColor="@color/texto_principal"
-        android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:layout_marginBottom="12dp"
-        android:background="@drawable/input_fondo" />
+        android:background="@drawable/input_fondo"
+        android:popupBackground="@color/blanco" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnRegistrar"
