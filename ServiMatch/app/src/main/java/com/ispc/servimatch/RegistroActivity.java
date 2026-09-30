@@ -14,6 +14,7 @@ import android.content.Intent;
 import com.ispc.servimatch.api.ApiService;
 import com.ispc.servimatch.api.RetrofitClient;
 import com.ispc.servimatch.model.Ubicacion;
+import com.ispc.servimatch.model.Oficio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,9 @@ public class RegistroActivity extends AppCompatActivity {
     // Lista donde guardamos las ubicaciones obtenidas desde Django
     private List<Ubicacion> listaUbicaciones = new ArrayList<>();
 
+    // Lista donde guardamos los oficios obtenidos desde Django
+    private List<Oficio> listaOficios = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,19 +57,8 @@ public class RegistroActivity extends AppCompatActivity {
         // Cargamos las ubicaciones desde la API de Django
         cargarUbicaciones();
 
-        // Cargamos temporalmente los oficios desde strings.xml
-        ArrayAdapter<CharSequence> adapterOficios =
-                ArrayAdapter.createFromResource(
-                        this,
-                        R.array.oficios,
-                        R.layout.spinner_item
-                );
-
-        adapterOficios.setDropDownViewResource(
-                R.layout.spinner_item
-        );
-
-        spOficio.setAdapter(adapterOficios);
+        // Cargamos los oficios desde la API de Django
+        cargarOficios();
 
         // Capturamos el clic del boton
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +211,64 @@ public class RegistroActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Ubicacion>> call, Throwable t) {
+
+                // Mostramos un mensaje si no se puede conectar con Django
+                Toast.makeText(RegistroActivity.this,
+                        "No se pudo conectar con el servidor",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Cargamos los oficios desde la API de Django
+    private void cargarOficios() {
+
+        // Creamos la conexion con la API
+        ApiService apiService =
+                RetrofitClient.getClient().create(ApiService.class);
+
+        // Solicitamos los oficios a Django
+        apiService.obtenerOficios().enqueue(new Callback<List<Oficio>>() {
+
+            @Override
+            public void onResponse(Call<List<Oficio>> call,
+                                   Response<List<Oficio>> response) {
+
+                // Verificamos que la respuesta sea correcta
+                if (response.isSuccessful() && response.body() != null) {
+
+                    listaOficios = response.body();
+
+                    // Creamos la lista que se mostrara en el Spinner
+                    List<String> oficios = new ArrayList<>();
+                    oficios.add("Seleccione un oficio (opcional)");
+
+                    // Agregamos los oficios recibidos desde Django
+                    for (Oficio oficio : listaOficios) {
+                        oficios.add(oficio.getNombre_oficio());
+                    }
+
+                    // Cargamos los oficios en el Spinner
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                            RegistroActivity.this,
+                            R.layout.spinner_item,
+                            oficios
+                    );
+
+                    adapter.setDropDownViewResource(R.layout.spinner_item);
+                    spOficio.setAdapter(adapter);
+
+                } else {
+
+                    // Mostramos un mensaje si Django responde con un error
+                    Toast.makeText(RegistroActivity.this,
+                            "Error al cargar los oficios",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Oficio>> call, Throwable t) {
 
                 // Mostramos un mensaje si no se puede conectar con Django
                 Toast.makeText(RegistroActivity.this,
