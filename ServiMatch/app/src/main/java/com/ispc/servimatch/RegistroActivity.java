@@ -11,6 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 
+import com.ispc.servimatch.api.ApiService;
+import com.ispc.servimatch.api.RetrofitClient;
+import com.ispc.servimatch.model.Ubicacion;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegistroActivity extends AppCompatActivity {
 
     // Declaramos los componentes
@@ -21,6 +32,9 @@ public class RegistroActivity extends AppCompatActivity {
     private Spinner spUbicacion;
     private Spinner spOficio;
     private Button btnRegistrar;
+
+    // Lista donde guardamos las ubicaciones obtenidas desde Django
+    private List<Ubicacion> listaUbicaciones = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +50,8 @@ public class RegistroActivity extends AppCompatActivity {
         spOficio = findViewById(R.id.spOficio);
         btnRegistrar = findViewById(R.id.btnRegistrar);
 
-        // Cargamos temporalmente las ubicaciones desde strings.xml
-        ArrayAdapter<CharSequence> adapterUbicaciones =
-                ArrayAdapter.createFromResource(
-                        this,
-                        R.array.ubicaciones,
-                        R.layout.spinner_item
-                );
-
-        adapterUbicaciones.setDropDownViewResource(
-                R.layout.spinner_item
-        );
-
-        spUbicacion.setAdapter(adapterUbicaciones);
+        // Cargamos las ubicaciones desde la API de Django
+        cargarUbicaciones();
 
         // Cargamos temporalmente los oficios desde strings.xml
         ArrayAdapter<CharSequence> adapterOficios =
@@ -68,6 +71,7 @@ public class RegistroActivity extends AppCompatActivity {
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String nombre = etNombreCompleto.getText().toString().trim();
                 String email = etEmail.getText().toString().trim();
                 String dni = etDNI.getText().toString().trim();
@@ -151,7 +155,7 @@ public class RegistroActivity extends AppCompatActivity {
                         "Registro exitoso",
                         Toast.LENGTH_SHORT).show();
 
-                //Redirigimos al Login
+                // Redirigimos al Login
                 Intent intent = new Intent(
                         RegistroActivity.this,
                         LoginActivity.class
@@ -159,8 +163,66 @@ public class RegistroActivity extends AppCompatActivity {
 
                 startActivity(intent);
 
-                 // Cerramos RegistroActivity
+                // Cerramos RegistroActivity
                 finish();
+            }
+        });
+    }
+
+    // Cargamos las ubicaciones desde la API de Django
+    private void cargarUbicaciones() {
+
+        // Creamos la conexion con la API
+        ApiService apiService =
+                RetrofitClient.getClient().create(ApiService.class);
+
+        // Solicitamos las ubicaciones a Django
+        apiService.obtenerUbicaciones().enqueue(new Callback<List<Ubicacion>>() {
+
+            @Override
+            public void onResponse(Call<List<Ubicacion>> call,
+                                   Response<List<Ubicacion>> response) {
+
+                // Verificamos que la respuesta sea correcta
+                if (response.isSuccessful() && response.body() != null) {
+
+                    listaUbicaciones = response.body();
+
+                    // Creamos la lista que se mostrara en el Spinner
+                    List<String> ubicaciones = new ArrayList<>();
+                    ubicaciones.add("Seleccione una ubicación");
+
+                    // Agregamos las ciudades recibidas desde Django
+                    for (Ubicacion ubicacion : listaUbicaciones) {
+                        ubicaciones.add(ubicacion.getCiudad());
+                    }
+
+                    // Cargamos las ubicaciones en el Spinner
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                            RegistroActivity.this,
+                            R.layout.spinner_item,
+                            ubicaciones
+                    );
+
+                    adapter.setDropDownViewResource(R.layout.spinner_item);
+                    spUbicacion.setAdapter(adapter);
+
+                } else {
+
+                    // Mostramos un mensaje si Django responde con un error
+                    Toast.makeText(RegistroActivity.this,
+                            "Error al cargar las ubicaciones",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Ubicacion>> call, Throwable t) {
+
+                // Mostramos un mensaje si no se puede conectar con Django
+                Toast.makeText(RegistroActivity.this,
+                        "No se pudo conectar con el servidor",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
