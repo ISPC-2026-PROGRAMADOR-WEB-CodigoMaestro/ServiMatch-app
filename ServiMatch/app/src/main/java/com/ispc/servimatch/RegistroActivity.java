@@ -15,6 +15,7 @@ import com.ispc.servimatch.api.ApiService;
 import com.ispc.servimatch.api.RetrofitClient;
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Oficio;
+import com.ispc.servimatch.model.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,21 +144,66 @@ public class RegistroActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Si todas las validaciones son correctas
-                Toast.makeText(RegistroActivity.this,
-                        "Registro exitoso",
-                        Toast.LENGTH_SHORT).show();
+                int posicionUbicacion = spUbicacion.getSelectedItemPosition() - 1;
+                Integer ubicacionId = listaUbicaciones.get(posicionUbicacion).getId();
 
-                // Redirigimos al Login
-                Intent intent = new Intent(
-                        RegistroActivity.this,
-                        LoginActivity.class
+                Integer oficioId = null;
+
+                if (spOficio.getSelectedItemPosition() != 0) {
+                    int posicionOficio = spOficio.getSelectedItemPosition() - 1;
+                    oficioId = listaOficios.get(posicionOficio).getId();
+                }
+
+                Integer rolId = 11;
+
+                Usuario usuario = new Usuario(
+                        nombre,
+                        email,
+                        contrasena,
+                        dni,
+                        rolId,
+                        oficioId,
+                        ubicacionId
                 );
 
-                startActivity(intent);
+                ApiService apiService =
+                        RetrofitClient.getClient().create(ApiService.class);
 
-                // Cerramos RegistroActivity
-                finish();
+                apiService.registrarUsuario(usuario).enqueue(new Callback<Usuario>() {
+
+                    @Override
+                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+
+                        if (response.isSuccessful()) {
+
+                            Toast.makeText(RegistroActivity.this,
+                                    "Registro exitoso",
+                                    Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(
+                                    RegistroActivity.this,
+                                    LoginActivity.class
+                            );
+
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+
+                            Toast.makeText(RegistroActivity.this,
+                                    "Error al registrar el usuario",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Usuario> call, Throwable t) {
+
+                        Toast.makeText(RegistroActivity.this,
+                                "No se pudo conectar con el servidor",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

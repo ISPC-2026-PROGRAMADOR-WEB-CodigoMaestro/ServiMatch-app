@@ -2,11 +2,14 @@ package com.ispc.servimatch.api;
 
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Oficio;
+import com.ispc.servimatch.model.Usuario;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 public interface ApiService {
 
@@ -16,4 +19,6 @@ public interface ApiService {
     @GET("api/oficios/")
     Call<List<Oficio>> obtenerOficios();
 
+    @POST("api/usuarios/")
+    Call<Usuario> registrarUsuario(@Body Usuario usuario);
 }
