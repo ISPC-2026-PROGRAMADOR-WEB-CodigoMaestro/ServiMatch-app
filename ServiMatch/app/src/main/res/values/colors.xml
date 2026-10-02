@@ -10,4 +10,5 @@
     <color name="borde_input">#BDBDBD</color>                 <!-- Borde de los campos -->
     <color name="blanco">#FFFFFF</color>                      <!-- Texto blanco -->
     <color name="fondo_splash">#082B59</color>                <!-- Fondo del Splash -->
+    <color name="rojo">#FF0000</color>                        <!-- Campos obligatorios -->
 </resources>
