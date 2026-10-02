@@ -3,6 +3,8 @@ package com.ispc.servimatch.api;
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Oficio;
 import com.ispc.servimatch.model.Usuario;
+import com.ispc.servimatch.model.LoginRequest;
+import com.ispc.servimatch.model.LoginResponse;
 
 import java.util.List;
 
@@ -21,4 +23,7 @@ public interface ApiService {
 
     @POST("api/usuarios/")
     Call<Usuario> registrarUsuario(@Body Usuario usuario);
+
+    @POST("api/login/")
+    Call<LoginResponse> login(@Body LoginRequest loginRequest);
 }
