@@ -9,124 +9,400 @@
     android:background="@color/fondo_principal"
     tools:context=".DashboardActivity">
 
+    <!-- ===================================== -->
+    <!-- CONTENIDO PRINCIPAL DEL DASHBOARD -->
+    <!-- ===================================== -->
+
     <ScrollView
+        android:id="@+id/scrollDashboard"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/barraNavigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:orientation="vertical">
 
-            <!-- Título de la aplicación -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:text="ServiMatch"
-                android:textColor="@color/color_primario"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+            <!-- ===================================== -->
+            <!-- ENCABEZADO -->
+            <!-- ===================================== -->
 
-            <!-- Mensaje de bienvenida -->
-            <TextView
-                android:id="@+id/txtBienvenida"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="¡Hola!"
-                android:textColor="@color/texto_principal"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <!-- Subtítulo -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
-                android:text="¿Qué servicio necesitás hoy?"
-                android:textColor="@color/texto_secundario"
-                android:textSize="16sp" />
-
-            <!-- Sección de categorías -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"
-                android:text="Categorías"
-                android:textColor="@color/texto_principal"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btnElectricistas"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/color_primario"
-                android:text="Electricistas" />
+                android:background="@color/color_primario_oscuro"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
 
-            <Button
-                android:id="@+id/btnPlomeros"
+                <!-- LOGO -->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:contentDescription="Logo de ServiMatch"
+                    android:src="@drawable/logo" />
+
+                <!-- NOMBRE DE LA APP -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="ServiMatch"
+                    android:textColor="@color/blanco"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <!-- BIENVENIDA -->
+                <TextView
+                    android:id="@+id/txtBienvenida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="¡Hola!"
+                    android:textColor="@color/blanco"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- SLOGAN -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="El servicio ideal, con la confianza que necesitás"
+                    android:textColor="@color/blanco"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- ===================================== -->
+            <!-- CONTENIDO DE SERVICIOS -->
+            <!-- ===================================== -->
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/color_primario"
-                android:text="Plomeros" />
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <Button
-                android:id="@+id/btnCarpinteros"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/color_primario"
-                android:text="Carpinteros" />
+                <!-- TÍTULO -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="¿Qué servicio necesitás?"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnPintores"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/color_primario"
-                android:text="Pintores" />
+                <!-- SUBTÍTULO -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Seleccioná un oficio para ver los profesionales disponibles."
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp" />
 
-            <!-- Sección de cuenta -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"
-                android:text="Mi cuenta"
-                android:textColor="@color/texto_principal"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                <!-- ===================================== -->
+                <!-- GRILLA DE OFICIOS -->
+                <!-- ===================================== -->
 
-            <Button
-                android:id="@+id/btnPerfil"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/color_primario_oscuro"
-                android:text="Mi perfil" />
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:columnCount="2">
 
-            <Button
-                android:id="@+id/btnCerrarSesion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/color_primario_oscuro"
-                android:text="Cerrar sesión" />
+                    <!-- ELECTRICISTA -->
+
+                    <LinearLayout
+                        android:id="@+id/cardElectricista"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⚡"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Electricista"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- PLOMERO -->
+
+                    <LinearLayout
+                        android:id="@+id/cardPlomero"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🚰"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Plomero"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- GASISTA -->
+
+                    <LinearLayout
+                        android:id="@+id/cardGasista"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔥"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Gasista"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- CARPINTERO -->
+
+                    <LinearLayout
+                        android:id="@+id/cardCarpintero"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔨"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Carpintero"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- PINTOR -->
+
+                    <LinearLayout
+                        android:id="@+id/cardPintor"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎨"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Pintor"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- JARDINERO -->
+
+                    <LinearLayout
+                        android:id="@+id/cardJardinero"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌱"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Jardinero"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- CERRAJERO -->
+
+                    <LinearLayout
+                        android:id="@+id/cardCerrajero"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔑"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Cerrajero"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- MECÁNICO -->
+
+                    <LinearLayout
+                        android:id="@+id/cardMecanico"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/card_oficio"
+                        android:clickable="true"
+                        android:elevation="4dp"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔧"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Mecánico"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </GridLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- ===================================== -->
+    <!-- COMPONENTE BARRA DE NAVEGACIÓN -->
+    <!-- ===================================== -->
+
+    <include
+        android:id="@+id/barraNavigation"
+        layout="@layout/barra_navigation"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
