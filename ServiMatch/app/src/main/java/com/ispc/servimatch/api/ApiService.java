@@ -15,15 +15,23 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
+    // Obtener ubicaciones
     @GET("api/ubicaciones/")
     Call<List<Ubicacion>> obtenerUbicaciones();
 
+    // Obtener oficios
     @GET("api/oficios/")
     Call<List<Oficio>> obtenerOficios();
 
+    // Obtener usuarios
+    @GET("api/usuarios/")
+    Call<List<Usuario>> obtenerUsuarios();
+
+    // Registrar usuario
     @POST("api/usuarios/")
     Call<Usuario> registrarUsuario(@Body Usuario usuario);
 
+    // Login
     @POST("api/login/")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 }
