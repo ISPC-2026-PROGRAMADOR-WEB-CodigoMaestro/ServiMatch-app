@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -170,5 +173,31 @@ public class DashboardActivity extends AppCompatActivity {
         );
 
         startActivity(intent);
+        setContentView(R.layout.activity_dashboard);
+
+        txtBienvenida = findViewById(R.id.txtBienvenida);
+
+        String usuario = getIntent().getStringExtra("usuario");
+
+        if (usuario != null && !usuario.isEmpty()) {
+            txtBienvenida.setText("¡Hola, " + usuario + "!");
+        }
+
+        Button btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
+
+        btnCerrarSesion.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    DashboardActivity.this,
+                    LoginActivity.class
+            );
+
+            intent.setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+            );
+
+            startActivity(intent);
+        });
     }
 }
