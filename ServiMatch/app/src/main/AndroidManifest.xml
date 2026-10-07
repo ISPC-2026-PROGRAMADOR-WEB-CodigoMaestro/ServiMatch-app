@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,40 +13,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ServiMatch"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <!-- SplashActivity como pantalla inicial -->
+        <activity
+            android:name=".ProfesionalesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PerfilActivity"
+            android:exported="false" /> <!-- SplashActivity como pantalla inicial -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity>
-
-        <!-- LoginActivity -->
+        </activity> <!-- LoginActivity -->
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
-
-        <!-- RegistroActivity -->
+            android:exported="false" /> <!-- RegistroActivity -->
         <activity
             android:name=".RegistroActivity"
-            android:exported="false" />
-
-        <!-- MainActivity -->
+            android:exported="false" /> <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-
-        <!-- DashboardActivity -->
+            android:exported="false" /> <!-- DashboardActivity -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
-
     </application>
 
 </manifest>
