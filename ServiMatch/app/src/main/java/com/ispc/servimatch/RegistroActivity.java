@@ -115,10 +115,10 @@ public class RegistroActivity extends AppCompatActivity {
                 }
 
                 // Validamos el campo DNI
-                if (!dni.matches("\\d{8}")) {
+                if (!dni.matches("\\d{7,8}")) {
 
                     Toast.makeText(RegistroActivity.this,
-                            "El DNI debe tener 8 digitos",
+                            "El DNI debe contener entre 7 y 8 dígitos",
                             Toast.LENGTH_SHORT).show();
 
                     return;
@@ -190,10 +190,39 @@ public class RegistroActivity extends AppCompatActivity {
 
                         } else {
 
-                            Toast.makeText(RegistroActivity.this,
-                                    "Error al registrar el usuario",
-                                    Toast.LENGTH_SHORT).show();
+                            try {
+
+                                String error = response.errorBody() != null
+                                        ? response.errorBody().string()
+                                        : "";
+
+                                if (error.contains("\"email\"")) {
+
+                                    Toast.makeText(RegistroActivity.this,
+                                            "El correo electrónico ya está registrado",
+                                            Toast.LENGTH_SHORT).show();
+
+                                } else if (error.contains("\"dni\"")) {
+
+                                    Toast.makeText(RegistroActivity.this,
+                                            "El DNI ya está registrado",
+                                            Toast.LENGTH_SHORT).show();
+
+                                } else {
+
+                                    Toast.makeText(RegistroActivity.this,
+                                            "Error al registrar el usuario",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+                            } catch (Exception e) {
+
+                                Toast.makeText(RegistroActivity.this,
+                                        "Error al registrar el usuario",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
+
                     }
 
                     @Override

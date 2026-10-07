@@ -40,15 +40,29 @@ public class LoginActivity extends AppCompatActivity {
             String usuario = etUsuario.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (usuario.isEmpty()) {
+            if (usuario.isEmpty() && password.isEmpty()) {
 
-                etUsuario.setError("Ingresá tu usuario o email");
-                etUsuario.requestFocus();
+                Toast.makeText(
+                        LoginActivity.this,
+                        "Completá el correo electrónico y la contraseña",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+            } else if (usuario.isEmpty()) {
+
+                Toast.makeText(
+                        LoginActivity.this,
+                        "Ingresá tu correo electrónico",
+                        Toast.LENGTH_SHORT
+                ).show();
 
             } else if (password.isEmpty()) {
 
-                etPassword.setError("Ingresá tu contraseña");
-                etPassword.requestFocus();
+                Toast.makeText(
+                        LoginActivity.this,
+                        "Ingresá tu contraseña",
+                        Toast.LENGTH_SHORT
+                ).show();
 
             } else {
 
@@ -131,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     Toast.makeText(
                             LoginActivity.this,
-                            "Usuario o contraseña incorrectos",
+                            "Correo electrónico o contraseña incorrectos",
                             Toast.LENGTH_LONG
                     ).show();
                 }
