@@ -3,6 +3,7 @@ package com.ispc.servimatch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +28,10 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout navContacto;
     private LinearLayout navPerfil;
 
+    // Elementos visuales de Inicio
+    private TextView iconInicio;
+    private TextView textoInicio;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,25 +41,62 @@ public class DashboardActivity extends AppCompatActivity {
         // VINCULAR ELEMENTOS DEL DASHBOARD
         // =========================================
 
-        txtBienvenida = findViewById(R.id.txtBienvenida);
+        txtBienvenida =
+                findViewById(R.id.txtBienvenida);
 
         // Cards
-        cardElectricista = findViewById(R.id.cardElectricista);
-        cardPlomero = findViewById(R.id.cardPlomero);
-        cardGasista = findViewById(R.id.cardGasista);
-        cardCarpintero = findViewById(R.id.cardCarpintero);
-        cardPintor = findViewById(R.id.cardPintor);
-        cardJardinero = findViewById(R.id.cardJardinero);
-        cardCerrajero = findViewById(R.id.cardCerrajero);
-        cardMecanico = findViewById(R.id.cardMecanico);
+        cardElectricista =
+                findViewById(R.id.cardElectricista);
+
+        cardPlomero =
+                findViewById(R.id.cardPlomero);
+
+        cardGasista =
+                findViewById(R.id.cardGasista);
+
+        cardCarpintero =
+                findViewById(R.id.cardCarpintero);
+
+        cardPintor =
+                findViewById(R.id.cardPintor);
+
+        cardJardinero =
+                findViewById(R.id.cardJardinero);
+
+        cardCerrajero =
+                findViewById(R.id.cardCerrajero);
+
+        cardMecanico =
+                findViewById(R.id.cardMecanico);
 
         // =========================================
-        // RECIBIR USUARIO DESDE LOGIN
+        // RECIBIR DATOS DEL USUARIO DESDE LOGIN
         // =========================================
 
-        String usuario = getIntent().getStringExtra("usuario");
+        String usuario =
+                getIntent().getStringExtra("usuario");
 
-        if (usuario != null && !usuario.isEmpty()) {
+        int idUsuario =
+                getIntent().getIntExtra(
+                        "id_usuario",
+                        -1
+                );
+
+        int idRol =
+                getIntent().getIntExtra(
+                        "id_rol",
+                        -1
+                );
+
+        String rol =
+                getIntent().getStringExtra("rol");
+
+        // =========================================
+        // MOSTRAR BIENVENIDA
+        // =========================================
+
+        if (usuario != null
+                && !usuario.isEmpty()) {
 
             txtBienvenida.setText(
                     "¡Hola, " + usuario + "!"
@@ -62,7 +104,9 @@ public class DashboardActivity extends AppCompatActivity {
 
         } else {
 
-            txtBienvenida.setText("¡Hola!");
+            txtBienvenida.setText(
+                    "¡Hola!"
+            );
         }
 
         // =========================================
@@ -70,46 +114,113 @@ public class DashboardActivity extends AppCompatActivity {
         // =========================================
 
         cardElectricista.setOnClickListener(v -> {
-            abrirProfesionales("Electricista");
+
+            abrirProfesionales(
+                    "Electricista"
+            );
+
         });
 
         cardPlomero.setOnClickListener(v -> {
-            abrirProfesionales("Plomero");
+
+            abrirProfesionales(
+                    "Plomero"
+            );
+
         });
 
         cardGasista.setOnClickListener(v -> {
-            abrirProfesionales("Gasista");
+
+            abrirProfesionales(
+                    "Gasista"
+            );
+
         });
 
         cardCarpintero.setOnClickListener(v -> {
-            abrirProfesionales("Carpintero");
+
+            abrirProfesionales(
+                    "Carpintero"
+            );
+
         });
 
         cardPintor.setOnClickListener(v -> {
-            abrirProfesionales("Pintor");
+
+            abrirProfesionales(
+                    "Pintor"
+            );
+
         });
 
         cardJardinero.setOnClickListener(v -> {
-            abrirProfesionales("Jardinero");
+
+            abrirProfesionales(
+                    "Jardinero"
+            );
+
         });
 
         cardCerrajero.setOnClickListener(v -> {
-            abrirProfesionales("Cerrajero");
+
+            abrirProfesionales(
+                    "Cerrajero"
+            );
+
         });
 
         cardMecanico.setOnClickListener(v -> {
-            abrirProfesionales("Mecánico");
+
+            abrirProfesionales(
+                    "Mecánico"
+            );
+
         });
 
         // =========================================
         // BARRA DE NAVEGACIÓN
         // =========================================
 
-        navInicio = findViewById(R.id.navInicio);
-        navContacto = findViewById(R.id.navContacto);
-        navPerfil = findViewById(R.id.navPerfil);
+        navInicio =
+                findViewById(R.id.navInicio);
 
-        // INICIO
+        navContacto =
+                findViewById(R.id.navContacto);
+
+        navPerfil =
+                findViewById(R.id.navPerfil);
+
+        iconInicio =
+                findViewById(R.id.iconInicio);
+
+        textoInicio =
+                findViewById(R.id.textoInicio);
+
+        // =========================================
+        // MARCAR INICIO COMO SELECCIONADO
+        // =========================================
+
+        iconInicio.setTextColor(
+                getResources().getColor(
+                        R.color.color_primario
+                )
+        );
+
+        textoInicio.setTextColor(
+                getResources().getColor(
+                        R.color.color_primario
+                )
+        );
+
+        textoInicio.setTypeface(
+                null,
+                Typeface.BOLD
+        );
+
+        // =========================================
+        // NAVEGACIÓN - INICIO
+        // =========================================
+
         navInicio.setOnClickListener(v -> {
 
             Toast.makeText(
@@ -120,7 +231,10 @@ public class DashboardActivity extends AppCompatActivity {
 
         });
 
-        // CONTACTO
+        // =========================================
+        // NAVEGACIÓN - CONTACTO
+        // =========================================
+
         navContacto.setOnClickListener(v -> {
 
             Toast.makeText(
@@ -131,18 +245,44 @@ public class DashboardActivity extends AppCompatActivity {
 
         });
 
-        // PERFIL
+        // =========================================
+        // NAVEGACIÓN - PERFIL
+        // =========================================
+
         navPerfil.setOnClickListener(v -> {
 
-            Intent intent = new Intent(
-                    DashboardActivity.this,
-                    PerfilActivity.class
-            );
+            Intent intent =
+                    new Intent(
+                            DashboardActivity.this,
+                            PerfilActivity.class
+                    );
+
+            // Enviamos los datos del usuario
+            // que inició sesión.
 
             if (usuario != null) {
+
                 intent.putExtra(
                         "usuario",
                         usuario
+                );
+            }
+
+            intent.putExtra(
+                    "id_usuario",
+                    idUsuario
+            );
+
+            intent.putExtra(
+                    "id_rol",
+                    idRol
+            );
+
+            if (rol != null) {
+
+                intent.putExtra(
+                        "rol",
+                        rol
                 );
             }
 
@@ -155,12 +295,14 @@ public class DashboardActivity extends AppCompatActivity {
     // ABRIR LISTADO DE PROFESIONALES
     // =============================================
 
-    private void abrirProfesionales(String oficio) {
+    private void abrirProfesionales(
+            String oficio) {
 
-        Intent intent = new Intent(
-                DashboardActivity.this,
-                ProfesionalesActivity.class
-        );
+        Intent intent =
+                new Intent(
+                        DashboardActivity.this,
+                        ProfesionalesActivity.class
+                );
 
         // Enviamos el oficio seleccionado
         intent.putExtra(

@@ -1,7 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ServiMatch" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+    <!-- Tema de la aplicación en modo oscuro -->
+    <style name="Base.Theme.ServiMatch"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="android:windowBackground">
+            @color/fondo_principal
+        </item>
+
     </style>
+
 </resources>
