@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -27,11 +28,21 @@ public interface ApiService {
     @GET("api/usuarios/")
     Call<List<Usuario>> obtenerUsuarios();
 
+    // Obtener un usuario por ID
+    @GET("api/usuarios/{id}/")
+    Call<Usuario> obtenerUsuario(
+            @Path("id") int id
+    );
+
     // Registrar usuario
     @POST("api/usuarios/")
-    Call<Usuario> registrarUsuario(@Body Usuario usuario);
+    Call<Usuario> registrarUsuario(
+            @Body Usuario usuario
+    );
 
     // Login
     @POST("api/login/")
-    Call<LoginResponse> login(@Body LoginRequest loginRequest);
+    Call<LoginResponse> login(
+            @Body LoginRequest loginRequest
+    );
 }

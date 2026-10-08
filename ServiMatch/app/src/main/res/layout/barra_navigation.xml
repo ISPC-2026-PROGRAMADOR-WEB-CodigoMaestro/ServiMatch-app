@@ -26,18 +26,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="⌂"
-            android:textColor="@color/color_primario"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:textColor="@color/texto_secundario"
+            android:textSize="28sp" />
 
         <TextView
             android:id="@+id/textoInicio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Inicio"
-            android:textColor="@color/color_primario"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:textColor="@color/texto_secundario"
+            android:textSize="13sp" />
 
     </LinearLayout>
 
