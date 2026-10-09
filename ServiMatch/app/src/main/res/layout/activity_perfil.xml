@@ -9,7 +9,6 @@
     android:background="@color/fondo_principal"
     tools:context=".PerfilActivity">
 
-    <!-- CONTENIDO DEL PERFIL -->
     <ScrollView
         android:id="@+id/scrollPerfil"
         android:layout_width="0dp"
@@ -67,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:text="Nombre del usuario"
+                    android:text="Cargando..."
                     android:textColor="@color/texto_principal"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -84,7 +83,7 @@
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
 
-                <!-- TÍTULO INFORMACIÓN PERSONAL -->
+                <!-- INFORMACIÓN PERSONAL -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="20dp"
-                    android:text="usuario@email.com"
+                    android:text="Cargando..."
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
 
@@ -128,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="20dp"
-                    android:text="12345678"
+                    android:text="Cargando..."
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
 
@@ -147,19 +146,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="28dp"
-                    android:text="Ubicación del usuario"
+                    android:text="Cargando..."
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
-
-                <!-- EDITAR PERFIL -->
-                <Button
-                    android:id="@+id/btnEditarPerfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:backgroundTint="@color/color_primario"
-                    android:text="Editar perfil"
-                    android:textColor="@color/blanco" />
 
                 <!-- CERRAR SESIÓN -->
                 <Button
@@ -176,7 +165,6 @@
 
     </ScrollView>
 
-    <!-- BARRA DE NAVEGACIÓN REUTILIZABLE -->
     <include
         android:id="@+id/barraNavigation"
         layout="@layout/barra_navigation"

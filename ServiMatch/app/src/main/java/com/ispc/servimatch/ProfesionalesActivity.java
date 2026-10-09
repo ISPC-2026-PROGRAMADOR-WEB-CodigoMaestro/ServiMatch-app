@@ -184,8 +184,6 @@ public class ProfesionalesActivity extends AppCompatActivity {
                             List<Usuario> usuarios =
                                     response.body();
 
-                            // Una vez obtenidos los usuarios,
-                            // obtenemos las ubicaciones.
                             buscarUbicaciones(
                                     idOficio,
                                     usuarios
@@ -321,127 +319,69 @@ public class ProfesionalesActivity extends AppCompatActivity {
                 }
 
                 // =================================
-                // CREAR CARD
+                // CARGAR ITEM_PROFESIONAL.XML
                 // =================================
 
-                LinearLayout card =
-                        new LinearLayout(
-                                ProfesionalesActivity.this
+                View card = getLayoutInflater().inflate(
+                        R.layout.item_profesional,
+                        contenedorProfesionales,
+                        false
+                );
+
+                // =================================
+                // VINCULAR ELEMENTOS DE LA CARD
+                // =================================
+
+                TextView tvNombreProfesional =
+                        card.findViewById(
+                                R.id.tvNombreProfesional
                         );
 
-                card.setOrientation(
-                        LinearLayout.VERTICAL
-                );
-
-                card.setPadding(
-                        32,
-                        28,
-                        32,
-                        28
-                );
-
-                // Fondo de la card
-                card.setBackgroundResource(
-                        R.drawable.card_oficio
-                );
-
-                // =================================
-                // NOMBRE
-                // =================================
-
-                TextView tvNombre =
-                        new TextView(
-                                ProfesionalesActivity.this
+                TextView tvOficioProfesional =
+                        card.findViewById(
+                                R.id.tvOficioProfesional
                         );
 
-                tvNombre.setText(
+                TextView tvUbicacionProfesional =
+                        card.findViewById(
+                                R.id.tvUbicacionProfesional
+                        );
+
+                TextView tvIconoOficio =
+                        card.findViewById(
+                                R.id.tvIconoOficio
+                        );
+
+                // =================================
+                // DATOS OBTENIDOS DEL BACKEND
+                // =================================
+
+                tvNombreProfesional.setText(
                         usuario.getNombre()
                 );
 
-                tvNombre.setTextSize(19);
-
-                tvNombre.setTextColor(
-                        getResources().getColor(
-                                R.color.texto_principal
-                        )
-                );
-
-                // =================================
-                // OFICIO
-                // =================================
-
-                TextView tvOficio =
-                        new TextView(
-                                ProfesionalesActivity.this
-                        );
-
-                tvOficio.setText(
+                tvOficioProfesional.setText(
                         oficioSeleccionado
                 );
 
-                tvOficio.setTextSize(16);
-
-                tvOficio.setTextColor(
-                        getResources().getColor(
-                                R.color.color_primario
-                        )
-                );
-
-                // =================================
-                // UBICACIÓN
-                // =================================
-
-                TextView tvUbicacion =
-                        new TextView(
-                                ProfesionalesActivity.this
-                        );
-
-                tvUbicacion.setText(
+                tvUbicacionProfesional.setText(
                         nombreUbicacion
                 );
 
-                tvUbicacion.setTextSize(15);
+                // =================================
+                // ICONO SEGÚN OFICIO
+                // =================================
 
-                tvUbicacion.setTextColor(
-                        getResources().getColor(
-                                R.color.texto_secundario
-                        )
+                colocarIconoOficio(
+                        tvIconoOficio,
+                        oficioSeleccionado
                 );
 
                 // =================================
-                // AGREGAR DATOS A LA CARD
+                // AGREGAR CARD AL CONTENEDOR
                 // =================================
 
-                card.addView(tvNombre);
-                card.addView(tvOficio);
-                card.addView(tvUbicacion);
-
-                // =================================
-                // MARGEN ENTRE CARDS
-                // =================================
-
-                LinearLayout.LayoutParams parametros =
-                        new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                        );
-
-                parametros.setMargins(
-                        0,
-                        0,
-                        0,
-                        24
-                );
-
-                card.setLayoutParams(parametros);
-
-                // =================================
-                // AGREGAR CARD A LA PANTALLA
-                // =================================
-
-                contenedorProfesionales.addView(
-                        card
-                );
+                contenedorProfesionales.addView(card);
             }
         }
 
@@ -466,6 +406,60 @@ public class ProfesionalesActivity extends AppCompatActivity {
             tvSinProfesionales.setVisibility(
                     View.GONE
             );
+        }
+    }
+
+    // =============================================
+    // ICONO DEL OFICIO
+    // =============================================
+
+    private void colocarIconoOficio(
+            TextView tvIconoOficio,
+            String oficio) {
+
+        if (oficio == null) {
+            tvIconoOficio.setText("🛠");
+            return;
+        }
+
+        switch (oficio.toLowerCase()) {
+
+            case "electricista":
+                tvIconoOficio.setText("⚡");
+                break;
+
+            case "plomero":
+                tvIconoOficio.setText("💧");
+                break;
+
+            case "gasista":
+                tvIconoOficio.setText("🔥");
+                break;
+
+            case "carpintero":
+                tvIconoOficio.setText("🔨");
+                break;
+
+            case "pintor":
+                tvIconoOficio.setText("🖌");
+                break;
+
+            case "jardinero":
+                tvIconoOficio.setText("🌿");
+                break;
+
+            case "cerrajero":
+                tvIconoOficio.setText("🔑");
+                break;
+
+            case "mecánico":
+            case "mecanico":
+                tvIconoOficio.setText("🔧");
+                break;
+
+            default:
+                tvIconoOficio.setText("🛠");
+                break;
         }
     }
 }

@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ServiMatch" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Tema base de la aplicación -->
+    <style name="Base.Theme.ServiMatch"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="android:windowBackground">
+            @color/fondo_principal
+        </item>
+
     </style>
 
-    <style name="Theme.ServiMatch" parent="Base.Theme.ServiMatch" />
+    <style name="Theme.ServiMatch"
+        parent="Base.Theme.ServiMatch" />
+
 </resources>
