@@ -7,6 +7,7 @@ public class LoginResponse {
     private String nombre;
     private int id_rol;
     private String rol;
+    private String access;
 
     public String getMensaje() {
         return mensaje;
@@ -27,4 +28,6 @@ public class LoginResponse {
     public String getRol() {
         return rol;
     }
+
+    public String getAccess() {return access;}
 }

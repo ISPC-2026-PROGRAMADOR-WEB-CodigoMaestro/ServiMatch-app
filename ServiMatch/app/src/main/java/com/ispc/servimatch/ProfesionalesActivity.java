@@ -88,7 +88,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
 
         ApiService apiService =
                 RetrofitClient
-                        .getClient()
+                        .getClient(ProfesionalesActivity.this)
                         .create(ApiService.class);
 
         apiService.obtenerOficios().enqueue(
@@ -167,10 +167,10 @@ public class ProfesionalesActivity extends AppCompatActivity {
 
         ApiService apiService =
                 RetrofitClient
-                        .getClient()
+                        .getClient(ProfesionalesActivity.this)
                         .create(ApiService.class);
 
-        apiService.obtenerUsuarios().enqueue(
+        apiService.obtenerProfesionales().enqueue(
                 new Callback<List<Usuario>>() {
 
                     @Override
@@ -223,7 +223,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
 
         ApiService apiService =
                 RetrofitClient
-                        .getClient()
+                        .getClient(ProfesionalesActivity.this)
                         .create(ApiService.class);
 
         apiService.obtenerUbicaciones().enqueue(
@@ -285,11 +285,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
 
         for (Usuario usuario : usuarios) {
 
-            // Rol 11 = Estándar
-            // También debe coincidir el oficio.
-            if (usuario.getRol() != null
-                    && usuario.getOficio() != null
-                    && usuario.getRol().intValue() == 11
+            if (usuario.getOficio() != null
                     && usuario.getOficio().intValue() == idOficio) {
 
                 encontrado = true;

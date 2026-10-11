@@ -247,7 +247,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         ApiService apiService =
                 RetrofitClient
-                        .getClient()
+                        .getClient(PerfilActivity.this)
                         .create(ApiService.class);
 
         apiService.obtenerUsuario(idUsuario).enqueue(
@@ -353,7 +353,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         ApiService apiService =
                 RetrofitClient
-                        .getClient()
+                        .getClient(PerfilActivity.this)
                         .create(ApiService.class);
 
         apiService.obtenerUbicaciones().enqueue(
