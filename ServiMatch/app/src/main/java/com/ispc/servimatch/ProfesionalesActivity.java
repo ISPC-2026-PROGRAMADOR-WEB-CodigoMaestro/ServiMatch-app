@@ -1,7 +1,9 @@
+
 package com.ispc.servimatch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -33,30 +35,15 @@ public class ProfesionalesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesionales);
 
-        // =========================================
         // VINCULAR ELEMENTOS DEL XML
-        // =========================================
+        tvTituloOficio = findViewById(R.id.tvTituloOficio);
+        tvSinProfesionales = findViewById(R.id.tvSinProfesionales);
+        contenedorProfesionales = findViewById(R.id.contenedorProfesionales);
 
-        tvTituloOficio =
-                findViewById(R.id.tvTituloOficio);
-
-        tvSinProfesionales =
-                findViewById(R.id.tvSinProfesionales);
-
-        contenedorProfesionales =
-                findViewById(R.id.contenedorProfesionales);
-
-        // =========================================
         // RECIBIR OFICIO DESDE EL DASHBOARD
-        // =========================================
+        oficioSeleccionado = getIntent().getStringExtra("oficio");
 
-        oficioSeleccionado =
-                getIntent().getStringExtra("oficio");
-
-        // =========================================
         // MOSTRAR OFICIO SELECCIONADO
-        // =========================================
-
         if (oficioSeleccionado != null
                 && !oficioSeleccionado.isEmpty()) {
 
@@ -74,22 +61,15 @@ public class ProfesionalesActivity extends AppCompatActivity {
                     "No se seleccionó ningún oficio."
             );
 
-            tvSinProfesionales.setVisibility(
-                    View.VISIBLE
-            );
+            tvSinProfesionales.setVisibility(View.VISIBLE);
         }
     }
 
-    // =============================================
     // BUSCAR EL ID DEL OFICIO
-    // =============================================
-
     private void buscarOficio() {
 
         ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(ApiService.class);
+                RetrofitClient.getClient().create(ApiService.class);
 
         apiService.obtenerOficios().enqueue(
                 new Callback<List<Oficio>>() {
@@ -102,20 +82,16 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         if (response.isSuccessful()
                                 && response.body() != null) {
 
-                            List<Oficio> oficios =
-                                    response.body();
+                            List<Oficio> oficios = response.body();
 
                             Integer idOficio = null;
 
                             for (Oficio oficio : oficios) {
 
                                 if (oficio.getNombre_oficio()
-                                        .equalsIgnoreCase(
-                                                oficioSeleccionado)) {
+                                        .equalsIgnoreCase(oficioSeleccionado)) {
 
-                                    idOficio =
-                                            oficio.getId();
-
+                                    idOficio = oficio.getId();
                                     break;
                                 }
                             }
@@ -130,9 +106,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
                                         "El oficio seleccionado no está registrado."
                                 );
 
-                                tvSinProfesionales.setVisibility(
-                                        View.VISIBLE
-                                );
+                                tvSinProfesionales.setVisibility(View.VISIBLE);
                             }
 
                         } else {
@@ -159,18 +133,44 @@ public class ProfesionalesActivity extends AppCompatActivity {
                 });
     }
 
-    // =============================================
-    // OBTENER USUARIOS
-    // =============================================
-
+    // OBTENER PROFESIONALES CON TOKEN JWT
     private void buscarProfesionales(int idOficio) {
 
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(ApiService.class);
+        // RECUPERAR TOKEN GUARDADO EN LOGIN
+        SharedPreferences preferencias =
+                getSharedPreferences(
+                        "ServiMatchSesion",
+                        MODE_PRIVATE
+                );
 
-        apiService.obtenerUsuarios().enqueue(
+        String token = preferencias.getString(
+                "access_token",
+                null
+        );
+
+        // VALIDAR SESIÓN
+        if (token == null || token.isEmpty()) {
+
+            tvSinProfesionales.setText(
+                    "Iniciá sesión para consultar los profesionales."
+            );
+
+            tvSinProfesionales.setVisibility(View.VISIBLE);
+
+            Toast.makeText(
+                    this,
+                    "No hay una sesión activa",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        ApiService apiService =
+                RetrofitClient.getClient().create(ApiService.class);
+
+        // ENVIAR TOKEN JWT A DJANGO
+        apiService.obtenerUsuarios("Bearer " + token).enqueue(
                 new Callback<List<Usuario>>() {
 
                     @Override
@@ -181,19 +181,35 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         if (response.isSuccessful()
                                 && response.body() != null) {
 
-                            List<Usuario> usuarios =
-                                    response.body();
+                            List<Usuario> usuarios = response.body();
 
                             buscarUbicaciones(
                                     idOficio,
                                     usuarios
                             );
 
+                        } else if (response.code() == 401) {
+
+                            tvSinProfesionales.setText(
+                                    "Tu sesión expiró. Iniciá sesión nuevamente."
+                            );
+
+                            tvSinProfesionales.setVisibility(View.VISIBLE);
+
+                        } else if (response.code() == 403) {
+
+                            tvSinProfesionales.setText(
+                                    "No tenés permisos para consultar este listado."
+                            );
+
+                            tvSinProfesionales.setVisibility(View.VISIBLE);
+
                         } else {
 
                             Toast.makeText(
                                     ProfesionalesActivity.this,
-                                    "Error al obtener los profesionales",
+                                    "Error al obtener los profesionales. Código: "
+                                            + response.code(),
                                     Toast.LENGTH_LONG
                             ).show();
                         }
@@ -213,18 +229,13 @@ public class ProfesionalesActivity extends AppCompatActivity {
                 });
     }
 
-    // =============================================
     // OBTENER UBICACIONES
-    // =============================================
-
     private void buscarUbicaciones(
             int idOficio,
             List<Usuario> usuarios) {
 
         ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(ApiService.class);
+                RetrofitClient.getClient().create(ApiService.class);
 
         apiService.obtenerUbicaciones().enqueue(
                 new Callback<List<Ubicacion>>() {
@@ -237,8 +248,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         if (response.isSuccessful()
                                 && response.body() != null) {
 
-                            List<Ubicacion> ubicaciones =
-                                    response.body();
+                            List<Ubicacion> ubicaciones = response.body();
 
                             mostrarProfesionales(
                                     idOficio,
@@ -270,10 +280,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
                 });
     }
 
-    // =============================================
     // MOSTRAR PROFESIONALES
-    // =============================================
-
     private void mostrarProfesionales(
             int idOficio,
             List<Usuario> usuarios,
@@ -285,8 +292,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
 
         for (Usuario usuario : usuarios) {
 
-            // Rol 11 = Estándar
-            // También debe coincidir el oficio.
+            // ROL 11 Y OFICIO COINCIDENTE
             if (usuario.getRol() != null
                     && usuario.getOficio() != null
                     && usuario.getRol().intValue() == 11
@@ -297,10 +303,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
                 String nombreUbicacion =
                         "Ubicación no disponible";
 
-                // =================================
-                // BUSCAR UBICACIÓN DEL USUARIO
-                // =================================
-
+                // BUSCAR UBICACIÓN
                 if (usuario.getUbicacion() != null) {
 
                     for (Ubicacion ubicacion : ubicaciones) {
@@ -318,19 +321,12 @@ public class ProfesionalesActivity extends AppCompatActivity {
                     }
                 }
 
-                // =================================
-                // CARGAR ITEM_PROFESIONAL.XML
-                // =================================
-
+                // CARGAR TARJETA
                 View card = getLayoutInflater().inflate(
                         R.layout.item_profesional,
                         contenedorProfesionales,
                         false
                 );
-
-                // =================================
-                // VINCULAR ELEMENTOS DE LA CARD
-                // =================================
 
                 TextView tvNombreProfesional =
                         card.findViewById(
@@ -352,10 +348,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
                                 R.id.tvIconoOficio
                         );
 
-                // =================================
-                // DATOS OBTENIDOS DEL BACKEND
-                // =================================
-
+                // DATOS DEL PROFESIONAL
                 tvNombreProfesional.setText(
                         usuario.getNombre()
                 );
@@ -368,51 +361,34 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         nombreUbicacion
                 );
 
-                // =================================
                 // ICONO SEGÚN OFICIO
-                // =================================
-
                 colocarIconoOficio(
                         tvIconoOficio,
                         oficioSeleccionado
                 );
 
-                // =================================
-                // AGREGAR CARD AL CONTENEDOR
-                // =================================
-
+                // AGREGAR TARJETA
                 contenedorProfesionales.addView(card);
             }
         }
 
-        // =========================================
         // SIN PROFESIONALES
-        // =========================================
-
         if (!encontrado) {
 
             tvSinProfesionales.setText(
                     "No hay profesionales disponibles para "
-                            + oficioSeleccionado
-                            + "."
+                            + oficioSeleccionado + "."
             );
 
-            tvSinProfesionales.setVisibility(
-                    View.VISIBLE
-            );
+            tvSinProfesionales.setVisibility(View.VISIBLE);
 
         } else {
 
-            tvSinProfesionales.setVisibility(
-                    View.GONE
-            );
+            tvSinProfesionales.setVisibility(View.GONE);
         }
     }
 
-    // =============================================
     // ICONO DEL OFICIO
-    // =============================================
-
     private void colocarIconoOficio(
             TextView tvIconoOficio,
             String oficio) {
