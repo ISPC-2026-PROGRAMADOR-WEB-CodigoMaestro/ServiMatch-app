@@ -9,13 +9,14 @@
     android:background="@color/fondo_principal"
     tools:context=".PerfilActivity">
 
+    <!-- CONTENIDO DEL PERFIL -->
     <ScrollView
         android:id="@+id/scrollPerfil"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/barraNavigation"
+        app:layout_constraintBottom_toTopOf="@id/contenedorNavegacionPerfil"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -43,14 +44,14 @@
 
             </LinearLayout>
 
-            <!-- INFORMACIÓN -->
+            <!-- INFORMACIÓN DEL PERFIL -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- AVATAR -->
+                <!-- FOTO DE PERFIL -->
                 <ImageView
                     android:id="@+id/imgPerfil"
                     android:layout_width="100dp"
@@ -59,7 +60,7 @@
                     android:contentDescription="Foto de perfil"
                     android:src="@drawable/ic_launcher_foreground" />
 
-                <!-- NOMBRE -->
+                <!-- NOMBRE DEL USUARIO -->
                 <TextView
                     android:id="@+id/tvNombre"
                     android:layout_width="match_parent"
@@ -71,7 +72,7 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
-                <!-- ROL -->
+                <!-- ROL DEL USUARIO -->
                 <TextView
                     android:id="@+id/tvRol"
                     android:layout_width="match_parent"
@@ -83,7 +84,7 @@
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
 
-                <!-- INFORMACIÓN PERSONAL -->
+                <!-- TÍTULO INFORMACIÓN PERSONAL -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,7 +94,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <!-- EMAIL -->
+                <!-- ETIQUETA EMAIL -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,6 +103,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
+                <!-- EMAIL -->
                 <TextView
                     android:id="@+id/tvEmail"
                     android:layout_width="match_parent"
@@ -112,7 +114,7 @@
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
 
-                <!-- DNI -->
+                <!-- ETIQUETA DNI -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,6 +123,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
+                <!-- DNI -->
                 <TextView
                     android:id="@+id/tvDni"
                     android:layout_width="match_parent"
@@ -131,7 +134,7 @@
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
 
-                <!-- UBICACIÓN -->
+                <!-- ETIQUETA UBICACIÓN -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -140,6 +143,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
+                <!-- UBICACIÓN -->
                 <TextView
                     android:id="@+id/tvUbicacion"
                     android:layout_width="match_parent"
@@ -150,7 +154,7 @@
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
 
-                <!-- CERRAR SESIÓN -->
+                <!-- BOTÓN CERRAR SESIÓN -->
                 <Button
                     android:id="@+id/btnCerrarSesion"
                     android:layout_width="match_parent"
@@ -165,13 +169,31 @@
 
     </ScrollView>
 
-    <include
-        android:id="@+id/barraNavigation"
-        layout="@layout/barra_navigation"
+    <!-- CONTENEDOR DE LAS BARRAS DE NAVEGACIÓN -->
+    <FrameLayout
+        android:id="@+id/contenedorNavegacionPerfil"
         android:layout_width="0dp"
         android:layout_height="72dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- BARRA DE NAVEGACIÓN USUARIO ESTÁNDAR -->
+        <include
+            android:id="@+id/barraNavigation"
+            layout="@layout/barra_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- BARRA DE NAVEGACIÓN ADMINISTRADOR -->
+        <include
+            android:id="@+id/barraNavigationAdmin"
+            layout="@layout/barra_navigation_admin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

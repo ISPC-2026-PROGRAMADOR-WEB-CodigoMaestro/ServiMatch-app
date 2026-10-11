@@ -24,7 +24,14 @@ import retrofit2.Response;
 
 public class AdminUsuariosActivity extends AppCompatActivity {
 
+    // CONTENEDOR DEL LISTADO
     private LinearLayout contenedorUsuariosAdmin;
+
+    // BARRA DE NAVEGACIÓN
+    private LinearLayout navInicioAdmin;
+    private LinearLayout navUsuariosAdmin;
+    private LinearLayout navPerfilAdmin;
+    private LinearLayout navSalirAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +39,112 @@ public class AdminUsuariosActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_admin_usuarios);
 
+        // VINCULAR CONTENEDOR
         contenedorUsuariosAdmin =
                 findViewById(R.id.contenedorUsuariosAdmin);
 
+        // VINCULAR BARRA DE NAVEGACIÓN
+        navInicioAdmin =
+                findViewById(R.id.navInicioAdmin);
+
+        navUsuariosAdmin =
+                findViewById(R.id.navUsuariosAdmin);
+
+        navPerfilAdmin =
+                findViewById(R.id.navPerfilAdmin);
+
+        navSalirAdmin =
+                findViewById(R.id.navSalirAdmin);
+
+        // CONFIGURAR MENÚ
+        configurarNavegacion();
+
+        // CARGAR USUARIOS DESDE DJANGO
         cargarUsuarios();
     }
 
+    // =====================================
+    // CONFIGURAR BARRA DE NAVEGACIÓN
+    // =====================================
+    private void configurarNavegacion() {
+
+        // INICIO: VOLVER AL DASHBOARD
+        navInicioAdmin.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    AdminUsuariosActivity.this,
+                    AdminDashboardActivity.class
+            );
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+            finish();
+        });
+
+        // USUARIOS: PANTALLA ACTUAL
+        navUsuariosAdmin.setOnClickListener(v -> {
+            // Ya estamos en el listado de usuarios.
+        });
+
+        // PERFIL
+        navPerfilAdmin.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    AdminUsuariosActivity.this,
+                    PerfilActivity.class
+            );
+
+            startActivity(intent);
+        });
+
+        // SALIR
+        navSalirAdmin.setOnClickListener(v -> {
+            cerrarSesion();
+        });
+    }
+
+    // =====================================
+    // CERRAR SESIÓN
+    // =====================================
+    private void cerrarSesion() {
+
+        // LIMPIAR SESIÓN PRINCIPAL
+        SharedPreferences sesion =
+                getSharedPreferences(
+                        "ServiMatchSesion",
+                        MODE_PRIVATE
+                );
+
+        sesion.edit().clear().apply();
+
+        // LIMPIAR TOKEN UTILIZADO POR RETROFIT
+        SharedPreferences preferencias =
+                getSharedPreferences(
+                        "ServiMatchPrefs",
+                        MODE_PRIVATE
+                );
+
+        preferencias.edit().clear().apply();
+
+        // REGRESAR AL LOGIN
+        Intent intent = new Intent(
+                AdminUsuariosActivity.this,
+                LoginActivity.class
+        );
+
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
+
+        startActivity(intent);
+        finish();
+    }
+
+    // =====================================
     // CONSULTAR USUARIOS DESDE DJANGO
+    // =====================================
     private void cargarUsuarios() {
 
         // RECUPERAR TOKEN JWT

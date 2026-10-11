@@ -1,6 +1,7 @@
 
 package com.ispc.servimatch;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import retrofit2.Response;
 
 public class AdminUsuarioDetalleActivity extends AppCompatActivity {
 
+    // DATOS DEL USUARIO
     private TextView txtDetalleNombre;
     private TextView txtDetalleEmail;
     private TextView txtDetalleDni;
@@ -30,7 +32,15 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
     private TextView txtDetalleOficio;
     private TextView txtDetalleUbicacion;
 
+    // BOTONES
+    private Button btnEditarUsuario;
+    private Button btnVolverUsuarios;
+
+    // API
     private ApiService apiService;
+
+    // ID DEL USUARIO SELECCIONADO
+    private int idUsuario = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,7 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_admin_usuario_detalle);
 
+        // VINCULAR CAMPOS
         txtDetalleNombre = findViewById(R.id.txtDetalleNombre);
         txtDetalleEmail = findViewById(R.id.txtDetalleEmail);
         txtDetalleDni = findViewById(R.id.txtDetalleDni);
@@ -45,31 +56,79 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
         txtDetalleOficio = findViewById(R.id.txtDetalleOficio);
         txtDetalleUbicacion = findViewById(R.id.txtDetalleUbicacion);
 
-        Button btnVolver = findViewById(R.id.btnVolverUsuarios);
-        btnVolver.setOnClickListener(v -> finish());
+        // VINCULAR BOTONES
+        btnEditarUsuario = findViewById(R.id.btnEditarUsuario);
+        btnVolverUsuarios = findViewById(R.id.btnVolverUsuarios);
 
-        apiService = RetrofitClient.getClient(AdminUsuarioDetalleActivity.this)
+        // INICIALIZAR RETROFIT
+        apiService = RetrofitClient
+                .getClient(AdminUsuarioDetalleActivity.this)
                 .create(ApiService.class);
 
-        int idUsuario = getIntent().getIntExtra("id_usuario", -1);
+        // RECUPERAR ID DEL USUARIO
+        idUsuario = getIntent().getIntExtra(
+                "id_usuario",
+                -1
+        );
 
         if (idUsuario == -1) {
+
             mostrarError("No se recibió el ID del usuario.");
+
+            btnEditarUsuario.setEnabled(false);
             return;
         }
 
-        cargarDetalleUsuario(idUsuario);
+        // VOLVER AL LISTADO DE USUARIOS
+        btnVolverUsuarios.setOnClickListener(v -> {
+            finish();
+        });
+
+        // ABRIR PANTALLA DE EDICIÓN
+        btnEditarUsuario.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    AdminUsuarioDetalleActivity.this,
+                    AdminEditarUsuarioActivity.class
+            );
+
+            // ENVIAR ID DEL USUARIO A MODIFICAR
+            intent.putExtra("id_usuario", idUsuario);
+
+            startActivity(intent);
+        });
     }
 
+    // ==========================================
+    // ACTUALIZAR DATOS AL VOLVER A LA PANTALLA
+    // ==========================================
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (apiService != null && idUsuario > 0) {
+            cargarDetalleUsuario(idUsuario);
+        }
+    }
+
+    // ==========================================
     // OBTENER DATOS DEL USUARIO DESDE DJANGO
+    // ==========================================
     private void cargarDetalleUsuario(int idUsuario) {
 
         SharedPreferences preferencias =
-                getSharedPreferences("ServiMatchSesion", MODE_PRIVATE);
+                getSharedPreferences(
+                        "ServiMatchSesion",
+                        MODE_PRIVATE
+                );
 
-        String token = preferencias.getString("access_token", null);
+        String token = preferencias.getString(
+                "access_token",
+                null
+        );
 
         if (token == null || token.isEmpty()) {
+
             mostrarError("Iniciá sesión nuevamente.");
             return;
         }
@@ -84,34 +143,47 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                     Call<Usuario> call,
                     Response<Usuario> response) {
 
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful()
+                        && response.body() != null) {
 
                     Usuario usuario = response.body();
 
+                    // MOSTRAR DATOS PERSONALES
                     txtDetalleNombre.setText(usuario.getNombre());
                     txtDetalleEmail.setText(usuario.getEmail());
                     txtDetalleDni.setText(usuario.getDni());
 
+                    // MOSTRAR ROL
                     Integer rol = usuario.getRol();
 
                     if (rol != null && rol == 10) {
+
                         txtDetalleRol.setText("Administrador");
+
                     } else if (rol != null && rol == 11) {
+
                         txtDetalleRol.setText("Usuario estándar");
+
                     } else {
+
                         txtDetalleRol.setText("Rol no identificado");
                     }
 
+                    // CONSULTAR OFICIO Y UBICACIÓN
                     cargarOficio(usuario.getOficio());
                     cargarUbicacion(usuario.getUbicacion());
 
                 } else if (response.code() == 401) {
 
-                    mostrarError("La sesión expiró. Iniciá sesión nuevamente.");
+                    mostrarError(
+                            "La sesión expiró. Iniciá sesión nuevamente."
+                    );
 
                 } else if (response.code() == 403) {
 
-                    mostrarError("No tenés permisos para consultar este usuario.");
+                    mostrarError(
+                            "No tenés permisos para consultar este usuario."
+                    );
 
                 } else if (response.code() == 404) {
 
@@ -131,15 +203,20 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                     Call<Usuario> call,
                     Throwable t) {
 
-                mostrarError("Error de conexión con el servidor.");
+                mostrarError(
+                        "Error de conexión con el servidor."
+                );
             }
         });
     }
 
+    // ==========================================
     // OBTENER NOMBRE DEL OFICIO
+    // ==========================================
     private void cargarOficio(Integer idOficio) {
 
         if (idOficio == null) {
+
             txtDetalleOficio.setText("No especificado");
             return;
         }
@@ -169,6 +246,7 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                             txtDetalleOficio.setText("No encontrado");
 
                         } else {
+
                             txtDetalleOficio.setText("No disponible");
                         }
                     }
@@ -183,10 +261,13 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                 });
     }
 
+    // ==========================================
     // OBTENER CIUDAD Y PROVINCIA
+    // ==========================================
     private void cargarUbicacion(Integer idUbicacion) {
 
         if (idUbicacion == null) {
+
             txtDetalleUbicacion.setText("No especificada");
             return;
         }
@@ -218,6 +299,7 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                             txtDetalleUbicacion.setText("No encontrada");
 
                         } else {
+
                             txtDetalleUbicacion.setText("No disponible");
                         }
                     }
@@ -232,7 +314,15 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                 });
     }
 
+    // ==========================================
+    // MOSTRAR MENSAJES DE ERROR
+    // ==========================================
     private void mostrarError(String mensaje) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
+
+        Toast.makeText(
+                AdminUsuarioDetalleActivity.this,
+                mensaje,
+                Toast.LENGTH_LONG
+        ).show();
     }
 }

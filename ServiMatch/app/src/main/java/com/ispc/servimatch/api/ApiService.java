@@ -8,50 +8,62 @@ import com.ispc.servimatch.model.LoginRequest;
 import com.ispc.servimatch.model.LoginResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 import retrofit2.http.Header;
 
 public interface ApiService {
 
-    // Obtener ubicaciones
+    // OBTENER UBICACIONES
     @GET("api/ubicaciones/")
     Call<List<Ubicacion>> obtenerUbicaciones();
 
-    // Obtener oficios
+    // OBTENER OFICIOS
     @GET("api/oficios/")
     Call<List<Oficio>> obtenerOficios();
 
-    // Obtener usuarios (solo administrador)
+
+    // OBTENER USUARIOS (ADMINISTRADOR)
     @GET("api/usuarios/")
     Call<List<Usuario>> obtenerUsuarios(
             @Header("Authorization") String token
     );
 
-    // Obtener profesionales con autenticación JWT
+
+    // OBTENER PROFESIONALES
     @GET("api/profesionales/")
     Call<List<Usuario>> obtenerProfesionales(
             @Header("Authorization") String token
     );
 
-    // Obtener un usuario por ID con autenticación JWT
+    // OBTENER USUARIO POR ID
     @GET("api/usuarios/{id}/")
     Call<Usuario> obtenerUsuario(
             @Path("id") int id,
             @Header("Authorization") String token
     );
 
-    // Registrar usuario
+    // REGISTRAR USUARIO
     @POST("api/usuarios/")
     Call<Usuario> registrarUsuario(
             @Body Usuario usuario
     );
 
-    // Iniciar sesión
+    // ACTUALIZAR USUARIO (ADMINISTRADOR)
+    @PATCH("api/usuarios/{id}/")
+    Call<Usuario> actualizarUsuario(
+            @Path("id") int id,
+            @Header("Authorization") String token,
+            @Body Map<String, Object> datos
+    );
+
+    // INICIAR SESIÓN
     @POST("api/login/")
     Call<LoginResponse> login(
             @Body LoginRequest loginRequest

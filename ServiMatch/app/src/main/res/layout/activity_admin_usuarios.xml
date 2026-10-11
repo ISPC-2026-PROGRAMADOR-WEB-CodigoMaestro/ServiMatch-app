@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -60,6 +61,13 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- BARRA DE NAVEGACIÓN DEL ADMINISTRADOR -->
+    <include
+        android:id="@+id/barraNavigationAdmin"
+        layout="@layout/barra_navigation_admin"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
 
 </LinearLayout>
 

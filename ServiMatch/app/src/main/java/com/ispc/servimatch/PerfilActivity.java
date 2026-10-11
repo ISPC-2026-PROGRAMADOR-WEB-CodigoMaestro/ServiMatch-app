@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,13 +38,20 @@ public class PerfilActivity extends AppCompatActivity {
 
     private Button btnCerrarSesion;
 
-    // BARRA DE NAVEGACIÓN
+    // CONTENEDORES DE NAVEGACIÓN
+    private View barraNavigation;
+    private View barraNavigationAdmin;
+
+    // NAVEGACIÓN ESTÁNDAR
     private LinearLayout navInicio;
     private LinearLayout navContacto;
     private LinearLayout navPerfil;
 
-    private TextView iconPerfil;
-    private TextView textoPerfil;
+    // NAVEGACIÓN ADMINISTRADOR
+    private LinearLayout navInicioAdmin;
+    private LinearLayout navUsuariosAdmin;
+    private LinearLayout navPerfilAdmin;
+    private LinearLayout navSalirAdmin;
 
     // DATOS DEL USUARIO
     private int idUsuario;
@@ -56,6 +64,7 @@ public class PerfilActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_perfil);
 
         // RECUPERAR SESIÓN
@@ -79,30 +88,29 @@ public class PerfilActivity extends AppCompatActivity {
 
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
-        // VINCULAR BARRA DE NAVEGACIÓN
+        // VINCULAR CONTENEDORES DE NAVEGACIÓN
+        barraNavigation = findViewById(R.id.barraNavigation);
+        barraNavigationAdmin = findViewById(R.id.barraNavigationAdmin);
+
+        // VINCULAR MENÚ ESTÁNDAR
         navInicio = findViewById(R.id.navInicio);
         navContacto = findViewById(R.id.navContacto);
         navPerfil = findViewById(R.id.navPerfil);
 
-        iconPerfil = findViewById(R.id.iconPerfil);
-        textoPerfil = findViewById(R.id.textoPerfil);
+        // VINCULAR MENÚ ADMINISTRADOR
+        navInicioAdmin = findViewById(R.id.navInicioAdmin);
+        navUsuariosAdmin = findViewById(R.id.navUsuariosAdmin);
+        navPerfilAdmin = findViewById(R.id.navPerfilAdmin);
+        navSalirAdmin = findViewById(R.id.navSalirAdmin);
 
-        // MARCAR PERFIL COMO SELECCIONADO
-        iconPerfil.setTextColor(
-                getResources().getColor(R.color.color_primario)
-        );
+        // MOSTRAR BARRA SEGÚN EL ROL
+        configurarNavegacion();
 
-        textoPerfil.setTextColor(
-                getResources().getColor(R.color.color_primario)
-        );
-
-        textoPerfil.setTypeface(null, Typeface.BOLD);
-
-        // VERIFICAR SESIÓN
+        // CONSULTAR DATOS DEL PERFIL
         if (idUsuario != -1) {
             buscarUsuario();
         } else {
-            Log.e(TAG, "No se encontró el ID del usuario en la sesión");
+            Log.e(TAG, "No se encontró el ID del usuario");
 
             Toast.makeText(
                     this,
@@ -111,7 +119,63 @@ public class PerfilActivity extends AppCompatActivity {
             ).show();
         }
 
-        // NAVEGACIÓN - INICIO
+        // BOTÓN CERRAR SESIÓN DEL PERFIL
+        btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
+    }
+
+    // ==========================================
+    // CONFIGURAR NAVEGACIÓN SEGÚN ROL
+    // ==========================================
+    private void configurarNavegacion() {
+
+        // OCULTAR AMBAS BARRAS INICIALMENTE
+        barraNavigation.setVisibility(View.GONE);
+        barraNavigationAdmin.setVisibility(View.GONE);
+
+        if (idRol == 10) {
+
+            // ADMINISTRADOR
+            barraNavigationAdmin.setVisibility(View.VISIBLE);
+            configurarNavegacionAdmin();
+
+        } else if (idRol == 11) {
+
+            // USUARIO ESTÁNDAR
+            barraNavigation.setVisibility(View.VISIBLE);
+            configurarNavegacionEstandar();
+
+        } else {
+
+            Log.e(TAG, "Rol no identificado: " + idRol);
+
+            Toast.makeText(
+                    this,
+                    "No se pudo identificar el rol del usuario.",
+                    Toast.LENGTH_LONG
+            ).show();
+        }
+    }
+
+    // ==========================================
+    // NAVEGACIÓN USUARIO ESTÁNDAR
+    // ==========================================
+    private void configurarNavegacionEstandar() {
+
+        // MARCAR PERFIL COMO SELECCIONADO
+        TextView iconPerfil = findViewById(R.id.iconPerfil);
+        TextView textoPerfil = findViewById(R.id.textoPerfil);
+
+        iconPerfil.setTextColor(
+                getColor(R.color.color_primario)
+        );
+
+        textoPerfil.setTextColor(
+                getColor(R.color.color_primario)
+        );
+
+        textoPerfil.setTypeface(null, Typeface.BOLD);
+
+        // INICIO
         navInicio.setOnClickListener(v -> {
 
             Intent intent = new Intent(
@@ -124,12 +188,15 @@ public class PerfilActivity extends AppCompatActivity {
             intent.putExtra("id_rol", idRol);
             intent.putExtra("rol", rolUsuario);
 
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             startActivity(intent);
             finish();
         });
 
-        // NAVEGACIÓN - CONTACTO
+        // CONTACTO
         navContacto.setOnClickListener(v -> {
+
             Toast.makeText(
                     this,
                     "Próximamente: Contacto",
@@ -137,8 +204,53 @@ public class PerfilActivity extends AppCompatActivity {
             ).show();
         });
 
-        // NAVEGACIÓN - PERFIL
+        // PERFIL
         navPerfil.setOnClickListener(v -> {
+
+            Toast.makeText(
+                    this,
+                    "Ya estás en Perfil",
+                    Toast.LENGTH_SHORT
+            ).show();
+        });
+    }
+
+    // ==========================================
+    // NAVEGACIÓN ADMINISTRADOR
+    // ==========================================
+    private void configurarNavegacionAdmin() {
+
+        // INICIO ADMINISTRADOR
+        navInicioAdmin.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    PerfilActivity.this,
+                    AdminDashboardActivity.class
+            );
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+            finish();
+        });
+
+        // GESTIÓN DE USUARIOS
+        navUsuariosAdmin.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    PerfilActivity.this,
+                    AdminUsuariosActivity.class
+            );
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+            finish();
+        });
+
+        // PERFIL ADMINISTRADOR
+        navPerfilAdmin.setOnClickListener(v -> {
+
             Toast.makeText(
                     this,
                     "Ya estás en Perfil",
@@ -146,33 +258,42 @@ public class PerfilActivity extends AppCompatActivity {
             ).show();
         });
 
-        // CERRAR SESIÓN
-        btnCerrarSesion.setOnClickListener(v -> {
-
-            // Eliminar los datos de ambas sesiones
-            preferencias.edit().clear().apply();
-
-            getSharedPreferences(
-                    "ServiMatchPrefs",
-                    MODE_PRIVATE
-            ).edit().clear().apply();
-
-            Intent intent = new Intent(
-                    PerfilActivity.this,
-                    LoginActivity.class
-            );
-
-            intent.setFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK
-                            | Intent.FLAG_ACTIVITY_CLEAR_TASK
-            );
-
-            startActivity(intent);
-            finish();
-        });
+        // SALIR
+        navSalirAdmin.setOnClickListener(v -> cerrarSesion());
     }
 
+    // ==========================================
+    // CERRAR SESIÓN
+    // ==========================================
+    private void cerrarSesion() {
+
+        // ELIMINAR SESIÓN PRINCIPAL
+        preferencias.edit().clear().apply();
+
+        // ELIMINAR TOKEN DE RETROFIT
+        getSharedPreferences(
+                "ServiMatchPrefs",
+                MODE_PRIVATE
+        ).edit().clear().apply();
+
+        // REGRESAR AL LOGIN
+        Intent intent = new Intent(
+                PerfilActivity.this,
+                LoginActivity.class
+        );
+
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
+
+        startActivity(intent);
+        finish();
+    }
+
+    // ==========================================
     // OBTENER USUARIO DESDE DJANGO
+    // ==========================================
     private void buscarUsuario() {
 
         String token = preferencias.getString(
@@ -199,7 +320,7 @@ public class PerfilActivity extends AppCompatActivity {
                         + " | Token presente: true"
         );
 
-        // NUEVA INICIALIZACIÓN RETROFIT
+        // INICIALIZAR RETROFIT
         ApiService apiService =
                 RetrofitClient.getClient(PerfilActivity.this)
                         .create(ApiService.class);
@@ -223,6 +344,7 @@ public class PerfilActivity extends AppCompatActivity {
                         && response.body() != null) {
 
                     Usuario usuario = response.body();
+
                     mostrarUsuario(usuario);
 
                 } else if (response.code() == 401) {
@@ -267,7 +389,9 @@ public class PerfilActivity extends AppCompatActivity {
         });
     }
 
+    // ==========================================
     // MOSTRAR DATOS DEL USUARIO
+    // ==========================================
     private void mostrarUsuario(Usuario usuario) {
 
         tvNombre.setText(usuario.getNombre());
@@ -279,10 +403,15 @@ public class PerfilActivity extends AppCompatActivity {
         Integer rol = usuario.getRol();
 
         if (rol != null && rol == 10) {
+
             rolUsuario = "Administrador";
+
         } else if (rol != null && rol == 11) {
+
             rolUsuario = "Usuario estándar";
+
         } else if (rolUsuario == null || rolUsuario.isEmpty()) {
+
             rolUsuario = "Usuario";
         }
 
@@ -304,10 +433,11 @@ public class PerfilActivity extends AppCompatActivity {
         );
     }
 
+    // ==========================================
     // OBTENER UBICACIÓN
+    // ==========================================
     private void buscarUbicacion(int idUbicacion) {
 
-        // NUEVA INICIALIZACIÓN RETROFIT
         ApiService apiService =
                 RetrofitClient.getClient(PerfilActivity.this)
                         .create(ApiService.class);
@@ -341,6 +471,7 @@ public class PerfilActivity extends AppCompatActivity {
                             }
 
                             if (!encontrada) {
+
                                 tvUbicacion.setText(
                                         "Ubicación no disponible"
                                 );
@@ -378,7 +509,9 @@ public class PerfilActivity extends AppCompatActivity {
                 });
     }
 
-    // MOSTRAR Y REGISTRAR ERRORES
+    // ==========================================
+    // MOSTRAR ERRORES
+    // ==========================================
     private void mostrarError(String mensaje) {
 
         Log.e(TAG, mensaje);
