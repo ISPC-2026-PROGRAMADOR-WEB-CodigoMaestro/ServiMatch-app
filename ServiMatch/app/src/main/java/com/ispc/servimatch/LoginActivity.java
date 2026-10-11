@@ -18,6 +18,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.SharedPreferences;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsuario;
@@ -89,7 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginRequest(emailOUsuario, contrasena);
 
         ApiService apiService =
-                RetrofitClient.getClient().create(ApiService.class);
+                RetrofitClient.getClient(LoginActivity.this)
+                        .create(ApiService.class);
 
         apiService.login(request).enqueue(new Callback<LoginResponse>() {
 
@@ -103,6 +106,29 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
 
                     LoginResponse loginResponse = response.body();
+
+                    // Obtener el JWT enviado por Django
+                    String token = loginResponse.getAccess();
+
+                    // Verificar que el backend haya enviado el token
+                    if (token == null || token.isEmpty()) {
+                        Toast.makeText(
+                                LoginActivity.this,
+                                "No se recibió el token de autenticación",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+
+                    // Guardar el JWT para futuras solicitudes
+                    SharedPreferences preferences = getSharedPreferences(
+                            "ServiMatchPrefs",
+                            MODE_PRIVATE
+                    );
+
+                    preferences.edit()
+                            .putString("jwt_token", token)
+                            .apply();
 
                     Toast.makeText(
                             LoginActivity.this,
@@ -143,9 +169,36 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
 
+                    int codigoError = response.code();
+
+                    String mensajeError;
+
+                    switch (codigoError) {
+
+                        case 401:
+                            mensajeError = "Correo electrónico o contraseña incorrectos";
+                            break;
+
+                        case 429:
+                            mensajeError = "Demasiados intentos. Esperá un minuto e intentá nuevamente";
+                            break;
+
+                        case 403:
+                            mensajeError = "No tenés permisos para iniciar sesión";
+                            break;
+
+                        case 500:
+                            mensajeError = "Error interno del servidor";
+                            break;
+
+                        default:
+                            mensajeError = "Error al iniciar sesión. Código HTTP: " + codigoError;
+                            break;
+                    }
+
                     Toast.makeText(
                             LoginActivity.this,
-                            "Correo electrónico o contraseña incorrectos",
+                            mensajeError,
                             Toast.LENGTH_LONG
                     ).show();
                 }

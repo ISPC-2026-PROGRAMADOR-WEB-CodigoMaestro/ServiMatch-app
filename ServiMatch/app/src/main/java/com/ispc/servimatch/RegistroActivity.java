@@ -167,7 +167,8 @@ public class RegistroActivity extends AppCompatActivity {
                 );
 
                 ApiService apiService =
-                        RetrofitClient.getClient().create(ApiService.class);
+                        RetrofitClient.getClient(RegistroActivity.this)
+                                .create(ApiService.class);
 
                 apiService.registrarUsuario(usuario).enqueue(new Callback<Usuario>() {
 
@@ -242,7 +243,8 @@ public class RegistroActivity extends AppCompatActivity {
 
         // Creamos la conexion con la API
         ApiService apiService =
-                RetrofitClient.getClient().create(ApiService.class);
+                RetrofitClient.getClient(RegistroActivity.this)
+                        .create(ApiService.class);
 
         // Solicitamos las ubicaciones a Django
         apiService.obtenerUbicaciones().enqueue(new Callback<List<Ubicacion>>() {
@@ -300,7 +302,8 @@ public class RegistroActivity extends AppCompatActivity {
 
         // Creamos la conexion con la API
         ApiService apiService =
-                RetrofitClient.getClient().create(ApiService.class);
+                RetrofitClient.getClient(RegistroActivity.this)
+                        .create(ApiService.class);
 
         // Solicitamos los oficios a Django
         apiService.obtenerOficios().enqueue(new Callback<List<Oficio>>() {

@@ -28,6 +28,10 @@ public interface ApiService {
     @GET("api/usuarios/")
     Call<List<Usuario>> obtenerUsuarios();
 
+    // Obtener profesionales
+    @GET("api/profesionales/")
+    Call<List<Usuario>> obtenerProfesionales();
+
     // Obtener un usuario por ID
     @GET("api/usuarios/{id}/")
     Call<Usuario> obtenerUsuario(
