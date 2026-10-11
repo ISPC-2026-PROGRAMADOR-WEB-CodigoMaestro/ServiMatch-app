@@ -8,8 +8,6 @@ public class LoginResponse {
     private String nombre;
     private int id_rol;
     private String rol;
-
-    // Token JWT enviado por Django
     private String access;
 
     public String getMensaje() {
@@ -32,7 +30,7 @@ public class LoginResponse {
         return rol;
     }
 
-    // Obtener token de autenticación
+    // Obtener token JWT enviado por Django
     public String getAccess() {
         return access;
     }

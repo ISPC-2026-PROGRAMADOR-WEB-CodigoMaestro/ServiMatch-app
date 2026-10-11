@@ -26,9 +26,15 @@ public interface ApiService {
     @GET("api/oficios/")
     Call<List<Oficio>> obtenerOficios();
 
-    // Obtener usuarios con autenticación JWT
+    // Obtener usuarios (solo administrador)
     @GET("api/usuarios/")
     Call<List<Usuario>> obtenerUsuarios(
+            @Header("Authorization") String token
+    );
+
+    // Obtener profesionales con autenticación JWT
+    @GET("api/profesionales/")
+    Call<List<Usuario>> obtenerProfesionales(
             @Header("Authorization") String token
     );
 
@@ -45,7 +51,7 @@ public interface ApiService {
             @Body Usuario usuario
     );
 
-    // Login
+    // Iniciar sesión
     @POST("api/login/")
     Call<LoginResponse> login(
             @Body LoginRequest loginRequest

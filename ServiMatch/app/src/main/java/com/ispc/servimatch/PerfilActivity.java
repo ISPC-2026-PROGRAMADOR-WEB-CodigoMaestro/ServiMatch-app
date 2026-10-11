@@ -56,7 +56,6 @@ public class PerfilActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_perfil);
 
         // RECUPERAR SESIÓN
@@ -65,25 +64,11 @@ public class PerfilActivity extends AppCompatActivity {
                 MODE_PRIVATE
         );
 
-        // OBTENER ID DEL USUARIO AUTENTICADO
-        idUsuario = preferencias.getInt(
-                "id_usuario",
-                -1
-        );
+        idUsuario = preferencias.getInt("id_usuario", -1);
+        idRol = preferencias.getInt("id_rol", -1);
 
-        idRol = preferencias.getInt(
-                "id_rol",
-                -1
-        );
-
-        // DATOS COMPLEMENTARIOS DEL INTENT
-        nombreUsuario = getIntent().getStringExtra(
-                "usuario"
-        );
-
-        rolUsuario = getIntent().getStringExtra(
-                "rol"
-        );
+        nombreUsuario = getIntent().getStringExtra("usuario");
+        rolUsuario = getIntent().getStringExtra("rol");
 
         // VINCULAR DATOS DEL PERFIL
         tvNombre = findViewById(R.id.tvNombre);
@@ -104,29 +89,19 @@ public class PerfilActivity extends AppCompatActivity {
 
         // MARCAR PERFIL COMO SELECCIONADO
         iconPerfil.setTextColor(
-                getResources().getColor(
-                        R.color.color_primario
-                )
+                getResources().getColor(R.color.color_primario)
         );
 
         textoPerfil.setTextColor(
-                getResources().getColor(
-                        R.color.color_primario
-                )
+                getResources().getColor(R.color.color_primario)
         );
 
-        textoPerfil.setTypeface(
-                null,
-                Typeface.BOLD
-        );
+        textoPerfil.setTypeface(null, Typeface.BOLD);
 
         // VERIFICAR SESIÓN
         if (idUsuario != -1) {
-
             buscarUsuario();
-
         } else {
-
             Log.e(TAG, "No se encontró el ID del usuario en la sesión");
 
             Toast.makeText(
@@ -144,25 +119,10 @@ public class PerfilActivity extends AppCompatActivity {
                     DashboardActivity.class
             );
 
-            intent.putExtra(
-                    "usuario",
-                    nombreUsuario
-            );
-
-            intent.putExtra(
-                    "id_usuario",
-                    idUsuario
-            );
-
-            intent.putExtra(
-                    "id_rol",
-                    idRol
-            );
-
-            intent.putExtra(
-                    "rol",
-                    rolUsuario
-            );
+            intent.putExtra("usuario", nombreUsuario);
+            intent.putExtra("id_usuario", idUsuario);
+            intent.putExtra("id_rol", idRol);
+            intent.putExtra("rol", rolUsuario);
 
             startActivity(intent);
             finish();
@@ -170,7 +130,6 @@ public class PerfilActivity extends AppCompatActivity {
 
         // NAVEGACIÓN - CONTACTO
         navContacto.setOnClickListener(v -> {
-
             Toast.makeText(
                     this,
                     "Próximamente: Contacto",
@@ -180,7 +139,6 @@ public class PerfilActivity extends AppCompatActivity {
 
         // NAVEGACIÓN - PERFIL
         navPerfil.setOnClickListener(v -> {
-
             Toast.makeText(
                     this,
                     "Ya estás en Perfil",
@@ -191,8 +149,13 @@ public class PerfilActivity extends AppCompatActivity {
         // CERRAR SESIÓN
         btnCerrarSesion.setOnClickListener(v -> {
 
-            // ELIMINAR DATOS DE SESIÓN
+            // Eliminar los datos de ambas sesiones
             preferencias.edit().clear().apply();
+
+            getSharedPreferences(
+                    "ServiMatchPrefs",
+                    MODE_PRIVATE
+            ).edit().clear().apply();
 
             Intent intent = new Intent(
                     PerfilActivity.this,
@@ -212,13 +175,11 @@ public class PerfilActivity extends AppCompatActivity {
     // OBTENER USUARIO DESDE DJANGO
     private void buscarUsuario() {
 
-        // RECUPERAR TOKEN JWT
         String token = preferencias.getString(
                 "access_token",
                 null
         );
 
-        // VERIFICAR TOKEN
         if (token == null || token.isEmpty()) {
 
             Log.e(TAG, "No se encontró el token JWT");
@@ -232,19 +193,17 @@ public class PerfilActivity extends AppCompatActivity {
             return;
         }
 
-        // INFORMACIÓN PARA DIAGNÓSTICO
         Log.d(
                 TAG,
                 "ID usuario: " + idUsuario
                         + " | Token presente: true"
         );
 
-        // CREAR SERVICIO RETROFIT
+        // NUEVA INICIALIZACIÓN RETROFIT
         ApiService apiService =
-                RetrofitClient.getClient()
+                RetrofitClient.getClient(PerfilActivity.this)
                         .create(ApiService.class);
 
-        // CONSULTAR USUARIO CON JWT
         apiService.obtenerUsuario(
                 idUsuario,
                 "Bearer " + token
@@ -264,7 +223,6 @@ public class PerfilActivity extends AppCompatActivity {
                         && response.body() != null) {
 
                     Usuario usuario = response.body();
-
                     mostrarUsuario(usuario);
 
                 } else if (response.code() == 401) {
@@ -299,11 +257,7 @@ public class PerfilActivity extends AppCompatActivity {
                     Call<Usuario> call,
                     Throwable t) {
 
-                Log.e(
-                        TAG,
-                        "Error de conexión",
-                        t
-                );
+                Log.e(TAG, "Error de conexión", t);
 
                 mostrarError(
                         "Error de conexión con el servidor: "
@@ -316,34 +270,19 @@ public class PerfilActivity extends AppCompatActivity {
     // MOSTRAR DATOS DEL USUARIO
     private void mostrarUsuario(Usuario usuario) {
 
-        tvNombre.setText(
-                usuario.getNombre()
-        );
+        tvNombre.setText(usuario.getNombre());
+        tvEmail.setText(usuario.getEmail());
+        tvDni.setText(usuario.getDni());
 
-        tvEmail.setText(
-                usuario.getEmail()
-        );
-
-        tvDni.setText(
-                usuario.getDni()
-        );
-
-        // ACTUALIZAR NOMBRE
         nombreUsuario = usuario.getNombre();
 
-        // MOSTRAR ROL
         Integer rol = usuario.getRol();
 
         if (rol != null && rol == 10) {
-
             rolUsuario = "Administrador";
-
         } else if (rol != null && rol == 11) {
-
             rolUsuario = "Usuario estándar";
-
         } else if (rolUsuario == null || rolUsuario.isEmpty()) {
-
             rolUsuario = "Usuario";
         }
 
@@ -352,15 +291,11 @@ public class PerfilActivity extends AppCompatActivity {
         // CONSULTAR UBICACIÓN
         if (usuario.getUbicacion() != null) {
 
-            buscarUbicacion(
-                    usuario.getUbicacion()
-            );
+            buscarUbicacion(usuario.getUbicacion());
 
         } else {
 
-            tvUbicacion.setText(
-                    "Ubicación no disponible"
-            );
+            tvUbicacion.setText("Ubicación no disponible");
         }
 
         Log.d(
@@ -372,8 +307,9 @@ public class PerfilActivity extends AppCompatActivity {
     // OBTENER UBICACIÓN
     private void buscarUbicacion(int idUbicacion) {
 
+        // NUEVA INICIALIZACIÓN RETROFIT
         ApiService apiService =
-                RetrofitClient.getClient()
+                RetrofitClient.getClient(PerfilActivity.this)
                         .create(ApiService.class);
 
         apiService.obtenerUbicaciones().enqueue(
@@ -405,7 +341,6 @@ public class PerfilActivity extends AppCompatActivity {
                             }
 
                             if (!encontrada) {
-
                                 tvUbicacion.setText(
                                         "Ubicación no disponible"
                                 );
