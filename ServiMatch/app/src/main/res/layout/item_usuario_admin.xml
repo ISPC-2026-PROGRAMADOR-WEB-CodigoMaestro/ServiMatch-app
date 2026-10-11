@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/card_oficio"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- NOMBRE DEL USUARIO -->
+    <TextView
+        android:id="@+id/txtNombreUsuarioAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre del usuario"
+        android:textColor="@color/texto_principal"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- CORREO ELECTRÓNICO -->
+    <TextView
+        android:id="@+id/txtEmailUsuarioAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="correo@ejemplo.com"
+        android:textColor="@color/texto_secundario"
+        android:textSize="14sp" />
+
+    <!-- ROL -->
+    <TextView
+        android:id="@+id/txtRolUsuarioAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Usuario estándar"
+        android:textColor="@color/color_primario"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
