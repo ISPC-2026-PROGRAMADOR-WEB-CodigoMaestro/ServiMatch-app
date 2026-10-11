@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <!-- PERMISO DE INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -16,11 +16,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ProfesionalesActivity"
+            android:name=".AdminUsuarioDetalleActivity"
             android:exported="false" />
+        <!-- DASHBOARD ADMINISTRADOR -->
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" /> <!-- GESTIÓN DE USUARIOS ADMINISTRADOR -->
+        <activity
+            android:name=".AdminUsuariosActivity"
+            android:exported="false" /> <!-- LISTADO DE PROFESIONALES -->
+        <activity
+            android:name=".ProfesionalesActivity"
+            android:exported="false" /> <!-- PERFIL DE USUARIO -->
         <activity
             android:name=".PerfilActivity"
-            android:exported="false" /> <!-- SplashActivity como pantalla inicial -->
+            android:exported="false" /> <!-- SPLASH: PANTALLA INICIAL -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -29,16 +39,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- LoginActivity -->
+        </activity> <!-- LOGIN -->
         <activity
             android:name=".LoginActivity"
-            android:exported="false" /> <!-- RegistroActivity -->
+            android:exported="false" /> <!-- REGISTRO -->
         <activity
             android:name=".RegistroActivity"
-            android:exported="false" /> <!-- MainActivity -->
+            android:exported="false" /> <!-- MAIN -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" /> <!-- DashboardActivity -->
+            android:exported="false" /> <!-- DASHBOARD USUARIO ESTÁNDAR -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />

@@ -1,3 +1,4 @@
+
 package com.ispc.servimatch.model;
 
 public class LoginResponse {
@@ -29,5 +30,8 @@ public class LoginResponse {
         return rol;
     }
 
-    public String getAccess() {return access;}
+    // Obtener token JWT enviado por Django
+    public String getAccess() {
+        return access;
+    }
 }

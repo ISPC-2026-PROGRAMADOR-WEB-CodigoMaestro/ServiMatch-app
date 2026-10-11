@@ -1,3 +1,4 @@
+
 package com.ispc.servimatch.api;
 
 import com.ispc.servimatch.model.Ubicacion;
@@ -13,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Header;
 
 public interface ApiService {
 
@@ -24,18 +26,23 @@ public interface ApiService {
     @GET("api/oficios/")
     Call<List<Oficio>> obtenerOficios();
 
-    // Obtener usuarios
+    // Obtener usuarios (solo administrador)
     @GET("api/usuarios/")
-    Call<List<Usuario>> obtenerUsuarios();
+    Call<List<Usuario>> obtenerUsuarios(
+            @Header("Authorization") String token
+    );
 
-    // Obtener profesionales
+    // Obtener profesionales con autenticación JWT
     @GET("api/profesionales/")
-    Call<List<Usuario>> obtenerProfesionales();
+    Call<List<Usuario>> obtenerProfesionales(
+            @Header("Authorization") String token
+    );
 
-    // Obtener un usuario por ID
+    // Obtener un usuario por ID con autenticación JWT
     @GET("api/usuarios/{id}/")
     Call<Usuario> obtenerUsuario(
-            @Path("id") int id
+            @Path("id") int id,
+            @Header("Authorization") String token
     );
 
     // Registrar usuario
@@ -44,7 +51,7 @@ public interface ApiService {
             @Body Usuario usuario
     );
 
-    // Login
+    // Iniciar sesión
     @POST("api/login/")
     Call<LoginResponse> login(
             @Body LoginRequest loginRequest

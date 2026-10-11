@@ -1,8 +1,10 @@
+
 package com.ispc.servimatch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,8 +19,6 @@ import com.ispc.servimatch.model.LoginResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import android.content.SharedPreferences;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,13 +39,16 @@ public class LoginActivity extends AppCompatActivity {
 
         btnIngresar.setOnClickListener(v -> {
 
-            String usuario = etUsuario.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String usuario = etUsuario.getText()
+                    .toString().trim();
+
+            String password = etPassword.getText()
+                    .toString();
 
             if (usuario.isEmpty() && password.isEmpty()) {
 
                 Toast.makeText(
-                        LoginActivity.this,
+                        this,
                         "Completá el correo electrónico y la contraseña",
                         Toast.LENGTH_SHORT
                 ).show();
@@ -53,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             } else if (usuario.isEmpty()) {
 
                 Toast.makeText(
-                        LoginActivity.this,
+                        this,
                         "Ingresá tu correo electrónico",
                         Toast.LENGTH_SHORT
                 ).show();
@@ -61,24 +64,21 @@ public class LoginActivity extends AppCompatActivity {
             } else if (password.isEmpty()) {
 
                 Toast.makeText(
-                        LoginActivity.this,
+                        this,
                         "Ingresá tu contraseña",
                         Toast.LENGTH_SHORT
                 ).show();
 
             } else {
-
                 iniciarSesion(usuario, password);
             }
         });
 
         tvRegistro.setOnClickListener(v -> {
-
             Intent intent = new Intent(
                     LoginActivity.this,
                     RegistroActivity.class
             );
-
             startActivity(intent);
         });
     }
@@ -107,41 +107,75 @@ public class LoginActivity extends AppCompatActivity {
 
                     LoginResponse loginResponse = response.body();
 
-                    // Obtener el JWT enviado por Django
                     String token = loginResponse.getAccess();
 
-                    // Verificar que el backend haya enviado el token
                     if (token == null || token.isEmpty()) {
+
                         Toast.makeText(
                                 LoginActivity.this,
-                                "No se recibió el token de autenticación",
+                                "El servidor no devolvió un token de acceso",
                                 Toast.LENGTH_LONG
                         ).show();
+
                         return;
                     }
 
-                    // Guardar el JWT para futuras solicitudes
-                    SharedPreferences preferences = getSharedPreferences(
-                            "ServiMatchPrefs",
-                            MODE_PRIVATE
-                    );
+                    int idRol = loginResponse.getId_rol();
+
+                    Intent intent;
+
+                    if (idRol == 10) {
+
+                        // ADMINISTRADOR
+                        intent = new Intent(
+                                LoginActivity.this,
+                                AdminDashboardActivity.class
+                        );
+
+                    } else if (idRol == 11) {
+
+                        // USUARIO ESTÁNDAR
+                        intent = new Intent(
+                                LoginActivity.this,
+                                DashboardActivity.class
+                        );
+
+                    } else {
+
+                        Toast.makeText(
+                                LoginActivity.this,
+                                "El usuario no tiene un rol válido: " + idRol,
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                        return;
+                    }
+
+                    // Guardar JWT y datos de sesión
+                    SharedPreferences preferencias =
+                            getSharedPreferences(
+                                    "ServiMatchSesion",
+                                    MODE_PRIVATE
+                            );
+
+                    preferencias.edit()
+                            .putString("access_token", token)
+                            .putInt("id_usuario", loginResponse.getId())
+                            .putInt("id_rol", idRol)
+                            .apply();
+
+                    // Compatibilidad con los cambios de develop
+                    SharedPreferences preferences =
+                            getSharedPreferences(
+                                    "ServiMatchPrefs",
+                                    MODE_PRIVATE
+                            );
 
                     preferences.edit()
                             .putString("jwt_token", token)
                             .apply();
 
-                    Toast.makeText(
-                            LoginActivity.this,
-                            loginResponse.getMensaje(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-
-                    Intent intent = new Intent(
-                            LoginActivity.this,
-                            DashboardActivity.class
-                    );
-
-                    // Datos del usuario que vienen desde Django
+                    // Datos enviados al dashboard
                     intent.putExtra(
                             "usuario",
                             loginResponse.getNombre()
@@ -154,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     intent.putExtra(
                             "id_rol",
-                            loginResponse.getId_rol()
+                            idRol
                     );
 
                     intent.putExtra(
@@ -162,37 +196,46 @@ public class LoginActivity extends AppCompatActivity {
                             loginResponse.getRol()
                     );
 
-                    startActivity(intent);
+                    Toast.makeText(
+                            LoginActivity.this,
+                            loginResponse.getMensaje(),
+                            Toast.LENGTH_SHORT
+                    ).show();
 
-                    // Evita volver al login con el botón atrás
+                    startActivity(intent);
                     finish();
 
                 } else {
 
                     int codigoError = response.code();
-
                     String mensajeError;
 
                     switch (codigoError) {
 
                         case 401:
-                            mensajeError = "Correo electrónico o contraseña incorrectos";
+                            mensajeError =
+                                    "Correo electrónico o contraseña incorrectos";
                             break;
 
                         case 429:
-                            mensajeError = "Demasiados intentos. Esperá un minuto e intentá nuevamente";
+                            mensajeError =
+                                    "Demasiados intentos. Esperá un minuto e intentá nuevamente";
                             break;
 
                         case 403:
-                            mensajeError = "No tenés permisos para iniciar sesión";
+                            mensajeError =
+                                    "No tenés permisos para iniciar sesión";
                             break;
 
                         case 500:
-                            mensajeError = "Error interno del servidor";
+                            mensajeError =
+                                    "Error interno del servidor";
                             break;
 
                         default:
-                            mensajeError = "Error al iniciar sesión. Código HTTP: " + codigoError;
+                            mensajeError =
+                                    "Error al iniciar sesión. Código HTTP: "
+                                            + codigoError;
                             break;
                     }
 
