@@ -48,7 +48,7 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
         Button btnVolver = findViewById(R.id.btnVolverUsuarios);
         btnVolver.setOnClickListener(v -> finish());
 
-        apiService = RetrofitClient.getClient()
+        apiService = RetrofitClient.getClient(AdminUsuarioDetalleActivity.this)
                 .create(ApiService.class);
 
         int idUsuario = getIntent().getIntExtra("id_usuario", -1);

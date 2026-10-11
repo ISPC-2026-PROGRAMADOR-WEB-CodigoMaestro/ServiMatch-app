@@ -64,9 +64,9 @@ public class AdminUsuariosActivity extends AppCompatActivity {
             return;
         }
 
-        // CREAR SERVICIO RETROFIT
+        // CREAR SERVICIO RETROFIT CON CONTEXT
         ApiService apiService =
-                RetrofitClient.getClient()
+                RetrofitClient.getClient(AdminUsuariosActivity.this)
                         .create(ApiService.class);
 
         // CONSULTAR USUARIOS CON JWT
