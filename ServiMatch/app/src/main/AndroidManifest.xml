@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- PERMISO DE INTERNET -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,43 +17,86 @@
         android:theme="@style/Theme.ServiMatch"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- DETALLE DE USUARIO ADMINISTRADOR -->
         <activity
             android:name=".AdminUsuarioDetalleActivity"
             android:exported="false" />
+
+        <!-- EDITAR USUARIO ADMINISTRADOR -->
+        <activity
+            android:name=".AdminEditarUsuarioActivity"
+            android:exported="false" />
+
         <!-- DASHBOARD ADMINISTRADOR -->
         <activity
             android:name=".AdminDashboardActivity"
-            android:exported="false" /> <!-- GESTIÓN DE USUARIOS ADMINISTRADOR -->
+            android:exported="false" />
+
+        <!-- GESTIÓN DE USUARIOS ADMINISTRADOR -->
         <activity
             android:name=".AdminUsuariosActivity"
-            android:exported="false" /> <!-- LISTADO DE PROFESIONALES -->
+            android:exported="false" />
+
+        <!-- REGISTRAR USUARIO DESDE ADMINISTRADOR -->
+        <activity
+            android:name=".AdminRegistrarUsuarioActivity"
+            android:exported="false" />
+
+        <!-- GESTIÓN DE UBICACIONES ADMINISTRADOR -->
+        <activity
+            android:name=".AdminUbicacionesActivity"
+            android:exported="false" />
+
+        <!-- LISTADO DE PROFESIONALES -->
         <activity
             android:name=".ProfesionalesActivity"
-            android:exported="false" /> <!-- PERFIL DE USUARIO -->
+            android:exported="false" />
+
+        <!-- PERFIL DE USUARIO -->
         <activity
             android:name=".PerfilActivity"
-            android:exported="false" /> <!-- SPLASH: PANTALLA INICIAL -->
+            android:exported="false" />
+
+        <!-- SPLASH: PANTALLA INICIAL -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.MAIN" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- LOGIN -->
+
+        </activity>
+
+        <!-- LOGIN -->
         <activity
             android:name=".LoginActivity"
-            android:exported="false" /> <!-- REGISTRO -->
+            android:exported="false" />
+
+        <!-- REGISTRO -->
         <activity
             android:name=".RegistroActivity"
-            android:exported="false" /> <!-- MAIN -->
+            android:exported="false" />
+
+        <!-- MAIN -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" /> <!-- DASHBOARD USUARIO ESTÁNDAR -->
+            android:exported="false" />
+
+        <!-- DASHBOARD USUARIO ESTÁNDAR -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".AdminOficiosActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

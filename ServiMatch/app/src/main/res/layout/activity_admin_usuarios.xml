@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -47,6 +48,7 @@
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- TÍTULO -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,9 +59,31 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
+            <!-- BOTÓN AGREGAR USUARIO -->
+            <Button
+                android:id="@+id/btnAgregarUsuarioAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/color_primario"
+                android:text="+ Agregar usuario"
+                android:textAllCaps="false"
+                android:textColor="@color/blanco"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- AQUÍ SE AGREGAN DINÁMICAMENTE
+                 LAS TARJETAS DE USUARIOS -->
+
         </LinearLayout>
 
     </ScrollView>
 
-</LinearLayout>
+    <!-- BARRA DE NAVEGACIÓN DEL ADMINISTRADOR -->
+    <include
+        android:id="@+id/barraNavigationAdmin"
+        layout="@layout/barra_navigation_admin"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
 
+</LinearLayout>

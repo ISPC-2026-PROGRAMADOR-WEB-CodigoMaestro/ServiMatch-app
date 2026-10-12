@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/fondo_principal">
+
+    <!-- ENCABEZADO -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:background="@color/color_primario_oscuro">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ServiMatch"
+            android:textColor="@color/blanco"
+            android:textSize="26sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Gestión de oficios"
+            android:textColor="@color/blanco"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <!-- CONTENIDO -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agregar nuevo oficio"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre del oficio"
+                android:textStyle="bold"
+                android:textColor="@color/texto_principal"/>
+
+            <EditText
+                android:id="@+id/edtNombreOficioAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ejemplo: Electricista"
+                android:inputType="textCapWords"
+                android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:id="@+id/btnGuardarOficioAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar oficio"
+                android:textAllCaps="false"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/color_primario"/>
+
+            <Button
+                android:id="@+id/btnVolverOficiosAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Volver"
+                android:textAllCaps="false"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/texto_secundario"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="12dp"
+                android:text="Oficios registrados"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_principal"/>
+
+            <LinearLayout
+                android:id="@+id/contenedorOficiosAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- NAVEGACIÓN ADMINISTRADOR -->
+    <include
+        android:id="@+id/barraNavigationAdmin"
+        layout="@layout/barra_navigation_admin"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"/>
+
+</LinearLayout>
