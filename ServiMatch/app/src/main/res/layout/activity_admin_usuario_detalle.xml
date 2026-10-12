@@ -156,6 +156,18 @@
             android:backgroundTint="@color/color_primario_oscuro"
             android:textColor="@color/blanco" />
 
+        <!-- BOTÓN ELIMINAR USUARIO -->
+        <Button
+            android:id="@+id/btnEliminarUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Eliminar usuario"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF" />
+
         <!-- BOTÓN VOLVER -->
         <Button
             android:id="@+id/btnVolverUsuarios"

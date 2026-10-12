@@ -17,6 +17,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 import retrofit2.http.Header;
+import retrofit2.http.DELETE;
 
 public interface ApiService {
 
@@ -63,9 +64,22 @@ public interface ApiService {
             @Body Map<String, Object> datos
     );
 
+    // ELIMINAR USUARIO (SOLO ADMINISTRADOR)
+    @DELETE("api/usuarios/{id}/")
+    Call<Void> eliminarUsuario(
+            @Path("id") int id,
+            @Header("Authorization") String token
+    );
+
     // INICIAR SESIÓN
     @POST("api/login/")
     Call<LoginResponse> login(
             @Body LoginRequest loginRequest
+    );
+
+    @POST("api/usuarios/")
+    Call<Map<String, Object>> registrarUsuarioAdmin(
+            @Header("Authorization") String token,
+            @Body Map<String, Object> datos
     );
 }

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ispc.servimatch.api.ApiService;
@@ -34,6 +35,7 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
 
     // BOTONES
     private Button btnEditarUsuario;
+    private Button btnEliminarUsuario;
     private Button btnVolverUsuarios;
 
     // API
@@ -41,6 +43,10 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
 
     // ID DEL USUARIO SELECCIONADO
     private int idUsuario = -1;
+
+    // ESTADO DE ELIMINACIÓN
+    private boolean eliminando = false;
+    private boolean usuarioCargado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,31 +64,27 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
 
         // VINCULAR BOTONES
         btnEditarUsuario = findViewById(R.id.btnEditarUsuario);
+        btnEliminarUsuario = findViewById(R.id.btnEliminarUsuario);
         btnVolverUsuarios = findViewById(R.id.btnVolverUsuarios);
+
+        btnEditarUsuario.setEnabled(false);
+        btnEliminarUsuario.setEnabled(false);
 
         // INICIALIZAR RETROFIT
         apiService = RetrofitClient
                 .getClient(AdminUsuarioDetalleActivity.this)
                 .create(ApiService.class);
 
-        // RECUPERAR ID DEL USUARIO
-        idUsuario = getIntent().getIntExtra(
-                "id_usuario",
-                -1
-        );
+        // RECUPERAR ID DEL USUARIO SELECCIONADO
+        idUsuario = getIntent().getIntExtra("id_usuario", -1);
 
-        if (idUsuario == -1) {
+        // VOLVER AL LISTADO
+        btnVolverUsuarios.setOnClickListener(v -> finish());
 
+        if (idUsuario <= 0) {
             mostrarError("No se recibió el ID del usuario.");
-
-            btnEditarUsuario.setEnabled(false);
             return;
         }
-
-        // VOLVER AL LISTADO DE USUARIOS
-        btnVolverUsuarios.setOnClickListener(v -> {
-            finish();
-        });
 
         // ABRIR PANTALLA DE EDICIÓN
         btnEditarUsuario.setOnClickListener(v -> {
@@ -92,10 +94,14 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                     AdminEditarUsuarioActivity.class
             );
 
-            // ENVIAR ID DEL USUARIO A MODIFICAR
             intent.putExtra("id_usuario", idUsuario);
 
             startActivity(intent);
+        });
+
+        // ELIMINAR USUARIO
+        btnEliminarUsuario.setOnClickListener(v -> {
+            confirmarEliminacion();
         });
     }
 
@@ -106,7 +112,7 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (apiService != null && idUsuario > 0) {
+        if (apiService != null && idUsuario > 0 && !eliminando) {
             cargarDetalleUsuario(idUsuario);
         }
     }
@@ -116,19 +122,18 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
     // ==========================================
     private void cargarDetalleUsuario(int idUsuario) {
 
-        SharedPreferences preferencias =
-                getSharedPreferences(
-                        "ServiMatchSesion",
-                        MODE_PRIVATE
-                );
+        usuarioCargado = false;
+        btnEditarUsuario.setEnabled(false);
+        btnEliminarUsuario.setEnabled(false);
 
-        String token = preferencias.getString(
-                "access_token",
-                null
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchSesion",
+                MODE_PRIVATE
         );
 
-        if (token == null || token.isEmpty()) {
+        String token = preferencias.getString("access_token", null);
 
+        if (token == null || token.isEmpty()) {
             mostrarError("Iniciá sesión nuevamente.");
             return;
         }
@@ -173,6 +178,9 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                     cargarOficio(usuario.getOficio());
                     cargarUbicacion(usuario.getUbicacion());
 
+                    usuarioCargado = true;
+                    actualizarEstadoBotones();
+
                 } else if (response.code() == 401) {
 
                     mostrarError(
@@ -203,9 +211,186 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
                     Call<Usuario> call,
                     Throwable t) {
 
-                mostrarError(
-                        "Error de conexión con el servidor."
-                );
+                mostrarError("Error de conexión con el servidor.");
+            }
+        });
+    }
+
+    // ==========================================
+    // ACTUALIZAR ESTADO DE BOTONES
+    // ==========================================
+    private void actualizarEstadoBotones() {
+
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchSesion",
+                MODE_PRIVATE
+        );
+
+        int idAdministrador = preferencias.getInt("id_usuario", -1);
+        int idRol = preferencias.getInt("id_rol", -1);
+
+        boolean esAdministrador = idRol == 10;
+
+        btnEditarUsuario.setEnabled(
+                usuarioCargado && esAdministrador && !eliminando
+        );
+
+        btnEliminarUsuario.setEnabled(
+                usuarioCargado
+                        && esAdministrador
+                        && idAdministrador > 0
+                        && idUsuario != idAdministrador
+                        && !eliminando
+        );
+    }
+
+    // ==========================================
+    // CONFIRMAR ELIMINACIÓN
+    // ==========================================
+    private void confirmarEliminacion() {
+
+        if (!usuarioCargado || eliminando || idUsuario <= 0) {
+            return;
+        }
+
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchSesion",
+                MODE_PRIVATE
+        );
+
+        int idAdministrador = preferencias.getInt("id_usuario", -1);
+        int idRol = preferencias.getInt("id_rol", -1);
+
+        if (idRol != 10) {
+            mostrarError("Solo los administradores pueden eliminar usuarios.");
+            return;
+        }
+
+        if (idAdministrador <= 0) {
+            mostrarError("No se pudo identificar al administrador.");
+            return;
+        }
+
+        if (idUsuario == idAdministrador) {
+            mostrarError("No podés eliminar tu propia cuenta.");
+            return;
+        }
+
+        String nombreUsuario = txtDetalleNombre.getText().toString();
+
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar usuario")
+                .setMessage(
+                        "¿Estás seguro de que querés eliminar a "
+                                + nombreUsuario
+                                + "?\n\nEsta acción no se puede deshacer."
+                )
+                .setNegativeButton("Cancelar", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setPositiveButton("Eliminar", (dialog, which) -> {
+                    eliminarUsuario();
+                })
+                .show();
+    }
+
+    // ==========================================
+    // ELIMINAR USUARIO DESDE DJANGO
+    // ==========================================
+    private void eliminarUsuario() {
+
+        if (eliminando || !usuarioCargado) {
+            return;
+        }
+
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchSesion",
+                MODE_PRIVATE
+        );
+
+        String token = preferencias.getString("access_token", null);
+        int idAdministrador = preferencias.getInt("id_usuario", -1);
+        int idRol = preferencias.getInt("id_rol", -1);
+
+        if (idRol != 10
+                || idAdministrador <= 0
+                || idUsuario == idAdministrador) {
+
+            mostrarError("No tenés permisos para realizar esta eliminación.");
+            return;
+        }
+
+        if (token == null || token.isEmpty()) {
+            mostrarError("La sesión expiró. Iniciá sesión nuevamente.");
+            return;
+        }
+
+        eliminando = true;
+        actualizarEstadoBotones();
+
+        apiService.eliminarUsuario(
+                idUsuario,
+                "Bearer " + token
+        ).enqueue(new Callback<Void>() {
+
+            @Override
+            public void onResponse(
+                    Call<Void> call,
+                    Response<Void> response) {
+
+                eliminando = false;
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(
+                            AdminUsuarioDetalleActivity.this,
+                            "Usuario eliminado correctamente.",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                    // INFORMAR AL LISTADO QUE HUBO CAMBIOS
+                    setResult(RESULT_OK);
+
+                    // REGRESAR AL LISTADO
+                    finish();
+
+                } else {
+
+                    actualizarEstadoBotones();
+
+                    if (response.code() == 401) {
+
+                        mostrarError("La sesión expiró.");
+
+                    } else if (response.code() == 403) {
+
+                        mostrarError(
+                                "No tenés permisos para eliminar usuarios."
+                        );
+
+                    } else if (response.code() == 404) {
+
+                        mostrarError("El usuario no existe.");
+
+                    } else {
+
+                        mostrarError(
+                                "Error al eliminar usuario. Código: "
+                                        + response.code()
+                        );
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<Void> call,
+                    Throwable t) {
+
+                eliminando = false;
+                actualizarEstadoBotones();
+
+                mostrarError("Error de conexión con el servidor.");
             }
         });
     }
@@ -216,7 +401,6 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
     private void cargarOficio(Integer idOficio) {
 
         if (idOficio == null) {
-
             txtDetalleOficio.setText("No especificado");
             return;
         }
@@ -267,7 +451,6 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
     private void cargarUbicacion(Integer idUbicacion) {
 
         if (idUbicacion == null) {
-
             txtDetalleUbicacion.setText("No especificada");
             return;
         }
@@ -315,7 +498,7 @@ public class AdminUsuarioDetalleActivity extends AppCompatActivity {
     }
 
     // ==========================================
-    // MOSTRAR MENSAJES DE ERROR
+    // MOSTRAR MENSAJES
     // ==========================================
     private void mostrarError(String mensaje) {
 

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,11 +28,20 @@ public class AdminUsuariosActivity extends AppCompatActivity {
     // CONTENEDOR DEL LISTADO
     private LinearLayout contenedorUsuariosAdmin;
 
+    // BOTÓN AGREGAR USUARIO
+    private Button btnAgregarUsuarioAdmin;
+
     // BARRA DE NAVEGACIÓN
     private LinearLayout navInicioAdmin;
     private LinearLayout navUsuariosAdmin;
     private LinearLayout navPerfilAdmin;
     private LinearLayout navSalirAdmin;
+
+    // SERVICIO API
+    private ApiService apiService;
+
+    // CONTROL DE CONSULTAS
+    private Call<List<Usuario>> consultaUsuarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +53,53 @@ public class AdminUsuariosActivity extends AppCompatActivity {
         contenedorUsuariosAdmin =
                 findViewById(R.id.contenedorUsuariosAdmin);
 
+        // VINCULAR BOTÓN AGREGAR USUARIO
+        btnAgregarUsuarioAdmin =
+                findViewById(R.id.btnAgregarUsuarioAdmin);
+
         // VINCULAR BARRA DE NAVEGACIÓN
-        navInicioAdmin =
-                findViewById(R.id.navInicioAdmin);
+        navInicioAdmin = findViewById(R.id.navInicioAdmin);
+        navUsuariosAdmin = findViewById(R.id.navUsuariosAdmin);
+        navPerfilAdmin = findViewById(R.id.navPerfilAdmin);
+        navSalirAdmin = findViewById(R.id.navSalirAdmin);
 
-        navUsuariosAdmin =
-                findViewById(R.id.navUsuariosAdmin);
+        // INICIALIZAR RETROFIT
+        apiService = RetrofitClient
+                .getClient(AdminUsuariosActivity.this)
+                .create(ApiService.class);
 
-        navPerfilAdmin =
-                findViewById(R.id.navPerfilAdmin);
-
-        navSalirAdmin =
-                findViewById(R.id.navSalirAdmin);
-
-        // CONFIGURAR MENÚ
+        // CONFIGURAR NAVEGACIÓN
         configurarNavegacion();
 
-        // CARGAR USUARIOS DESDE DJANGO
+        // CONFIGURAR BOTÓN AGREGAR USUARIO
+        configurarBotonAgregarUsuario();
+    }
+
+    // =====================================
+    // ACTUALIZAR LISTADO AL REGRESAR
+    // =====================================
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // CONSULTAR NUEVAMENTE LOS USUARIOS
         cargarUsuarios();
+    }
+
+    // =====================================
+    // CONFIGURAR BOTÓN AGREGAR USUARIO
+    // =====================================
+    private void configurarBotonAgregarUsuario() {
+
+        btnAgregarUsuarioAdmin.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    AdminUsuariosActivity.this,
+                    AdminRegistrarUsuarioActivity.class
+            );
+
+            startActivity(intent);
+        });
     }
 
     // =====================================
@@ -82,9 +121,9 @@ public class AdminUsuariosActivity extends AppCompatActivity {
             finish();
         });
 
-        // USUARIOS: PANTALLA ACTUAL
+        // USUARIOS: ACTUALIZAR LISTADO
         navUsuariosAdmin.setOnClickListener(v -> {
-            // Ya estamos en el listado de usuarios.
+            cargarUsuarios();
         });
 
         // PERFIL
@@ -109,21 +148,24 @@ public class AdminUsuariosActivity extends AppCompatActivity {
     // =====================================
     private void cerrarSesion() {
 
+        // CANCELAR CONSULTA PENDIENTE
+        if (consultaUsuarios != null) {
+            consultaUsuarios.cancel();
+        }
+
         // LIMPIAR SESIÓN PRINCIPAL
-        SharedPreferences sesion =
-                getSharedPreferences(
-                        "ServiMatchSesion",
-                        MODE_PRIVATE
-                );
+        SharedPreferences sesion = getSharedPreferences(
+                "ServiMatchSesion",
+                MODE_PRIVATE
+        );
 
         sesion.edit().clear().apply();
 
-        // LIMPIAR TOKEN UTILIZADO POR RETROFIT
-        SharedPreferences preferencias =
-                getSharedPreferences(
-                        "ServiMatchPrefs",
-                        MODE_PRIVATE
-                );
+        // LIMPIAR TOKEN DE RETROFIT
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchPrefs",
+                MODE_PRIVATE
+        );
 
         preferencias.edit().clear().apply();
 
@@ -148,11 +190,10 @@ public class AdminUsuariosActivity extends AppCompatActivity {
     private void cargarUsuarios() {
 
         // RECUPERAR TOKEN JWT
-        SharedPreferences preferencias =
-                getSharedPreferences(
-                        "ServiMatchSesion",
-                        MODE_PRIVATE
-                );
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchSesion",
+                MODE_PRIVATE
+        );
 
         String token = preferencias.getString(
                 "access_token",
@@ -161,22 +202,24 @@ public class AdminUsuariosActivity extends AppCompatActivity {
 
         if (token == null || token.isEmpty()) {
 
-            Toast.makeText(
-                    this,
-                    "No hay una sesión activa. Iniciá sesión nuevamente.",
-                    Toast.LENGTH_LONG
-            ).show();
+            mostrarMensaje(
+                    "No hay una sesión activa. Iniciá sesión nuevamente."
+            );
 
             return;
         }
 
-        // CREAR SERVICIO RETROFIT CON CONTEXT
-        ApiService apiService =
-                RetrofitClient.getClient(AdminUsuariosActivity.this)
-                        .create(ApiService.class);
+        // CANCELAR CONSULTA ANTERIOR
+        if (consultaUsuarios != null) {
+            consultaUsuarios.cancel();
+        }
 
-        // CONSULTAR USUARIOS CON JWT
-        apiService.obtenerUsuarios("Bearer " + token).enqueue(
+        // NUEVA CONSULTA
+        consultaUsuarios = apiService.obtenerUsuarios(
+                "Bearer " + token
+        );
+
+        consultaUsuarios.enqueue(
                 new Callback<List<Usuario>>() {
 
                     @Override
@@ -184,116 +227,35 @@ public class AdminUsuariosActivity extends AppCompatActivity {
                             Call<List<Usuario>> call,
                             Response<List<Usuario>> response) {
 
+                        if (call.isCanceled() || isFinishing()) {
+                            return;
+                        }
+
                         if (response.isSuccessful()
                                 && response.body() != null) {
 
                             List<Usuario> usuarios = response.body();
 
-                            // ELIMINAR TARJETAS ANTERIORES
-                            // CONSERVAR EL TÍTULO
-                            while (contenedorUsuariosAdmin.getChildCount() > 1) {
-                                contenedorUsuariosAdmin.removeViewAt(1);
-                            }
-
-                            if (usuarios.isEmpty()) {
-
-                                Toast.makeText(
-                                        AdminUsuariosActivity.this,
-                                        "No hay usuarios registrados",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-
-                                return;
-                            }
-
-                            // MOSTRAR USUARIOS
-                            for (Usuario usuario : usuarios) {
-
-                                View tarjeta = LayoutInflater.from(
-                                        AdminUsuariosActivity.this
-                                ).inflate(
-                                        R.layout.item_usuario_admin,
-                                        contenedorUsuariosAdmin,
-                                        false
-                                );
-
-                                TextView txtNombre =
-                                        tarjeta.findViewById(
-                                                R.id.txtNombreUsuarioAdmin
-                                        );
-
-                                TextView txtEmail =
-                                        tarjeta.findViewById(
-                                                R.id.txtEmailUsuarioAdmin
-                                        );
-
-                                TextView txtRol =
-                                        tarjeta.findViewById(
-                                                R.id.txtRolUsuarioAdmin
-                                        );
-
-                                txtNombre.setText(usuario.getNombre());
-                                txtEmail.setText(usuario.getEmail());
-
-                                Integer rol = usuario.getRol();
-
-                                if (rol != null && rol == 10) {
-
-                                    txtRol.setText("Administrador");
-
-                                } else if (rol != null && rol == 11) {
-
-                                    txtRol.setText("Usuario estándar");
-
-                                } else {
-
-                                    txtRol.setText("Rol no identificado");
-                                }
-
-                                // ABRIR DETALLE AL TOCAR LA TARJETA
-                                tarjeta.setOnClickListener(v -> {
-
-                                    Intent intent = new Intent(
-                                            AdminUsuariosActivity.this,
-                                            AdminUsuarioDetalleActivity.class
-                                    );
-
-                                    // ENVIAR ID DEL USUARIO
-                                    intent.putExtra(
-                                            "id_usuario",
-                                            usuario.getId()
-                                    );
-
-                                    startActivity(intent);
-                                });
-
-                                contenedorUsuariosAdmin.addView(tarjeta);
-                            }
+                            mostrarUsuarios(usuarios);
 
                         } else if (response.code() == 401) {
 
-                            Toast.makeText(
-                                    AdminUsuariosActivity.this,
-                                    "La sesión expiró. Iniciá sesión nuevamente.",
-                                    Toast.LENGTH_LONG
-                            ).show();
+                            mostrarMensaje(
+                                    "La sesión expiró. Iniciá sesión nuevamente."
+                            );
 
                         } else if (response.code() == 403) {
 
-                            Toast.makeText(
-                                    AdminUsuariosActivity.this,
-                                    "No tenés permisos de administrador.",
-                                    Toast.LENGTH_LONG
-                            ).show();
+                            mostrarMensaje(
+                                    "No tenés permisos de administrador."
+                            );
 
                         } else {
 
-                            Toast.makeText(
-                                    AdminUsuariosActivity.this,
+                            mostrarMensaje(
                                     "Error al obtener usuarios. Código: "
-                                            + response.code(),
-                                    Toast.LENGTH_LONG
-                            ).show();
+                                            + response.code()
+                            );
                         }
                     }
 
@@ -302,12 +264,125 @@ public class AdminUsuariosActivity extends AppCompatActivity {
                             Call<List<Usuario>> call,
                             Throwable t) {
 
-                        Toast.makeText(
-                                AdminUsuariosActivity.this,
-                                "Error de conexión: " + t.getMessage(),
-                                Toast.LENGTH_LONG
-                        ).show();
+                        if (call.isCanceled() || isFinishing()) {
+                            return;
+                        }
+
+                        mostrarMensaje(
+                                "Error de conexión: " + t.getMessage()
+                        );
                     }
-                });
+                }
+        );
+    }
+
+    // =====================================
+    // MOSTRAR USUARIOS EN EL LISTADO
+    // =====================================
+    private void mostrarUsuarios(List<Usuario> usuarios) {
+
+        // ELIMINAR TARJETAS ANTERIORES
+        // CONSERVAR EL TÍTULO Y EL BOTÓN AGREGAR
+        while (contenedorUsuariosAdmin.getChildCount() > 2) {
+
+            contenedorUsuariosAdmin.removeViewAt(2);
+        }
+
+        // VERIFICAR SI HAY USUARIOS
+        if (usuarios.isEmpty()) {
+
+            mostrarMensaje("No hay usuarios registrados.");
+
+            return;
+        }
+
+        // RECORRER USUARIOS
+        for (Usuario usuario : usuarios) {
+
+            // CREAR TARJETA
+            View tarjeta = LayoutInflater.from(
+                    AdminUsuariosActivity.this
+            ).inflate(
+                    R.layout.item_usuario_admin,
+                    contenedorUsuariosAdmin,
+                    false
+            );
+
+            // VINCULAR ELEMENTOS
+            TextView txtNombre = tarjeta.findViewById(
+                    R.id.txtNombreUsuarioAdmin
+            );
+
+            TextView txtEmail = tarjeta.findViewById(
+                    R.id.txtEmailUsuarioAdmin
+            );
+
+            TextView txtRol = tarjeta.findViewById(
+                    R.id.txtRolUsuarioAdmin
+            );
+
+            // MOSTRAR DATOS
+            txtNombre.setText(usuario.getNombre());
+            txtEmail.setText(usuario.getEmail());
+
+            Integer rol = usuario.getRol();
+
+            if (rol != null && rol == 10) {
+
+                txtRol.setText("Administrador");
+
+            } else if (rol != null && rol == 11) {
+
+                txtRol.setText("Usuario estándar");
+
+            } else {
+
+                txtRol.setText("Rol no identificado");
+            }
+
+            // ABRIR DETALLE AL TOCAR LA TARJETA
+            tarjeta.setOnClickListener(v -> {
+
+                Intent intent = new Intent(
+                        AdminUsuariosActivity.this,
+                        AdminUsuarioDetalleActivity.class
+                );
+
+                // ENVIAR ID DEL USUARIO
+                intent.putExtra(
+                        "id_usuario",
+                        usuario.getId()
+                );
+
+                startActivity(intent);
+            });
+
+            // AGREGAR TARJETA AL CONTENEDOR
+            contenedorUsuariosAdmin.addView(tarjeta);
+        }
+    }
+
+    // =====================================
+    // MOSTRAR MENSAJES
+    // =====================================
+    private void mostrarMensaje(String mensaje) {
+
+        Toast.makeText(
+                AdminUsuariosActivity.this,
+                mensaje,
+                Toast.LENGTH_LONG
+        ).show();
+    }
+
+    // =====================================
+    // CANCELAR CONSULTAS AL CERRAR
+    // =====================================
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (consultaUsuarios != null) {
+            consultaUsuarios.cancel();
+        }
     }
 }

@@ -38,6 +38,11 @@
             android:name=".AdminUsuariosActivity"
             android:exported="false" />
 
+        <!-- REGISTRAR USUARIO DESDE ADMINISTRADOR -->
+        <activity
+            android:name=".AdminRegistrarUsuarioActivity"
+            android:exported="false" />
+
         <!-- LISTADO DE PROFESIONALES -->
         <activity
             android:name=".ProfesionalesActivity"
