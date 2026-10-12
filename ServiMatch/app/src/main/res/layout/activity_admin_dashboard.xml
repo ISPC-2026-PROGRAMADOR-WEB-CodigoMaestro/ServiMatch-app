@@ -2,7 +2,6 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo_principal"
@@ -48,6 +47,7 @@
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- BIENVENIDA -->
             <TextView
                 android:id="@+id/txtBienvenidaAdmin"
                 android:layout_width="match_parent"
@@ -67,13 +67,14 @@
                 android:textColor="@color/texto_secundario"
                 android:textSize="15sp" />
 
-            <!-- TARJETAS -->
+            <!-- PRIMERA FILA -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:orientation="horizontal">
 
+                <!-- USUARIOS -->
                 <TextView
                     android:id="@+id/btnUsuariosAdmin"
                     android:layout_width="0dp"
@@ -89,6 +90,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <!-- OFICIOS -->
                 <TextView
                     android:id="@+id/btnOficiosAdmin"
                     android:layout_width="0dp"
@@ -96,6 +98,8 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/card_oficio"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center"
                     android:text="🔧&#10;Oficios"
                     android:textColor="@color/texto_principal"
@@ -104,11 +108,43 @@
 
             </LinearLayout>
 
+            <!-- SEGUNDA FILA -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <!-- UBICACIONES -->
+                <TextView
+                    android:id="@+id/btnUbicacionesAdmin"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/card_oficio"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="📍&#10;Ubicaciones"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- ESPACIO PARA FUTURAS FUNCIONES -->
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
 
-    <!-- BARRA DE NAVEGACIÓN DEL ADMINISTRADOR -->
+    <!-- BARRA DE NAVEGACIÓN -->
     <include
         android:id="@+id/barraNavigationAdmin"
         layout="@layout/barra_navigation_admin"

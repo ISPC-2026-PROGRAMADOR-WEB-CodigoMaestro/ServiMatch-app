@@ -2,11 +2,9 @@
 package com.ispc.servimatch;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,12 +14,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private TextView txtBienvenidaAdmin;
     private TextView btnUsuariosAdmin;
     private TextView btnOficiosAdmin;
+    private TextView btnUbicacionesAdmin;
 
     // ELEMENTOS DE LA BARRA DE NAVEGACIÓN
     private LinearLayout navInicioAdmin;
     private LinearLayout navUsuariosAdmin;
     private LinearLayout navPerfilAdmin;
-    private LinearLayout navSalirAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +38,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
         btnOficiosAdmin =
                 findViewById(R.id.btnOficiosAdmin);
 
+        btnUbicacionesAdmin =
+                findViewById(R.id.btnUbicacionesAdmin);
+
         // VINCULAR ELEMENTOS DE NAVEGACIÓN
         navInicioAdmin =
                 findViewById(R.id.navInicioAdmin);
@@ -49,9 +50,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         navPerfilAdmin =
                 findViewById(R.id.navPerfilAdmin);
-
-        navSalirAdmin =
-                findViewById(R.id.navSalirAdmin);
 
         // RECIBIR DATOS DESDE LOGIN
         String usuario =
@@ -89,18 +87,31 @@ public class AdminDashboardActivity extends AppCompatActivity {
         // =====================================
         btnOficiosAdmin.setOnClickListener(v -> {
 
-            Toast.makeText(
+            Intent intent = new Intent(
                     AdminDashboardActivity.this,
-                    "Gestión de oficios próximamente",
-                    Toast.LENGTH_SHORT
-            ).show();
+                    AdminOficiosActivity.class
+            );
+
+            startActivity(intent);
+        });
+
+        // =====================================
+        // TARJETA: GESTIÓN DE UBICACIONES
+        // =====================================
+        btnUbicacionesAdmin.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    AdminDashboardActivity.this,
+                    AdminUbicacionesActivity.class
+            );
+
+            startActivity(intent);
         });
 
         // =====================================
         // MENÚ: INICIO
         // =====================================
         navInicioAdmin.setOnClickListener(v -> {
-
             // Ya estamos en el dashboard.
         });
 
@@ -129,51 +140,5 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
-
-        // =====================================
-        // MENÚ: SALIR
-        // =====================================
-        navSalirAdmin.setOnClickListener(v -> {
-
-            cerrarSesion();
-        });
-    }
-
-    // =====================================
-    // CERRAR SESIÓN
-    // =====================================
-    private void cerrarSesion() {
-
-        // LIMPIAR SESIÓN PRINCIPAL
-        SharedPreferences sesion =
-                getSharedPreferences(
-                        "ServiMatchSesion",
-                        MODE_PRIVATE
-                );
-
-        sesion.edit().clear().apply();
-
-        // LIMPIAR TOKEN DE RETROFIT
-        SharedPreferences preferencias =
-                getSharedPreferences(
-                        "ServiMatchPrefs",
-                        MODE_PRIVATE
-                );
-
-        preferencias.edit().clear().apply();
-
-        // REGRESAR AL LOGIN
-        Intent intent = new Intent(
-                AdminDashboardActivity.this,
-                LoginActivity.class
-        );
-
-        intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
-        );
-
-        startActivity(intent);
-        finish();
     }
 }

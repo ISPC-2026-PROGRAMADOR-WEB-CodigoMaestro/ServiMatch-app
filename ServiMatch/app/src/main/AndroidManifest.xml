@@ -43,6 +43,11 @@
             android:name=".AdminRegistrarUsuarioActivity"
             android:exported="false" />
 
+        <!-- GESTIÓN DE UBICACIONES ADMINISTRADOR -->
+        <activity
+            android:name=".AdminUbicacionesActivity"
+            android:exported="false" />
+
         <!-- LISTADO DE PROFESIONALES -->
         <activity
             android:name=".ProfesionalesActivity"
@@ -86,6 +91,10 @@
         <!-- DASHBOARD USUARIO ESTÁNDAR -->
         <activity
             android:name=".DashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminOficiosActivity"
             android:exported="false" />
 
     </application>

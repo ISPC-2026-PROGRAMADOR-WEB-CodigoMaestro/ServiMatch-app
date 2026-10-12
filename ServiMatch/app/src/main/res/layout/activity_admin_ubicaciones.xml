@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_principal"
+    android:orientation="vertical">
+
+    <!-- ENCABEZADO -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_primario_oscuro"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ServiMatch"
+            android:textColor="@color/blanco"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Gestión de ubicaciones"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!-- CONTENIDO -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agregar nueva ubicación"
+                android:textColor="@color/texto_principal"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp" />
+
+            <!-- CIUDAD -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ciudad"
+                android:textColor="@color/texto_principal"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtCiudadAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ejemplo: Jesús María"
+                android:inputType="textCapWords"
+                android:layout_marginBottom="16dp" />
+
+            <!-- PROVINCIA -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Provincia"
+                android:textColor="@color/texto_principal"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtProvinciaAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ejemplo: Córdoba"
+                android:inputType="textCapWords"
+                android:layout_marginBottom="20dp" />
+
+            <!-- GUARDAR -->
+            <Button
+                android:id="@+id/btnGuardarUbicacionAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar ubicación"
+                android:textAllCaps="false"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/color_primario" />
+
+            <!-- VOLVER -->
+            <Button
+                android:id="@+id/btnVolverUbicacionesAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Volver"
+                android:textAllCaps="false"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/texto_secundario" />
+
+            <!-- LISTADO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="12dp"
+                android:text="Ubicaciones registradas"
+                android:textColor="@color/texto_principal"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/contenedorUbicacionesAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <include
+        android:id="@+id/barraNavigationAdmin"
+        layout="@layout/barra_navigation_admin"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
+
+</LinearLayout>

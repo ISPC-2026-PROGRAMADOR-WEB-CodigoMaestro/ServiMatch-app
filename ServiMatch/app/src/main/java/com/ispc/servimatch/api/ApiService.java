@@ -18,12 +18,35 @@ import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 import retrofit2.http.Header;
 import retrofit2.http.DELETE;
+import retrofit2.http.PUT;
 
 public interface ApiService {
 
     // OBTENER UBICACIONES
     @GET("api/ubicaciones/")
     Call<List<Ubicacion>> obtenerUbicaciones();
+
+    // REGISTRAR UBICACIÓN (ADMINISTRADOR)
+    @POST("api/ubicaciones/")
+    Call<Ubicacion> registrarUbicacion(
+            @Header("Authorization") String token,
+            @Body Map<String, String> datos
+    );
+
+    // MODIFICAR UBICACIÓN (ADMINISTRADOR)
+    @PUT("api/ubicaciones/{id}/")
+    Call<Ubicacion> actualizarUbicacion(
+            @Path("id") int id,
+            @Header("Authorization") String token,
+            @Body Map<String, String> datos
+    );
+
+    // ELIMINAR UBICACIÓN (ADMINISTRADOR)
+    @DELETE("api/ubicaciones/{id}/")
+    Call<Void> eliminarUbicacion(
+            @Path("id") int id,
+            @Header("Authorization") String token
+    );
 
     // OBTENER OFICIOS
     @GET("api/oficios/")
@@ -33,6 +56,28 @@ public interface ApiService {
     // OBTENER USUARIOS (ADMINISTRADOR)
     @GET("api/usuarios/")
     Call<List<Usuario>> obtenerUsuarios(
+            @Header("Authorization") String token
+    );
+
+    // REGISTRAR OFICIO (SOLO ADMINISTRADOR)
+    @POST("api/oficios/")
+    Call<Oficio> registrarOficio(
+            @Header("Authorization") String token,
+            @Body Map<String, String> datos
+    );
+
+    // MODIFICAR OFICIO (SOLO ADMINISTRADOR)
+    @PUT("api/oficios/{id}/")
+    Call<Oficio> actualizarOficio(
+            @Path("id") int id,
+            @Header("Authorization") String token,
+            @Body Map<String, String> datos
+    );
+
+    // ELIMINAR OFICIO (SOLO ADMINISTRADOR)
+    @DELETE("api/oficios/{id}/")
+    Call<Void> eliminarOficio(
+            @Path("id") int id,
             @Header("Authorization") String token
     );
 
