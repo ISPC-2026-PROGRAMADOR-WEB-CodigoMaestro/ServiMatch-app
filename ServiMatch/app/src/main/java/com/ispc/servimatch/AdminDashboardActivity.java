@@ -25,7 +25,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // CARGAR PANTALLA DEL ADMINISTRADOR
+        // CARGAR DE PANTALLA DEL ADMINISTRADOR
         setContentView(R.layout.activity_admin_dashboard);
 
         // VINCULAR ELEMENTOS DEL DASHBOARD
