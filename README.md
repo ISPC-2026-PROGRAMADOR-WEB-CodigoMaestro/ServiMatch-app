@@ -95,6 +95,8 @@ Para instalar ServiMatch en un dispositivo Android:
 - Autorizar la instalación desde esa fuente si Android lo solicita.
 - Completar la instalación y abrir ServiMatch.
 
+**Link de Apk:** https://drive.google.com/drive/folders/18d7ImcfeI_HjnKT-8HBfU42Ilq5Xgqzx?usp=sharing
+
   Usuario para probar la aplicacion:
   
   **Estandar**
@@ -104,6 +106,8 @@ Para instalar ServiMatch en un dispositivo Android:
   **Administrador**
   Usuario: agustin@servimatch.com
   Contraseña: Admin1234
+
+**Link de Video Demo App:** https://drive.google.com/drive/folders/1r_tLlBe7StcwPfiTu7Nd7cKVqIosWWiO?usp=sharing
   
 ## 👥 Integrantes del equipo
 
