@@ -4,26 +4,107 @@
 
 ## 🧾 Descripción del Proyecto
 
-**ServiMatch** es una aplicación web desarrollada para facilitar la búsqueda de trabajadores de oficios confiables en la provincia de Córdoba, tales como electricistas, carpinteros, pintores, plomeros, gasistas y otros profesionales independientes.
+**ServiMatch** es una aplicación movil desarrollada para facilitar la búsqueda de trabajadores de oficios confiables en la provincia de Córdoba, tales como electricistas, carpinteros, pintores, plomeros, gasistas y otros profesionales independientes.
 
-Actualmente, muchas personas que residen en distintas localidades de Córdoba enfrentan dificultades para encontrar prestadores de servicios que sean responsables, cuenten con experiencia comprobable y generen confianza al momento de contratarlos. En la mayoría de los casos, la búsqueda se realiza mediante recomendaciones informales, grupos de redes sociales o publicaciones sin ningún tipo de validación, lo que puede generar desconfianza, incertidumbre y riesgos para los usuarios.
+Actualmente, muchas personas que residen en distintas localidades de Córdoba enfrentan dificultades para encontrar prestadores de servicios responsables, con experiencia y que generen confianza al momento de contratarlos.
 
-Frente a esta problemática, ServiMatch propone una plataforma web que funcione como un directorio digital de trabajadores de oficios verificados en Córdoba, permitiendo a los usuarios buscar profesionales según su localidad o ciudad , conocer sus calificaciones y opiniones , consultar su experiencia laboral y establecer un contacto directo de manera rápida y segura.
+En muchos casos, la búsqueda se realiza mediante recomendaciones informales, redes sociales o publicaciones que no siempre ofrecen información suficiente sobre los profesionales.
 
-La propuesta de valor de ServiMatch se basa en brindar mayor confianza , seguridad y transparencia en el proceso de contratación, incorporando características como la verificación de identidad , la visualización del historial de trabajos realizados, la valoración de los servicios por parte de otros usuarios y la posibilidad de encontrar profesionales cercanos a la ubicación del cliente.
+Frente a esta problemática, **ServiMatch** propone una solución tecnológica que permite conectar usuarios con trabajadores de diferentes oficios dentro de la provincia de Córdoba, facilitando el acceso a información sobre sus especialidades y ubicaciones.
 
-De esta manera, la plataforma busca fortalecer la conexión entre clientes y trabajadores de oficios de la provincia de Córdoba, promoviendo oportunidades laborales para los profesionales y ofreciendo una solución confiable, organizada y accesible para la contratación de servicios.
+La aplicación busca ofrecer una experiencia sencilla, organizada y accesible desde dispositivos Android, contribuyendo a mejorar la búsqueda de servicios y promoviendo oportunidades laborales para los profesionales cordobeses.
+
+## 🎯 Objetivo del proyecto
+
+Desarrollar una aplicación móvil que facilite la búsqueda y consulta de profesionales de diferentes oficios en la provincia de Córdoba, mediante una plataforma intuitiva que permita acceder a información actualizada y organizada.
+
+## 📱 Funcionalidades de la aplicación
+
+🔐 Autenticación de usuarios
+
+- Inicio de sesión mediante correo electrónico y contraseña.
+- Identificación de usuarios según su rol.
+- Acceso a diferentes funcionalidades según los permisos correspondientes.
+
+👤 Usuario estándar
+
+- Acceso a la pantalla principal.
+- Visualización del listado de profesionales disponibles.
+- Visualización de la ciudad y provincia de los profesionales.
+
+🛠️ Administrador
+
+El administrador dispone de un panel de gestión que permite administrar los datos del sistema.
+
+**Gestión de usuarios (CRUD):**
+- Registrar nuevos usuarios.
+- Consultar usuarios existentes.
+- Modificar información de usuarios.
+- Eliminar usuarios.
+
+**Gestión de oficios (CRUD):**
+- Registrar nuevos oficios.
+- Consultar los oficios disponibles.
+- Actualizar información de oficios.
+- Eliminar oficios.
+
+**Gestión de ubicaciones (CRUD):**
+- Registrar nuevas ubicaciones.
+- Consultar ciudades y provincias.
+- Modificar ubicaciones.
+- Eliminar ubicaciones.
 
 ## 🚀 Tecnologías utilizadas
 
-- Desarrollo móvil: Android Studio
-- Lenguaje: Java
-- Diseño de interfaces: XML
-- Backend: Django + Django REST Framework
-- Base de datos: MySQL
-- Comunicación con API: JSON
-- Control de versiones: Git y GitHub
+- Android Studio: entorno de desarrollo de la aplicación móvil.
+- Java: lenguaje de programación.
+- XML: diseño de interfaces.
+- Retrofit: comunicación con la API REST.
+- JSON: intercambio de información entre aplicación y servidor.
+- Django y Django REST Framework: desarrollo del backend.
+- MySQL: gestión de la base de datos.
+- Railway: alojamiento del backend.
+- Git y GitHub: control de versiones y trabajo colaborativo.
 
+## 🏗️ Arquitectura de la aplicación
+
+La aplicación móvil utiliza una arquitectura cliente-servidor.
+
+1 - El usuario interactúa con la aplicación Android.
+2 - La aplicación realiza solicitudes HTTP mediante Retrofit.
+3 - La API REST desarrollada con Django procesa las solicitudes.
+4 - El backend consulta o modifica la información almacenada en MySQL.
+5 - La API devuelve respuestas en formato JSON.
+6 - La aplicación muestra la información correspondiente al usuario.
+
+## 🔒 Seguridad
+
+La aplicación incorpora mecanismos de seguridad para proteger el acceso a las funcionalidades del sistema.
+
+- Autenticación mediante JWT.
+- Diferenciación de permisos según roles.
+- Comunicación con el backend mediante HTTPS.
+
+## 📥 Instalación de la aplicación
+
+Para instalar ServiMatch en un dispositivo Android:
+
+- Acceder al link en la wiki.
+- Descargar el archivo APK disponible.
+- Abrir el archivo desde el dispositivo.
+- Autorizar la instalación desde esa fuente si Android lo solicita.
+- Completar la instalación y abrir ServiMatch.
+
+  Usuario para probar la aplicacion:
+  
+  **Estandar**
+  Usuario: carlos@gmail.com
+  Contraseña: Carlos1234
+
+  **Administrador**
+  Usuario: agustin@servimatch.com
+  Contraseña: Admin1234
+  
 ## 👥 Integrantes del equipo
 
 | Integrante | Rol |
