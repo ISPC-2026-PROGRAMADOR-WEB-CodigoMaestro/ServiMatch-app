@@ -95,7 +95,7 @@ public class RegistroActivity extends AppCompatActivity {
                 }
 
                 // Validamos el campo Nombre Completo
-                if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+")) {
+                if (!RegistroValidator.validarNombre(nombre)) {
 
                     Toast.makeText(RegistroActivity.this,
                             "El nombre solo puede contener letras",
@@ -105,7 +105,7 @@ public class RegistroActivity extends AppCompatActivity {
                 }
 
                 // Validamos el campo Correo Electronico
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                if (!RegistroValidator.validarEmail(email)) {
 
                     Toast.makeText(RegistroActivity.this,
                             "Ingrese un correo electronico valido",
@@ -115,7 +115,7 @@ public class RegistroActivity extends AppCompatActivity {
                 }
 
                 // Validamos el campo DNI
-                if (!dni.matches("\\d{7,8}")) {
+                if (!RegistroValidator.validarDNI(dni)) {
 
                     Toast.makeText(RegistroActivity.this,
                             "El DNI debe contener entre 7 y 8 dígitos",
