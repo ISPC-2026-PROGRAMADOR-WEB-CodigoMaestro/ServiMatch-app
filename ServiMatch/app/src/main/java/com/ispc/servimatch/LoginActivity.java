@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT
                 ).show();
 
-            } else {
+            } else if (LoginValidator.validarCampos(usuario, password)) {
                 iniciarSesion(usuario, password);
             }
         });
