@@ -69,6 +69,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Ejemplo: Jesús María"
                 android:inputType="textCapWords"
+                android:textColorHint="@color/texto_secundario"
+                android:textColor="@color/texto_principal"
                 android:layout_marginBottom="16dp" />
 
             <!-- PROVINCIA -->
@@ -85,6 +87,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Ejemplo: Córdoba"
                 android:inputType="textCapWords"
+                android:textColorHint="@color/texto_secundario"
+                android:textColor="@color/texto_principal"
                 android:layout_marginBottom="20dp" />
 
             <!-- GUARDAR -->
@@ -95,7 +99,7 @@
                 android:text="Guardar ubicación"
                 android:textAllCaps="false"
                 android:textColor="@color/blanco"
-                android:backgroundTint="@color/color_primario" />
+                android:backgroundTint="@color/color_primario_oscuro" />
 
             <!-- VOLVER -->
             <Button
@@ -106,7 +110,7 @@
                 android:text="Volver"
                 android:textAllCaps="false"
                 android:textColor="@color/blanco"
-                android:backgroundTint="@color/texto_secundario" />
+                android:backgroundTint="@color/color_primario" />
 
             <!-- LISTADO -->
             <TextView

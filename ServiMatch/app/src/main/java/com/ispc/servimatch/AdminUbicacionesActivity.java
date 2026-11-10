@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -161,6 +162,7 @@ public class AdminUbicacionesActivity extends AppCompatActivity {
             TextView mensaje = new TextView(this);
             mensaje.setText("No hay ubicaciones registradas.");
             mensaje.setTextSize(16);
+            mensaje.setTextColor(getResources().getColor(R.color.texto_principal));
 
             contenedorUbicaciones.addView(mensaje);
             return;
@@ -168,79 +170,35 @@ public class AdminUbicacionesActivity extends AppCompatActivity {
 
         for (Ubicacion ubicacion : ubicaciones) {
 
-            LinearLayout tarjeta = new LinearLayout(this);
-            tarjeta.setOrientation(LinearLayout.VERTICAL);
-
-            tarjeta.setPadding(
-                    dp(16), dp(12), dp(16), dp(12)
+            //Cargar el diseño de la tarjeta desde XML
+            View tarjeta = getLayoutInflater().inflate(
+                    R.layout.item_ubicacion_admin,
+                    contenedorUbicaciones, false
             );
 
-            LinearLayout.LayoutParams tarjetaParams =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
+            //Obtener los elementos de la tarjeta
+            TextView txtCiudad = tarjeta.findViewById(
+                    R.id.txtCiudadUbicacion
+            );
 
-            tarjetaParams.bottomMargin = dp(12);
-            tarjeta.setLayoutParams(tarjetaParams);
+            TextView txtProvincia = tarjeta.findViewById(
+                    R.id.txtProvinciaUbicacion
+            );
 
-            tarjeta.setBackgroundResource(R.drawable.card_oficio);
+            Button btnEditar = tarjeta.findViewById(
+                    R.id.btnEditarUbicacion
+            );
 
-            // CIUDAD
-            TextView txtCiudad = new TextView(this);
+            Button btnEliminar = tarjeta.findViewById(
+                    R.id.btnEliminarUbicacion
+            );
 
+            // Mostrar los datos recibidos desde Django
             txtCiudad.setText(ubicacion.getCiudad());
-            txtCiudad.setTextSize(18);
-            txtCiudad.setTypeface(null, Typeface.BOLD);
-
-            tarjeta.addView(txtCiudad);
-
-            // PROVINCIA
-            TextView txtProvincia = new TextView(this);
 
             txtProvincia.setText(
                     "Provincia: " + ubicacion.getProvincia()
             );
-
-            txtProvincia.setTextSize(15);
-
-            tarjeta.addView(txtProvincia);
-
-            // BOTONES
-            LinearLayout filaBotones = new LinearLayout(this);
-            filaBotones.setOrientation(LinearLayout.HORIZONTAL);
-
-            filaBotones.setPadding(0, dp(12), 0, 0);
-
-            Button btnEditar = new Button(this);
-            btnEditar.setText("Editar");
-            btnEditar.setAllCaps(false);
-
-            Button btnEliminar = new Button(this);
-            btnEliminar.setText("Eliminar");
-            btnEliminar.setAllCaps(false);
-
-            LinearLayout.LayoutParams paramsEditar =
-                    new LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1
-                    );
-
-            paramsEditar.rightMargin = dp(8);
-
-            LinearLayout.LayoutParams paramsEliminar =
-                    new LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1
-                    );
-
-            filaBotones.addView(btnEditar, paramsEditar);
-            filaBotones.addView(btnEliminar, paramsEliminar);
-
-            tarjeta.addView(filaBotones);
-            contenedorUbicaciones.addView(tarjeta);
 
             btnEditar.setOnClickListener(
                     v -> mostrarDialogoEditar(ubicacion)
@@ -249,7 +207,12 @@ public class AdminUbicacionesActivity extends AppCompatActivity {
             btnEliminar.setOnClickListener(
                     v -> confirmarEliminacion(ubicacion)
             );
+
+            // Agregar la tarjeta al contenedor
+            contenedorUbicaciones.addView(tarjeta);
+
         }
+
     }
 
     // =====================================

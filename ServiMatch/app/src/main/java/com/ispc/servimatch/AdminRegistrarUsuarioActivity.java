@@ -112,7 +112,7 @@ public class AdminRegistrarUsuarioActivity extends AppCompatActivity {
 
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                                 AdminRegistrarUsuarioActivity.this,
-                                android.R.layout.simple_spinner_item,
+                                R.layout.spinner_item,
                                 nombres
                         );
 
@@ -165,7 +165,7 @@ public class AdminRegistrarUsuarioActivity extends AppCompatActivity {
 
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                                 AdminRegistrarUsuarioActivity.this,
-                                android.R.layout.simple_spinner_item,
+                                R.layout.spinner_item,
                                 nombres
                         );
 

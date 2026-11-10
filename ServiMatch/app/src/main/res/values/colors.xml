@@ -18,7 +18,7 @@
 
     <!-- Colores generales -->
     <color name="blanco">#FFFFFF</color>
-    <color name="rojo">#FF0000</color>
+    <color name="rojo">#C62828</color>
 
     <!-- Splash -->
     <color name="fondo_splash">#082B59</color>
