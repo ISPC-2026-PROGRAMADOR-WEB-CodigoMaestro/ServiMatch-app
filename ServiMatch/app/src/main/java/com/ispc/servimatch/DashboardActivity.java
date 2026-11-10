@@ -69,9 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
         cardMecanico =
                 findViewById(R.id.cardMecanico);
 
-        // =========================================
         // RECIBIR DATOS DEL USUARIO DESDE LOGIN
-        // =========================================
 
         String usuario =
                 getIntent().getStringExtra("usuario");
@@ -91,9 +89,7 @@ public class DashboardActivity extends AppCompatActivity {
         String rol =
                 getIntent().getStringExtra("rol");
 
-        // =========================================
         // MOSTRAR BIENVENIDA
-        // =========================================
 
         if (usuario != null
                 && !usuario.isEmpty()) {
@@ -109,9 +105,7 @@ public class DashboardActivity extends AppCompatActivity {
             );
         }
 
-        // =========================================
         // EVENTOS DE LAS CARDS
-        // =========================================
 
         cardElectricista.setOnClickListener(v -> {
 
@@ -177,9 +171,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         });
 
-        // =========================================
         // BARRA DE NAVEGACIÓN
-        // =========================================
 
         navInicio =
                 findViewById(R.id.navInicio);
@@ -196,9 +188,7 @@ public class DashboardActivity extends AppCompatActivity {
         textoInicio =
                 findViewById(R.id.textoInicio);
 
-        // =========================================
         // MARCAR INICIO COMO SELECCIONADO
-        // =========================================
 
         iconInicio.setTextColor(
                 getResources().getColor(
@@ -217,9 +207,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Typeface.BOLD
         );
 
-        // =========================================
         // NAVEGACIÓN - INICIO
-        // =========================================
 
         navInicio.setOnClickListener(v -> {
 
@@ -231,23 +219,41 @@ public class DashboardActivity extends AppCompatActivity {
 
         });
 
-        // =========================================
         // NAVEGACIÓN - CONTACTO
-        // =========================================
 
         navContacto.setOnClickListener(v -> {
 
-            Toast.makeText(
-                    DashboardActivity.this,
-                    "Próximamente: Contacto",
-                    Toast.LENGTH_SHORT
-            ).show();
+            Intent intent =
+                    new Intent(
+                            DashboardActivity.this,
+                            ContactoActivity.class
+                    );
+
+            // Enviamos los datos del usuario que inició sesión.
+
+            if (usuario != null) {
+
+                intent.putExtra(
+                        "usuario", usuario);
+            }
+
+            intent.putExtra(
+                    "id_usuario", idUsuario);
+
+            intent.putExtra(
+                    "id_rol", idRol);
+
+            if (rol != null) {
+
+                intent.putExtra(
+                        "rol", rol);
+            }
+
+            startActivity(intent);
 
         });
 
-        // =========================================
         // NAVEGACIÓN - PERFIL
-        // =========================================
 
         navPerfil.setOnClickListener(v -> {
 
@@ -257,33 +263,24 @@ public class DashboardActivity extends AppCompatActivity {
                             PerfilActivity.class
                     );
 
-            // Enviamos los datos del usuario
-            // que inició sesión.
+            // Enviamos los datos del usuario que inició sesión.
 
             if (usuario != null) {
 
                 intent.putExtra(
-                        "usuario",
-                        usuario
-                );
+                        "usuario", usuario);
             }
 
             intent.putExtra(
-                    "id_usuario",
-                    idUsuario
-            );
+                    "id_usuario", idUsuario);
 
             intent.putExtra(
-                    "id_rol",
-                    idRol
-            );
+                    "id_rol", idRol);
 
             if (rol != null) {
 
                 intent.putExtra(
-                        "rol",
-                        rol
-                );
+                        "rol", rol);
             }
 
             startActivity(intent);
@@ -291,9 +288,7 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    // =============================================
     // ABRIR LISTADO DE PROFESIONALES
-    // =============================================
 
     private void abrirProfesionales(
             String oficio) {

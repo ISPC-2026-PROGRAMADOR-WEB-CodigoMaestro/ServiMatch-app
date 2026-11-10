@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/fondo_principal">
+
+    <!-- ENCABEZADO -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/color_primario_oscuro">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ServiMatch"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/blanco" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contacto"
+            android:textSize="18sp"
+            android:textColor="@color/blanco" />
+
+    </LinearLayout>
+
+    <!-- CONTENIDO DESPLAZABLE -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- ILUSTRACIÓN -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:src="@drawable/ic_contacto"
+                android:contentDescription="Ilustración de contacto"
+                android:scaleType="fitCenter"
+                android:layout_marginBottom="12dp" />
+
+            <!-- TÍTULO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¡Hablemos!"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_principal"
+                android:gravity="center"
+                android:layout_marginBottom="12dp" />
+
+            <!-- DESCRIPCIÓN -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Envíanos tu consulta, sugerencia o reporte y te responderemos a la brevedad."
+                android:textSize="16sp"
+                android:textColor="@color/texto_principal"
+                android:gravity="center"
+                android:layout_marginBottom="28dp" />
+
+            <!-- ASUNTO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Asunto"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="8dp" />
+
+            <Spinner
+                android:id="@+id/spinnerAsunto"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/input_fondo"
+                android:popupBackground="@color/blanco"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp" />
+
+            <!-- MENSAJE -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mensaje"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/etMensaje"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:hint="Escribí tu mensaje..."
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:textColor="@color/texto_principal"
+                android:textColorHint="@color/texto_secundario"
+                android:background="@drawable/input_fondo"
+                android:padding="12dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- BOTÓN ENVIAR -->
+            <Button
+                android:id="@+id/btnEnviarMensaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enviar mensaje"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/color_primario_oscuro"
+                android:layout_marginBottom="28dp" />
+
+
+            <!-- OTROS CANALES DE CONTACTO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/fondo_banner"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Otros canales de contacto"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/texto_principal"
+                    android:layout_marginBottom="20dp" />
+
+                <!-- WHATSAPP -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_whatsapp"
+                        android:contentDescription="WhatsApp"
+                        android:layout_marginEnd="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="WhatsApp"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/texto_principal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+54 351 1234567"
+                            android:textSize="14sp"
+                            android:textColor="@color/texto_secundario" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- CORREO ELECTRÓNICO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_email"
+                        android:contentDescription="Correo electrónico"
+                        android:layout_marginEnd="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Correo electrónico"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/texto_principal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="contacto@servimatch.com.ar"
+                            android:textSize="14sp"
+                            android:textColor="@color/texto_secundario" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- BARRA DE NAVEGACIÓN FIJA -->
+    <include layout="@layout/barra_navigation" />
+
+</LinearLayout>
