@@ -164,6 +164,7 @@ public class AdminOficiosActivity extends AppCompatActivity {
             TextView mensaje = new TextView(this);
             mensaje.setText("No hay oficios registrados.");
             mensaje.setTextSize(16);
+            mensaje.setTextColor(getResources().getColor(R.color.texto_principal));
 
             contenedorOficios.addView(mensaje);
             return;
@@ -171,90 +172,27 @@ public class AdminOficiosActivity extends AppCompatActivity {
 
         for (Oficio oficio : oficios) {
 
-            LinearLayout tarjeta = new LinearLayout(this);
-            tarjeta.setOrientation(LinearLayout.VERTICAL);
-
-            tarjeta.setPadding(
-                    dp(16), dp(12), dp(16), dp(12)
+            //Cargar el diseño de la tarjeta desde XML
+            View tarjeta = getLayoutInflater().inflate(
+                    R.layout.item_oficio_admin,
+                    contenedorOficios,false
             );
 
-            LinearLayout.LayoutParams tarjetaParams =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-
-            tarjetaParams.bottomMargin = dp(12);
-            tarjeta.setLayoutParams(tarjetaParams);
-
-            tarjeta.setBackgroundResource(
-                    R.drawable.card_oficio
+            //Obtener los componentes de la tarjeta
+            TextView txtNombre = tarjeta.findViewById(
+                    R.id.txtNombreOficio
             );
 
-            // NOMBRE DEL OFICIO
-            TextView txtNombre = new TextView(this);
-
-            txtNombre.setText(
-                    oficio.getNombre_oficio()
+            Button btnEditar = tarjeta.findViewById(
+                    R.id.btnEditarOficio
             );
 
-            txtNombre.setTextSize(18);
-            txtNombre.setTypeface(
-                    null,
-                    android.graphics.Typeface.BOLD
+            Button btnEliminar = tarjeta.findViewById(
+                    R.id.btnEliminarOficio
             );
 
-            tarjeta.addView(txtNombre);
-
-            // CONTENEDOR DE BOTONES
-            LinearLayout filaBotones = new LinearLayout(this);
-            filaBotones.setOrientation(
-                    LinearLayout.HORIZONTAL
-            );
-
-            filaBotones.setPadding(
-                    0, dp(12), 0, 0
-            );
-
-            // BOTÓN EDITAR
-            Button btnEditar = new Button(this);
-            btnEditar.setText("Editar");
-            btnEditar.setAllCaps(false);
-
-            // BOTÓN ELIMINAR
-            Button btnEliminar = new Button(this);
-            btnEliminar.setText("Eliminar");
-            btnEliminar.setAllCaps(false);
-
-            LinearLayout.LayoutParams paramsEditar =
-                    new LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1
-                    );
-
-            paramsEditar.rightMargin = dp(8);
-
-            LinearLayout.LayoutParams paramsEliminar =
-                    new LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1
-                    );
-
-            filaBotones.addView(
-                    btnEditar,
-                    paramsEditar
-            );
-
-            filaBotones.addView(
-                    btnEliminar,
-                    paramsEliminar
-            );
-
-            tarjeta.addView(filaBotones);
-
-            contenedorOficios.addView(tarjeta);
+            //Mostrar nombre desde Django
+            txtNombre.setText(oficio.getNombre_oficio());
 
             // EVENTOS
             btnEditar.setOnClickListener(
@@ -264,6 +202,9 @@ public class AdminOficiosActivity extends AppCompatActivity {
             btnEliminar.setOnClickListener(
                     v -> confirmarEliminacion(oficio)
             );
+
+            // Agregar la tarjeta al contenedor
+            contenedorOficios.addView(tarjeta);
         }
     }
 

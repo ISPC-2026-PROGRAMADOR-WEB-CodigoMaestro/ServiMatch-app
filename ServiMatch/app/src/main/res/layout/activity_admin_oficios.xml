@@ -67,6 +67,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Ejemplo: Electricista"
                 android:inputType="textCapWords"
+                android:textColorHint="@color/texto_secundario"
+                android:textColor="@color/texto_principal"
                 android:layout_marginBottom="20dp"/>
 
             <Button
@@ -76,7 +78,7 @@
                 android:text="Guardar oficio"
                 android:textAllCaps="false"
                 android:textColor="@color/blanco"
-                android:backgroundTint="@color/color_primario"/>
+                android:backgroundTint="@color/color_primario_oscuro"/>
 
             <Button
                 android:id="@+id/btnVolverOficiosAdmin"
@@ -86,7 +88,7 @@
                 android:text="Volver"
                 android:textAllCaps="false"
                 android:textColor="@color/blanco"
-                android:backgroundTint="@color/texto_secundario"/>
+                android:backgroundTint="@color/color_primario"/>
 
             <TextView
                 android:layout_width="match_parent"
