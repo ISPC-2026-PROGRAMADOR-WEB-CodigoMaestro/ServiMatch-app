@@ -1,199 +1,331 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
     android:background="@color/fondo_principal"
-    android:gravity="center_vertical">
+    android:fillViewport="true"
+    android:clipToPadding="false">
 
-    <!-- Titulo Principal -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Registrate"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"
-        android:textColor="@color/texto_principal"
-        android:layout_gravity="center_horizontal"/>
-
-
-    <!-- Campo Nombre Completo -->
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_vertical">
 
-        <EditText
-            android:id="@+id/etNombreCompleto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="Nombre Completo"
-            android:textColorHint="@color/texto_secundario"
-            android:textColor="@color/texto_principal"
-            android:inputType="textPersonName"
-            android:paddingStart="16dp"
-            android:paddingEnd="40dp"
-            android:background="@drawable/input_fondo" />
-
+        <!-- Titulo Principal -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="@color/rojo"
-            android:textSize="18sp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="16dp" />
+            android:text="Registrate"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/texto_principal"
+            android:layout_gravity="center_horizontal"/>
 
-    </FrameLayout>
-
-
-    <!-- Campo Correo Electronico -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
-
-        <EditText
-            android:id="@+id/etEmail"
+        <!-- Campo Nombre Completo -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="Correo Electrónico"
-            android:textColorHint="@color/texto_secundario"
-            android:textColor="@color/texto_principal"
-            android:inputType="textEmailAddress"
-            android:paddingStart="16dp"
-            android:paddingEnd="40dp"
-            android:background="@drawable/input_fondo" />
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="@color/rojo"
-            android:textSize="18sp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="16dp" />
+            <EditText
+                android:id="@+id/etNombreCompleto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="Nombre Completo"
+                android:textColorHint="@color/texto_secundario"
+                android:textColor="@color/texto_principal"
+                android:inputType="textPersonName"
+                android:paddingStart="16dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/input_fondo"/>
 
-    </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/rojo"
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"/>
 
+        </FrameLayout>
 
-    <!-- Campo DNI -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
-
-        <EditText
-            android:id="@+id/etDNI"
+        <!-- Campo Correo Electronico -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="DNI"
-            android:textColorHint="@color/texto_secundario"
-            android:textColor="@color/texto_principal"
-            android:inputType="number"
-            android:maxLength="8"
-            android:paddingStart="16dp"
-            android:paddingEnd="40dp"
-            android:background="@drawable/input_fondo" />
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="@color/rojo"
-            android:textSize="18sp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="16dp" />
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="Correo Electrónico"
+                android:textColorHint="@color/texto_secundario"
+                android:textColor="@color/texto_principal"
+                android:inputType="textEmailAddress"
+                android:paddingStart="16dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/input_fondo"/>
 
-    </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/rojo"
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"/>
 
+        </FrameLayout>
 
-    <!-- Campo Contraseña -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
-
-        <EditText
-            android:id="@+id/etContrasena"
+        <!-- Campo DNI -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="Contraseña"
-            android:textColorHint="@color/texto_secundario"
-            android:textColor="@color/texto_principal"
-            android:inputType="textPassword"
-            android:paddingStart="16dp"
-            android:paddingEnd="40dp"
-            android:background="@drawable/input_fondo" />
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/etDNI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="DNI"
+                android:textColorHint="@color/texto_secundario"
+                android:textColor="@color/texto_principal"
+                android:inputType="number"
+                android:maxLength="8"
+                android:paddingStart="16dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/input_fondo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/rojo"
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"/>
+
+        </FrameLayout>
+
+        <!-- Campo Contrasena -->
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="@color/rojo"
-            android:textSize="18sp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginBottom="12dp">
 
-    </FrameLayout>
+            <EditText
+                android:id="@+id/etContrasena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="Contraseña"
+                android:textColorHint="@color/texto_secundario"
+                android:textColor="@color/texto_principal"
+                android:inputType="textPassword"
+                android:paddingStart="16dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/input_fondo"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/rojo"
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"/>
 
-    <!-- Campo Ubicacion -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
+        </FrameLayout>
 
+        <!-- Campo Ubicacion -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <Spinner
+                android:id="@+id/spUbicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/input_fondo"
+                android:popupBackground="@color/blanco"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/rojo"
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"/>
+
+        </FrameLayout>
+
+        <!-- Campo Oficio - Opcional -->
         <Spinner
-            android:id="@+id/spUbicacion"
+            android:id="@+id/spOficio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:paddingStart="16dp"
-            android:paddingEnd="40dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/input_fondo"
-            android:popupBackground="@color/blanco" />
+            android:popupBackground="@color/blanco"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Boton Registrarse -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRegistrar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="@color/rojo"
-            android:textSize="18sp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="16dp" />
+            android:minHeight="48dp"
+            android:text="Registrarse"
+            android:background="@drawable/boton_redondeado"
+            android:textColor="@color/blanco"/>
 
-    </FrameLayout>
+        <!-- Banner Condiciones de Registro -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/banner_condiciones"
+            android:orientation="vertical"
+            android:padding="16dp">
 
+            <!-- Encabezado -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ⓘ  Condiciones de registro"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_banner"
+                android:layout_marginBottom="8dp"/>
 
-    <!-- Campo Oficio - Opcional -->
-    <Spinner
-        android:id="@+id/spOficio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/input_fondo"
-        android:popupBackground="@color/blanco" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Para crear tu cuenta, completá obligatoriamente los campos marcados con un asterisco (*) y cumplí las siguientes condiciones:"
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="12dp"/>
 
+            <!-- Nombre -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre completo"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_banner"/>
 
-    <!-- Boton Registrarse -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnRegistrar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:text="Registrarse"
-        android:background="@drawable/boton_redondeado"
-        android:textColor="@color/blanco"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Solo letras y espacios, sin números ni caracteres especiales."
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="10dp"/>
 
-</LinearLayout>
+            <!-- Correo -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Correo electrónico"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_banner"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Debe tener un formato válido. Ejemplo: usuario@dominio.com"
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- DNI -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DNI"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_banner"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Debe contener entre 7 y 8 dígitos, solo números."
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Contrasena -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contraseña"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_banner"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Mínimo 6 caracteres.\n• Al menos una letra mayúscula.\n• Al menos un número.\n• Al menos un carácter especial."
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Ubicacion -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ubicación"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_banner"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Es obligatorio seleccionar una ubicación."
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Oficio -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Oficio"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_banner"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Es opcional. Podés dejarlo sin seleccionar."
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

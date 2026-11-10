@@ -9,7 +9,10 @@ if (localPropertiesFile.exists()) {
     localProperties.load(new FileInputStream(localPropertiesFile))
 }
 
-def apiBaseUrl = localProperties.getProperty("API_BASE_URL", "")
+def apiBaseUrl = localProperties.getProperty(
+        "API_BASE_URL",
+        "https://ispc-modulo-programdor-web-codigo-maestro-2026-production.up.railway.app/"
+)
 
 android {
     namespace 'com.ispc.servimatch'

@@ -125,11 +125,12 @@ public class RegistroActivity extends AppCompatActivity {
                 }
 
                 // Validamos el campo Contrasena
-                if (contrasena.length() < 6) {
+                if (!RegistroValidator.validarContrasena(contrasena)) {
 
                     Toast.makeText(RegistroActivity.this,
-                            "La contraseña debe tener al menos 6 caracteres",
-                            Toast.LENGTH_SHORT).show();
+                            "La contraseña debe tener al menos 6 caracteres, " +
+                                    "una mayúscula, un número y un carácter especial.",
+                            Toast.LENGTH_LONG).show();
 
                     return;
                 }

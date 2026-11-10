@@ -36,5 +36,23 @@ public class RegistroValidator {
         );
     }
 
+    public static boolean validarContrasena(String contrasena)  {
+
+        if (contrasena == null || contrasena.length() <= 6) {
+            return false;
+        }
+
+        boolean tieneMayuscula =
+                contrasena.matches(".*[A-Z].*");
+
+        boolean tieneNumero =
+                contrasena.matches(".*[0-9].*");
+
+        boolean tieneCaracterEspecial =
+                contrasena.matches(".*[!@#$%&*._+?\\-].*");
+
+        return tieneMayuscula && tieneNumero && tieneCaracterEspecial;
+    }
+
 }
 
