@@ -23,4 +23,9 @@
     <!-- Splash -->
     <color name="fondo_splash">#082B59</color>
 
+    <!-- Banner de condiciones de registro -->
+    <color name="fondo_banner">#EFF5FF</color>
+    <color name="borde_banner">#B8D2FA</color>
+    <color name="texto_banner">#0D47A1</color>
+
 </resources>
