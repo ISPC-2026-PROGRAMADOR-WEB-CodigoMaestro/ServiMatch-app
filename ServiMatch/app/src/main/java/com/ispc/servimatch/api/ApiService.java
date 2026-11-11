@@ -81,7 +81,6 @@ public interface ApiService {
             @Header("Authorization") String token
     );
 
-
     // OBTENER PROFESIONALES
     @GET("api/profesionales/")
     Call<List<Usuario>> obtenerProfesionales(
@@ -126,5 +125,11 @@ public interface ApiService {
     Call<Map<String, Object>> registrarUsuarioAdmin(
             @Header("Authorization") String token,
             @Body Map<String, Object> datos
+    );
+
+    // ENVIAR MENSAJE DE CONTACTO
+    @POST("api/contactos/")
+    Call<Map<String, Object>> enviarContacto(
+            @Body Map<String, String> datos
     );
 }

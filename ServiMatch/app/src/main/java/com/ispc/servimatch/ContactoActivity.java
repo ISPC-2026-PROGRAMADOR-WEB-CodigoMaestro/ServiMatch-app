@@ -12,6 +12,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+import com.ispc.servimatch.api.ApiService;
+import com.ispc.servimatch.api.RetrofitClient;
+import java.util.HashMap;
+import java.util.Map;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ContactoActivity extends AppCompatActivity {
 
@@ -121,12 +128,65 @@ public class ContactoActivity extends AppCompatActivity {
                 return;
             }
 
-            // Validaciones correctas
-            Toast.makeText(
-                    ContactoActivity.this,
-                    "Formulario validado correctamente",
-                    Toast.LENGTH_SHORT
-            ).show();
+            // Preparar los datos del mensaje
+            Map<String, String> datos = new HashMap<>();
+            datos.put("asunto", asunto);
+            datos.put("mensaje", mensaje);
+
+            // Conectar con el backend
+            ApiService apiService = RetrofitClient
+                    .getClient(ContactoActivity.this)
+                    .create(ApiService.class);
+
+            // Enviar mensaje
+            btnEnviarMensaje.setEnabled(false);
+
+            apiService.enviarContacto(datos).enqueue(
+                    new Callback<Map<String, Object>>() {
+
+                        @Override
+                        public void onResponse(
+                                Call<Map<String, Object>> call,
+                                Response<Map<String, Object>> response) {
+
+                            btnEnviarMensaje.setEnabled(true);
+
+                            if (response.isSuccessful()) {
+
+                                Toast.makeText(
+                                        ContactoActivity.this,
+                                        "Mensaje enviado correctamente",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+
+                                spinnerAsunto.setSelection(0);
+                                etMensaje.setText("");
+
+                            } else {
+
+                                Toast.makeText(
+                                        ContactoActivity.this,
+                                        "No se pudo enviar el mensaje",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(
+                                Call<Map<String, Object>> call,
+                                Throwable t) {
+
+                            btnEnviarMensaje.setEnabled(true);
+
+                            Toast.makeText(
+                                    ContactoActivity.this,
+                                    "Error de conexión con el servidor",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    }
+            );
 
         });
 
