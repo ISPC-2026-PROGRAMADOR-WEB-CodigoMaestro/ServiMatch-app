@@ -16,9 +16,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ContactoActivity"
+            android:name=".EditarPerfilActivity"
             android:exported="false" />
-        <!-- DETALLE DE USUARIO ADMINISTRADOR -->
+        <activity
+            android:name=".ContactoActivity"
+            android:exported="false" /> <!-- DETALLE DE USUARIO ADMINISTRADOR -->
         <activity
             android:name=".AdminUsuarioDetalleActivity"
             android:exported="false" /> <!-- EDITAR USUARIO ADMINISTRADOR -->

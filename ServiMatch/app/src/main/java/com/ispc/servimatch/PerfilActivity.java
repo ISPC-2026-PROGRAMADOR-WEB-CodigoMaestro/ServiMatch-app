@@ -18,6 +18,7 @@ import com.ispc.servimatch.api.ApiService;
 import com.ispc.servimatch.api.RetrofitClient;
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Usuario;
+import com.ispc.servimatch.model.Oficio;
 
 import java.util.List;
 
@@ -29,31 +30,30 @@ public class PerfilActivity extends AppCompatActivity {
 
     private static final String TAG = "SERVIMATCH_PERFIL";
 
-    // DATOS DEL PERFIL
     private TextView tvNombre;
     private TextView tvRol;
     private TextView tvEmail;
     private TextView tvDni;
     private TextView tvUbicacion;
 
+    private TextView tvOficio;
+
+    private Button btnEditarPerfil;
+
     private Button btnCerrarSesion;
 
-    // CONTENEDORES DE NAVEGACIÓN
     private View barraNavigation;
     private View barraNavigationAdmin;
 
-    // NAVEGACIÓN ESTÁNDAR
     private LinearLayout navInicio;
     private LinearLayout navContacto;
     private LinearLayout navPerfil;
 
-    // NAVEGACIÓN ADMINISTRADOR
     private LinearLayout navInicioAdmin;
     private LinearLayout navUsuariosAdmin;
     private LinearLayout navPerfilAdmin;
     private LinearLayout navSalirAdmin;
 
-    // DATOS DEL USUARIO
     private int idUsuario;
     private int idRol;
     private String nombreUsuario;
@@ -85,7 +85,9 @@ public class PerfilActivity extends AppCompatActivity {
         tvEmail = findViewById(R.id.tvEmail);
         tvDni = findViewById(R.id.tvDni);
         tvUbicacion = findViewById(R.id.tvUbicacion);
+        tvOficio = findViewById(R.id.tvOficio);
 
+        btnEditarPerfil = findViewById(R.id.btnEditarPerfil);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
         // VINCULAR CONTENEDORES DE NAVEGACIÓN
@@ -106,26 +108,53 @@ public class PerfilActivity extends AppCompatActivity {
         // MOSTRAR BARRA SEGÚN EL ROL
         configurarNavegacion();
 
-        // CONSULTAR DATOS DEL PERFIL
-        if (idUsuario != -1) {
-            buscarUsuario();
-        } else {
-            Log.e(TAG, "No se encontró el ID del usuario");
+        // VALIDAR ID DEL USUARIO
+                if (idUsuario == -1) {
+                    Log.e(TAG, "No se encontró el ID del usuario");
 
-            Toast.makeText(
-                    this,
-                    "No se pudo identificar al usuario. Iniciá sesión nuevamente.",
-                    Toast.LENGTH_LONG
-            ).show();
-        }
+                    Toast.makeText(
+                            this,
+                            "No se pudo identificar al usuario. Iniciá sesión nuevamente.",
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+
+        // BOTÓN EDITAR PERFIL
+        btnEditarPerfil.setOnClickListener(v -> {
+
+            if (idUsuario == -1) {
+                Toast.makeText(
+                        this,
+                        "No se pudo identificar al usuario",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
+
+            Intent intent = new Intent(
+                    PerfilActivity.this,
+                    EditarPerfilActivity.class
+            );
+
+            intent.putExtra("id_usuario", idUsuario);
+            startActivity(intent);
+        });
 
         // BOTÓN CERRAR SESIÓN DEL PERFIL
         btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
     }
 
-    // ==========================================
+    // ACTUALIZAR DATOS DEL PERFIL
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (idUsuario > 0) {
+            buscarUsuario();
+        }
+    }
+
     // CONFIGURAR NAVEGACIÓN SEGÚN ROL
-    // ==========================================
     private void configurarNavegacion() {
 
         // OCULTAR AMBAS BARRAS INICIALMENTE
@@ -156,9 +185,7 @@ public class PerfilActivity extends AppCompatActivity {
         }
     }
 
-    // ==========================================
     // NAVEGACIÓN USUARIO ESTÁNDAR
-    // ==========================================
     private void configurarNavegacionEstandar() {
 
         // MARCAR PERFIL COMO SELECCIONADO
@@ -188,8 +215,6 @@ public class PerfilActivity extends AppCompatActivity {
             intent.putExtra("id_rol", idRol);
             intent.putExtra("rol", rolUsuario);
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
             startActivity(intent);
             finish();
         });
@@ -197,11 +222,18 @@ public class PerfilActivity extends AppCompatActivity {
         // CONTACTO
         navContacto.setOnClickListener(v -> {
 
-            Toast.makeText(
-                    this,
-                    "Próximamente: Contacto",
-                    Toast.LENGTH_SHORT
-            ).show();
+            Intent intent = new Intent(
+                    PerfilActivity.this,
+                    ContactoActivity.class
+            );
+
+            intent.putExtra("usuario", nombreUsuario);
+            intent.putExtra("id_usuario", idUsuario);
+            intent.putExtra("id_rol", idRol);
+            intent.putExtra("rol", rolUsuario);
+
+            startActivity(intent);
+            finish();
         });
 
         // PERFIL
@@ -215,9 +247,7 @@ public class PerfilActivity extends AppCompatActivity {
         });
     }
 
-    // ==========================================
     // NAVEGACIÓN ADMINISTRADOR
-    // ==========================================
     private void configurarNavegacionAdmin() {
 
         // INICIO ADMINISTRADOR
@@ -262,9 +292,7 @@ public class PerfilActivity extends AppCompatActivity {
         navSalirAdmin.setOnClickListener(v -> cerrarSesion());
     }
 
-    // ==========================================
     // CERRAR SESIÓN
-    // ==========================================
     private void cerrarSesion() {
 
         // ELIMINAR SESIÓN PRINCIPAL
@@ -276,7 +304,6 @@ public class PerfilActivity extends AppCompatActivity {
                 MODE_PRIVATE
         ).edit().clear().apply();
 
-        // REGRESAR AL LOGIN
         Intent intent = new Intent(
                 PerfilActivity.this,
                 LoginActivity.class
@@ -291,9 +318,7 @@ public class PerfilActivity extends AppCompatActivity {
         finish();
     }
 
-    // ==========================================
-    // OBTENER USUARIO DESDE DJANGO
-    // ==========================================
+    // OBTENEMOS EL TOKEN JWT
     private void buscarUsuario() {
 
         String token = preferencias.getString(
@@ -320,7 +345,7 @@ public class PerfilActivity extends AppCompatActivity {
                         + " | Token presente: true"
         );
 
-        // INICIALIZAR RETROFIT
+        // CONSULTAMOS EL USUARIO MEDIANTE APISERVICE Y RETROFIC
         ApiService apiService =
                 RetrofitClient.getClient(PerfilActivity.this)
                         .create(ApiService.class);
@@ -389,9 +414,7 @@ public class PerfilActivity extends AppCompatActivity {
         });
     }
 
-    // ==========================================
     // MOSTRAR DATOS DEL USUARIO
-    // ==========================================
     private void mostrarUsuario(Usuario usuario) {
 
         tvNombre.setText(usuario.getNombre());
@@ -427,15 +450,23 @@ public class PerfilActivity extends AppCompatActivity {
             tvUbicacion.setText("Ubicación no disponible");
         }
 
+        // CONSULTAR OFICIO
+        if (usuario.getOficio() != null) {
+
+            buscarOficio(usuario.getOficio());
+
+        } else {
+
+            tvOficio.setText("Sin oficio registrado");
+        }
+
         Log.d(
                 TAG,
                 "Datos del usuario cargados correctamente"
         );
     }
 
-    // ==========================================
     // OBTENER UBICACIÓN
-    // ==========================================
     private void buscarUbicacion(int idUbicacion) {
 
         ApiService apiService =
@@ -509,9 +540,62 @@ public class PerfilActivity extends AppCompatActivity {
                 });
     }
 
-    // ==========================================
+    // OBTENER OFICIO
+    private void buscarOficio(int idOficio) {
+
+        ApiService apiService =
+                RetrofitClient.getClient(PerfilActivity.this)
+                        .create(ApiService.class);
+
+        apiService.obtenerOficios().enqueue(
+                new Callback<List<Oficio>>() {
+
+                    @Override
+                    public void onResponse(
+                            Call<List<Oficio>> call,
+                            Response<List<Oficio>> response) {
+
+                        if (response.isSuccessful()
+                                && response.body() != null) {
+
+                            boolean encontrado = false;
+
+                            for (Oficio oficio : response.body()) {
+
+                                if (oficio.getId() == idOficio) {
+
+                                    tvOficio.setText(
+                                            oficio.getNombre_oficio()
+                                    );
+
+                                    encontrado = true;
+                                    break;
+                                }
+                            }
+
+                            if (!encontrado) {
+                                tvOficio.setText("Oficio no disponible");
+                            }
+
+                        } else {
+                            tvOficio.setText("Oficio no disponible");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<List<Oficio>> call,
+                            Throwable t) {
+
+                        Log.e(TAG, "Error al consultar oficio", t);
+
+                        tvOficio.setText("Oficio no disponible");
+                    }
+                }
+        );
+    }
+
     // MOSTRAR ERRORES
-    // ==========================================
     private void mostrarError(String mensaje) {
 
         Log.e(TAG, mensaje);

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_principal">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ENCABEZADO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_primario_oscuro"
+                android:gravity="center"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Editar perfil"
+                    android:textColor="@color/blanco"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- FORMULARIO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="Modificá tus datos personales"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre completo"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtPerfilNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre completo"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/texto_secundario"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Correo electrónico"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtPerfilEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Correo electrónico"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/texto_secundario"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="DNI"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtPerfilDni"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="DNI"
+                    android:inputType="number"
+                    android:maxLength="8"
+                    android:textColor="@color/texto_secundario"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Ubicación"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerPerfilUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:popupBackground="@color/blanco"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Oficio (opcional)"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerPerfilOficio"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:popupBackground="@color/blanco"/>
+
+                <Button
+                    android:id="@+id/btnGuardarPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:backgroundTint="@color/color_primario_oscuro"
+                    android:enabled="false"
+                    android:text="Guardar cambios"
+                    android:textColor="@color/blanco" />
+
+                <Button
+                    android:id="@+id/btnCancelarPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/color_primario"
+                    android:textColor="@color/blanco"
+                    android:text="Cancelar" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

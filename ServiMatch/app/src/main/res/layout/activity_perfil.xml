@@ -149,17 +149,47 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:layout_marginBottom="28dp"
+                    android:layout_marginBottom="20dp"
                     android:text="Cargando..."
                     android:textColor="@color/texto_secundario"
                     android:textSize="16sp" />
+
+                <!-- ETIQUETA OFICIO -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Oficio"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <!-- OFICIO -->
+                <TextView
+                    android:id="@+id/tvOficio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="28dp"
+                    android:text="Sin oficio registrado"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp" />
+
+                <!-- BOTÓN EDITAR PERFIL -->
+                <Button
+                    android:id="@+id/btnEditarPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/color_primario_oscuro"
+                    android:text="Editar perfil"
+                    android:textColor="@color/blanco" />
 
                 <!-- BOTÓN CERRAR SESIÓN -->
                 <Button
                     android:id="@+id/btnCerrarSesion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/color_primario_oscuro"
+                    android:backgroundTint="@color/rojo"
                     android:text="Cerrar sesión"
                     android:textColor="@color/blanco" />
 
