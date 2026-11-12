@@ -184,12 +184,21 @@
                     android:text="Editar perfil"
                     android:textColor="@color/blanco" />
 
+                <Button
+                    android:id="@+id/btnEliminarPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/rojo"
+                    android:text="Eliminar mi cuenta"
+                    android:textColor="@color/blanco" />
+
                 <!-- BOTÓN CERRAR SESIÓN -->
                 <Button
                     android:id="@+id/btnCerrarSesion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/rojo"
+                    android:backgroundTint="@color/color_primario"
                     android:text="Cerrar sesión"
                     android:textColor="@color/blanco" />
 
