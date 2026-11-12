@@ -1,4 +1,3 @@
-
 package com.ispc.servimatch;
 
 import android.content.SharedPreferences;
@@ -7,7 +6,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +15,7 @@ import com.ispc.servimatch.api.RetrofitClient;
 import com.ispc.servimatch.model.Oficio;
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Usuario;
+import com.ispc.servimatch.model.Rol;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +29,7 @@ import retrofit2.Response;
 public class AdminEditarUsuarioActivity extends AppCompatActivity {
 
     private EditText edtNombre, edtEmail, edtDni;
-    private TextView txtRol;
-    private Spinner spinnerOficio, spinnerUbicacion;
+    private Spinner spinnerRol, spinnerOficio, spinnerUbicacion;
     private Button btnGuardar, btnCancelar;
 
     private ApiService apiService;
@@ -40,13 +38,16 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
 
     private final List<Integer> idsOficios = new ArrayList<>();
     private final List<Integer> idsUbicaciones = new ArrayList<>();
+    private final List<Integer> idsRoles = new ArrayList<>();
 
     private Integer oficioActual;
     private Integer ubicacionActual;
+    private Integer rolActual;
 
     private boolean usuarioCargado = false;
     private boolean oficiosCargados = false;
     private boolean ubicacionesCargadas = false;
+    private boolean rolesCargados = false;
     private boolean guardando = false;
 
     @Override
@@ -57,8 +58,8 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
         edtNombre = findViewById(R.id.edtEditarNombre);
         edtEmail = findViewById(R.id.edtEditarEmail);
         edtDni = findViewById(R.id.edtEditarDni);
-        txtRol = findViewById(R.id.txtEditarRol);
 
+        spinnerRol = findViewById(R.id.spinnerEditarRol);
         spinnerOficio = findViewById(R.id.spinnerEditarOficio);
         spinnerUbicacion = findViewById(R.id.spinnerEditarUbicacion);
 
@@ -67,19 +68,13 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
 
         btnGuardar.setEnabled(false);
 
-        apiService = RetrofitClient
-                .getClient(this)
-                .create(ApiService.class);
+        apiService = RetrofitClient.getClient(this).create(ApiService.class);
 
         idUsuario = getIntent().getIntExtra("id_usuario", -1);
 
-        SharedPreferences preferencias = getSharedPreferences(
-                "ServiMatchSesion",
-                MODE_PRIVATE
-        );
+        SharedPreferences preferencias = getSharedPreferences("ServiMatchSesion", MODE_PRIVATE);
 
         token = preferencias.getString("access_token", null);
-
         int idRol = preferencias.getInt("id_rol", -1);
 
         if (idRol != 10) {
@@ -95,166 +90,190 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
         }
 
         btnCancelar.setOnClickListener(v -> finish());
-
         btnGuardar.setOnClickListener(v -> guardarCambios());
 
         cargarUsuario();
         cargarOficios();
+        cargarRoles();
         cargarUbicaciones();
     }
 
+    // CARGAR USUARIO
     private void cargarUsuario() {
-        apiService.obtenerUsuario(
-                idUsuario,
-                "Bearer " + token
-        ).enqueue(new Callback<Usuario>() {
 
-            @Override
-            public void onResponse(
-                    Call<Usuario> call,
-                    Response<Usuario> response) {
+        apiService.obtenerUsuario(idUsuario, "Bearer " + token)
+                .enqueue(new Callback<Usuario>() {
 
-                if (response.isSuccessful() && response.body() != null) {
-                    Usuario usuario = response.body();
+                    @Override
+                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
 
-                    edtNombre.setText(usuario.getNombre());
-                    edtEmail.setText(usuario.getEmail());
-                    edtDni.setText(usuario.getDni());
+                        if (response.isSuccessful() && response.body() != null) {
+                            Usuario usuario = response.body();
 
-                    Integer rol = usuario.getRol();
+                            edtNombre.setText(usuario.getNombre());
+                            edtEmail.setText(usuario.getEmail());
+                            edtDni.setText(usuario.getDni());
 
-                    if (rol != null && rol == 10) {
-                        txtRol.setText("Administrador");
-                    } else if (rol != null && rol == 11) {
-                        txtRol.setText("Usuario estándar");
-                    } else {
-                        txtRol.setText("Rol no identificado");
+                            rolActual = usuario.getRol();
+                            oficioActual = usuario.getOficio();
+                            ubicacionActual = usuario.getUbicacion();
+
+                            usuarioCargado = true;
+                            seleccionarRol();
+                            seleccionarOficio();
+                            seleccionarUbicacion();
+                            verificarCarga();
+
+                        } else {
+                            mostrarMensaje("Error al cargar usuario. Código: " + response.code());
+                        }
                     }
 
-                    oficioActual = usuario.getOficio();
-                    ubicacionActual = usuario.getUbicacion();
+                    @Override
+                    public void onFailure(Call<Usuario> call, Throwable t) {
+                        mostrarMensaje("Error de conexión al cargar usuario.");
+                    }
+                });
+    }
 
-                    usuarioCargado = true;
-                    seleccionarOficio();
-                    seleccionarUbicacion();
-                    verificarCarga();
+    // CARGAR ROLES
+    private void cargarRoles() {
 
-                } else {
-                    mostrarMensaje(
-                            "Error al cargar usuario. Código: " + response.code()
-                    );
+        apiService.obtenerRoles().enqueue(new Callback<List<Rol>>() {
+
+            @Override
+            public void onResponse(Call<List<Rol>> call, Response<List<Rol>> response) {
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    mostrarMensaje("No se pudieron cargar los roles.");
+                    return;
                 }
+
+                List<String> nombres = new ArrayList<>();
+                idsRoles.clear();
+
+                for (Rol rol : response.body()) {
+                    nombres.add(rol.getNombre_rol());
+                    idsRoles.add(rol.getId());
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        AdminEditarUsuarioActivity.this, R.layout.spinner_item, nombres
+                );
+
+                adapter.setDropDownViewResource(R.layout.spinner_item);
+                spinnerRol.setAdapter(adapter);
+
+                rolesCargados = true;
+                seleccionarRol();
+                verificarCarga();
             }
 
             @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
-                mostrarMensaje("Error de conexión al cargar usuario.");
+            public void onFailure(Call<List<Rol>> call, Throwable t) {
+                mostrarMensaje("Error de conexión al cargar roles.");
             }
         });
     }
 
+    // CARGAR OFICIOS
     private void cargarOficios() {
-        apiService.obtenerOficios().enqueue(
-                new Callback<List<Oficio>>() {
 
-                    @Override
-                    public void onResponse(
-                            Call<List<Oficio>> call,
-                            Response<List<Oficio>> response) {
+        apiService.obtenerOficios().enqueue(new Callback<List<Oficio>>() {
 
-                        if (!response.isSuccessful() || response.body() == null) {
-                            mostrarMensaje("No se pudieron cargar los oficios.");
-                            return;
-                        }
+            @Override
+            public void onResponse(Call<List<Oficio>> call, Response<List<Oficio>> response) {
 
-                        List<String> nombres = new ArrayList<>();
-                        nombres.add("Sin oficio");
-                        idsOficios.add(null);
+                if (!response.isSuccessful() || response.body() == null) {
+                    mostrarMensaje("No se pudieron cargar los oficios.");
+                    return;
+                }
 
-                        for (Oficio oficio : response.body()) {
-                            nombres.add(oficio.getNombre_oficio());
-                            idsOficios.add(oficio.getId());
-                        }
+                List<String> nombres = new ArrayList<>();
+                nombres.add("Sin oficio");
+                idsOficios.add(null);
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                AdminEditarUsuarioActivity.this,
-                                android.R.layout.simple_spinner_item,
-                                nombres
-                        );
+                for (Oficio oficio : response.body()) {
+                    nombres.add(oficio.getNombre_oficio());
+                    idsOficios.add(oficio.getId());
+                }
 
-                        adapter.setDropDownViewResource(
-                                android.R.layout.simple_spinner_dropdown_item
-                        );
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        AdminEditarUsuarioActivity.this, R.layout.spinner_item, nombres
+                );
 
-                        spinnerOficio.setAdapter(adapter);
+                adapter.setDropDownViewResource(R.layout.spinner_item);
+                spinnerOficio.setAdapter(adapter);
 
-                        oficiosCargados = true;
-                        seleccionarOficio();
-                        verificarCarga();
-                    }
+                oficiosCargados = true;
+                seleccionarOficio();
+                verificarCarga();
+            }
 
-                    @Override
-                    public void onFailure(
-                            Call<List<Oficio>> call,
-                            Throwable t) {
-
-                        mostrarMensaje("Error de conexión al cargar oficios.");
-                    }
-                });
+            @Override
+            public void onFailure(Call<List<Oficio>> call, Throwable t) {
+                mostrarMensaje("Error de conexión al cargar oficios.");
+            }
+        });
     }
 
+    // CARGAR UBICACIONES
     private void cargarUbicaciones() {
-        apiService.obtenerUbicaciones().enqueue(
-                new Callback<List<Ubicacion>>() {
 
-                    @Override
-                    public void onResponse(
-                            Call<List<Ubicacion>> call,
-                            Response<List<Ubicacion>> response) {
+        apiService.obtenerUbicaciones().enqueue(new Callback<List<Ubicacion>>() {
 
-                        if (!response.isSuccessful() || response.body() == null) {
-                            mostrarMensaje("No se pudieron cargar las ubicaciones.");
-                            return;
-                        }
+            @Override
+            public void onResponse(Call<List<Ubicacion>> call, Response<List<Ubicacion>> response) {
 
-                        List<String> nombres = new ArrayList<>();
+                if (!response.isSuccessful() || response.body() == null) {
+                    mostrarMensaje("No se pudieron cargar las ubicaciones.");
+                    return;
+                }
 
-                        for (Ubicacion ubicacion : response.body()) {
-                            nombres.add(
-                                    ubicacion.getCiudad() + ", "
-                                            + ubicacion.getProvincia()
-                            );
-                            idsUbicaciones.add(ubicacion.getId());
-                        }
+                List<String> nombres = new ArrayList<>();
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                AdminEditarUsuarioActivity.this,
-                                android.R.layout.simple_spinner_item,
-                                nombres
-                        );
+                for (Ubicacion ubicacion : response.body()) {
+                    nombres.add(ubicacion.getCiudad() + ", " + ubicacion.getProvincia());
+                    idsUbicaciones.add(ubicacion.getId());
+                }
 
-                        adapter.setDropDownViewResource(
-                                android.R.layout.simple_spinner_dropdown_item
-                        );
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        AdminEditarUsuarioActivity.this, R.layout.spinner_item, nombres
+                );
 
-                        spinnerUbicacion.setAdapter(adapter);
+                adapter.setDropDownViewResource(R.layout.spinner_item);
+                spinnerUbicacion.setAdapter(adapter);
 
-                        ubicacionesCargadas = true;
-                        seleccionarUbicacion();
-                        verificarCarga();
-                    }
+                ubicacionesCargadas = true;
+                seleccionarUbicacion();
+                verificarCarga();
+            }
 
-                    @Override
-                    public void onFailure(
-                            Call<List<Ubicacion>> call,
-                            Throwable t) {
-
-                        mostrarMensaje("Error de conexión al cargar ubicaciones.");
-                    }
-                });
+            @Override
+            public void onFailure(Call<List<Ubicacion>> call, Throwable t) {
+                mostrarMensaje("Error de conexión al cargar ubicaciones.");
+            }
+        });
     }
 
+    // SELECCIONAR ROL ACTUAL
+    private void seleccionarRol() {
+
+        if (!usuarioCargado || !rolesCargados) return;
+
+        int posicion = idsRoles.indexOf(rolActual);
+
+        if (posicion >= 0) {
+            spinnerRol.setSelection(posicion);
+        } else {
+            mostrarMensaje("El rol actual no está disponible.");
+            btnGuardar.setEnabled(false);
+        }
+    }
+
+    // SELECCIONAR OFICIO ACTUAL
     private void seleccionarOficio() {
+
         if (!usuarioCargado || !oficiosCargados) return;
 
         int posicion = idsOficios.indexOf(oficioActual);
@@ -267,7 +286,9 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
         }
     }
 
+    // SELECCIONAR UBICACIÓN ACTUAL
     private void seleccionarUbicacion() {
+
         if (!usuarioCargado || !ubicacionesCargadas) return;
 
         int posicion = idsUbicaciones.indexOf(ubicacionActual);
@@ -280,19 +301,21 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
         }
     }
 
+    // VERIFICAR CARGA DE DATOS
     private void verificarCarga() {
-        if (!usuarioCargado || !oficiosCargados || !ubicacionesCargadas) {
+
+        if (!usuarioCargado || !rolesCargados || !oficiosCargados || !ubicacionesCargadas) {
             return;
         }
 
+        boolean rolValido = idsRoles.contains(rolActual);
         boolean oficioValido = idsOficios.contains(oficioActual);
         boolean ubicacionValida = idsUbicaciones.contains(ubicacionActual);
 
-        btnGuardar.setEnabled(
-                oficioValido && ubicacionValida && !guardando
-        );
+        btnGuardar.setEnabled(rolValido && oficioValido && ubicacionValida && !guardando);
     }
 
+    // GUARDAR CAMBIOS
     private void guardarCambios() {
 
         if (guardando || !btnGuardar.isEnabled()) return;
@@ -302,26 +325,36 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
         String dni = edtDni.getText().toString().trim();
 
         if (nombre.isEmpty()) {
-            edtNombre.setError("Ingresá el nombre.");
+            Toast.makeText(this, "Ingresa el nombre.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            Toast.makeText(this, "El nombre solo puede contener letras y espacios.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtEmail.setError("Ingresá un correo válido.");
+            Toast.makeText(this, "Ingresa un correo valido", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!dni.matches("\\d{7,8}")) {
-            edtDni.setError("El DNI debe tener 7 u 8 dígitos.");
+            Toast.makeText(this, "El DNI debe tener 7 u 8 digitos", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        int posicionRol = spinnerRol.getSelectedItemPosition();
         int posicionOficio = spinnerOficio.getSelectedItemPosition();
         int posicionUbicacion = spinnerUbicacion.getSelectedItemPosition();
 
+        if (posicionRol < 0 || posicionRol >= idsRoles.size()) {
+            mostrarMensaje("Seleccioná un rol válido.");
+            return;
+        }
+
         if (posicionOficio < 0 || posicionOficio >= idsOficios.size()
-                || posicionUbicacion < 0
-                || posicionUbicacion >= idsUbicaciones.size()) {
+                || posicionUbicacion < 0 || posicionUbicacion >= idsUbicaciones.size()) {
 
             mostrarMensaje("Seleccioná un oficio y una ubicación válidos.");
             return;
@@ -332,57 +365,52 @@ public class AdminEditarUsuarioActivity extends AppCompatActivity {
         datos.put("nombre", nombre);
         datos.put("email", email);
         datos.put("dni", dni);
+        datos.put("rol", idsRoles.get(posicionRol));
         datos.put("oficio", idsOficios.get(posicionOficio));
         datos.put("ubicacion", idsUbicaciones.get(posicionUbicacion));
 
         guardando = true;
         btnGuardar.setEnabled(false);
 
-        apiService.actualizarUsuario(
-                idUsuario,
-                "Bearer " + token,
-                datos
-        ).enqueue(new Callback<Usuario>() {
+        // ACTUALIZAR USUARIO
+        apiService.actualizarUsuario(idUsuario, "Bearer " + token, datos)
+                .enqueue(new Callback<Usuario>() {
 
-            @Override
-            public void onResponse(
-                    Call<Usuario> call,
-                    Response<Usuario> response) {
+                    @Override
+                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
 
-                guardando = false;
+                        guardando = false;
 
-                if (response.isSuccessful()) {
-                    mostrarMensaje("Usuario actualizado correctamente.");
-                    finish();
-                } else {
-                    verificarCarga();
+                        if (response.isSuccessful()) {
+                            mostrarMensaje("Usuario actualizado correctamente.");
+                            finish();
 
-                    if (response.code() == 400) {
-                        mostrarMensaje(
-                                "Datos inválidos o duplicados. Revisá el formulario."
-                        );
-                    } else if (response.code() == 401) {
-                        mostrarMensaje("La sesión expiró.");
-                    } else if (response.code() == 403) {
-                        mostrarMensaje("No tenés permisos para editar usuarios.");
-                    } else {
-                        mostrarMensaje(
-                                "No se pudieron guardar los cambios. Código: "
-                                        + response.code()
-                        );
+                        } else {
+                            verificarCarga();
+
+                            if (response.code() == 400) {
+                                mostrarMensaje("Datos inválidos o duplicados. Revisá el formulario.");
+                            } else if (response.code() == 401) {
+                                mostrarMensaje("La sesión expiró.");
+                            } else if (response.code() == 403) {
+                                mostrarMensaje("No tenés permisos para editar usuarios.");
+                            } else {
+                                mostrarMensaje("No se pudieron guardar los cambios. Código: "
+                                        + response.code());
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
-                guardando = false;
-                verificarCarga();
-                mostrarMensaje("Error de conexión al guardar los cambios.");
-            }
-        });
+                    @Override
+                    public void onFailure(Call<Usuario> call, Throwable t) {
+                        guardando = false;
+                        verificarCarga();
+                        mostrarMensaje("Error de conexión al guardar los cambios.");
+                    }
+                });
     }
 
+    // MOSTRAR MENSAJES
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
