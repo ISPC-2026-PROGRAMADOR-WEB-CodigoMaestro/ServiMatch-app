@@ -1,4 +1,3 @@
-
 package com.ispc.servimatch;
 
 import android.content.Intent;
@@ -12,13 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ispc.servimatch.api.ApiService;
 import com.ispc.servimatch.api.RetrofitClient;
+import com.ispc.servimatch.model.Oficio;
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Usuario;
-import com.ispc.servimatch.model.Oficio;
 
 import java.util.List;
 
@@ -30,48 +30,27 @@ public class PerfilActivity extends AppCompatActivity {
 
     private static final String TAG = "SERVIMATCH_PERFIL";
 
-    private TextView tvNombre;
-    private TextView tvRol;
-    private TextView tvEmail;
-    private TextView tvDni;
-    private TextView tvUbicacion;
+    private TextView tvNombre, tvRol, tvEmail, tvDni, tvUbicacion, tvOficio;
+    private Button btnEditarPerfil, btnEliminarPerfil, btnCerrarSesion;
 
-    private TextView tvOficio;
+    private View barraNavigation, barraNavigationAdmin;
 
-    private Button btnEditarPerfil;
+    private LinearLayout navInicio, navContacto, navPerfil;
+    private LinearLayout navInicioAdmin, navUsuariosAdmin, navPerfilAdmin, navSalirAdmin;
 
-    private Button btnCerrarSesion;
-
-    private View barraNavigation;
-    private View barraNavigationAdmin;
-
-    private LinearLayout navInicio;
-    private LinearLayout navContacto;
-    private LinearLayout navPerfil;
-
-    private LinearLayout navInicioAdmin;
-    private LinearLayout navUsuariosAdmin;
-    private LinearLayout navPerfilAdmin;
-    private LinearLayout navSalirAdmin;
-
-    private int idUsuario;
-    private int idRol;
-    private String nombreUsuario;
-    private String rolUsuario;
+    private int idUsuario, idRol;
+    private String nombreUsuario, rolUsuario;
 
     private SharedPreferences preferencias;
+    private boolean eliminando = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_perfil);
 
         // RECUPERAR SESIÓN
-        preferencias = getSharedPreferences(
-                "ServiMatchSesion",
-                MODE_PRIVATE
-        );
+        preferencias = getSharedPreferences("ServiMatchSesion", MODE_PRIVATE);
 
         idUsuario = preferencias.getInt("id_usuario", -1);
         idRol = preferencias.getInt("id_rol", -1);
@@ -88,7 +67,15 @@ public class PerfilActivity extends AppCompatActivity {
         tvOficio = findViewById(R.id.tvOficio);
 
         btnEditarPerfil = findViewById(R.id.btnEditarPerfil);
+        btnEliminarPerfil = findViewById(R.id.btnEliminarPerfil);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
+
+        // MOSTRAR BOTÓN SOLO A USUARIOS ESTÁNDAR
+        if (idRol == 11) {
+            btnEliminarPerfil.setVisibility(View.VISIBLE);
+        } else {
+            btnEliminarPerfil.setVisibility(View.GONE);
+        }
 
         // VINCULAR CONTENEDORES DE NAVEGACIÓN
         barraNavigation = findViewById(R.id.barraNavigation);
@@ -109,36 +96,29 @@ public class PerfilActivity extends AppCompatActivity {
         configurarNavegacion();
 
         // VALIDAR ID DEL USUARIO
-                if (idUsuario == -1) {
-                    Log.e(TAG, "No se encontró el ID del usuario");
-
-                    Toast.makeText(
-                            this,
-                            "No se pudo identificar al usuario. Iniciá sesión nuevamente.",
-                            Toast.LENGTH_LONG
-                    ).show();
-                }
+        if (idUsuario == -1) {
+            Log.e(TAG, "No se encontró el ID del usuario");
+            Toast.makeText(this,
+                    "No se pudo identificar al usuario. Iniciá sesión nuevamente.",
+                    Toast.LENGTH_LONG).show();
+        }
 
         // BOTÓN EDITAR PERFIL
         btnEditarPerfil.setOnClickListener(v -> {
-
             if (idUsuario == -1) {
-                Toast.makeText(
-                        this,
+                Toast.makeText(this,
                         "No se pudo identificar al usuario",
-                        Toast.LENGTH_SHORT
-                ).show();
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Intent intent = new Intent(
-                    PerfilActivity.this,
-                    EditarPerfilActivity.class
-            );
-
+            Intent intent = new Intent(PerfilActivity.this, EditarPerfilActivity.class);
             intent.putExtra("id_usuario", idUsuario);
             startActivity(intent);
         });
+
+        // BOTÓN ELIMINAR CUENTA
+        btnEliminarPerfil.setOnClickListener(v -> confirmarEliminacion());
 
         // BOTÓN CERRAR SESIÓN DEL PERFIL
         btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
@@ -174,14 +154,10 @@ public class PerfilActivity extends AppCompatActivity {
             configurarNavegacionEstandar();
 
         } else {
-
             Log.e(TAG, "Rol no identificado: " + idRol);
-
-            Toast.makeText(
-                    this,
+            Toast.makeText(this,
                     "No se pudo identificar el rol del usuario.",
-                    Toast.LENGTH_LONG
-            ).show();
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -192,23 +168,13 @@ public class PerfilActivity extends AppCompatActivity {
         TextView iconPerfil = findViewById(R.id.iconPerfil);
         TextView textoPerfil = findViewById(R.id.textoPerfil);
 
-        iconPerfil.setTextColor(
-                getColor(R.color.color_primario)
-        );
-
-        textoPerfil.setTextColor(
-                getColor(R.color.color_primario)
-        );
-
+        iconPerfil.setTextColor(getColor(R.color.color_primario));
+        textoPerfil.setTextColor(getColor(R.color.color_primario));
         textoPerfil.setTypeface(null, Typeface.BOLD);
 
         // INICIO
         navInicio.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    PerfilActivity.this,
-                    DashboardActivity.class
-            );
+            Intent intent = new Intent(PerfilActivity.this, DashboardActivity.class);
 
             intent.putExtra("usuario", nombreUsuario);
             intent.putExtra("id_usuario", idUsuario);
@@ -221,11 +187,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         // CONTACTO
         navContacto.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    PerfilActivity.this,
-                    ContactoActivity.class
-            );
+            Intent intent = new Intent(PerfilActivity.this, ContactoActivity.class);
 
             intent.putExtra("usuario", nombreUsuario);
             intent.putExtra("id_usuario", idUsuario);
@@ -238,12 +200,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         // PERFIL
         navPerfil.setOnClickListener(v -> {
-
-            Toast.makeText(
-                    this,
-                    "Ya estás en Perfil",
-                    Toast.LENGTH_SHORT
-            ).show();
+            Toast.makeText(this, "Ya estás en Perfil", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -252,12 +209,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         // INICIO ADMINISTRADOR
         navInicioAdmin.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    PerfilActivity.this,
-                    AdminDashboardActivity.class
-            );
-
+            Intent intent = new Intent(PerfilActivity.this, AdminDashboardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             startActivity(intent);
@@ -266,12 +218,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         // GESTIÓN DE USUARIOS
         navUsuariosAdmin.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    PerfilActivity.this,
-                    AdminUsuariosActivity.class
-            );
-
+            Intent intent = new Intent(PerfilActivity.this, AdminUsuariosActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             startActivity(intent);
@@ -280,16 +227,118 @@ public class PerfilActivity extends AppCompatActivity {
 
         // PERFIL ADMINISTRADOR
         navPerfilAdmin.setOnClickListener(v -> {
-
-            Toast.makeText(
-                    this,
-                    "Ya estás en Perfil",
-                    Toast.LENGTH_SHORT
-            ).show();
+            Toast.makeText(this, "Ya estás en Perfil", Toast.LENGTH_SHORT).show();
         });
 
         // SALIR
         navSalirAdmin.setOnClickListener(v -> cerrarSesion());
+    }
+
+    // CONFIRMAR ELIMINACIÓN
+    private void confirmarEliminacion() {
+
+        if (eliminando || idUsuario <= 0) {
+            return;
+        }
+
+        if (idRol != 11) {
+            mostrarError("No tenés permisos para eliminar esta cuenta.");
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar mi cuenta")
+                .setMessage("¿Estás seguro de que querés eliminar tu cuenta?"
+                        + "\n\nEsta acción no se puede deshacer.")
+                .setNegativeButton("Cancelar", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setPositiveButton("Eliminar", (dialog, which) -> {
+                    eliminarUsuario();
+                })
+                .show();
+    }
+
+    // ELIMINAR USUARIO DESDE DJANGO
+    private void eliminarUsuario() {
+
+        if (eliminando || idUsuario <= 0) {
+            return;
+        }
+
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchSesion", MODE_PRIVATE
+        );
+
+        String token = preferencias.getString("access_token", null);
+        int idSesion = preferencias.getInt("id_usuario", -1);
+        int idRol = preferencias.getInt("id_rol", -1);
+
+        // VALIDAR USUARIO ESTÁNDAR
+        if (idRol != 11 || idSesion <= 0 || idUsuario != idSesion) {
+            mostrarError("No tenés permisos para realizar esta eliminación.");
+            return;
+        }
+
+        // VALIDAR TOKEN
+        if (token == null || token.isEmpty()) {
+            mostrarError("La sesión expiró. Iniciá sesión nuevamente.");
+            return;
+        }
+
+        eliminando = true;
+        btnEliminarPerfil.setEnabled(false);
+
+        // INICIALIZAR RETROFIT
+        ApiService apiService = RetrofitClient.getClient(PerfilActivity.this)
+                .create(ApiService.class);
+
+        // ELIMINAR USUARIO
+        apiService.eliminarUsuario(idUsuario, "Bearer " + token)
+                .enqueue(new Callback<Void>() {
+
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (isFinishing() || isDestroyed()) return;
+
+                        Log.d(TAG, "Eliminar usuario - HTTP: " + response.code());
+
+                        if (response.code() == 204) {
+                            Toast.makeText(PerfilActivity.this,
+                                    "Tu cuenta fue eliminada correctamente.",
+                                    Toast.LENGTH_LONG).show();
+
+                            // CERRAR SESIÓN Y VOLVER AL LOGIN
+                            cerrarSesion();
+
+                        } else {
+                            eliminando = false;
+                            btnEliminarPerfil.setEnabled(true);
+
+                            if (response.code() == 401) {
+                                mostrarError("La sesión expiró. Iniciá sesión nuevamente.");
+                            } else if (response.code() == 403) {
+                                mostrarError("No tenés permisos para eliminar esta cuenta.");
+                            } else if (response.code() == 404) {
+                                mostrarError("La cuenta no existe.");
+                            } else {
+                                mostrarError("Error al eliminar la cuenta. Código: "
+                                        + response.code());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        if (isFinishing() || isDestroyed()) return;
+
+                        eliminando = false;
+                        btnEliminarPerfil.setEnabled(true);
+
+                        Log.e(TAG, "Error al eliminar usuario", t);
+                        mostrarError("Error de conexión. No se pudo confirmar la eliminación.");
+                    }
+                });
     }
 
     // CERRAR SESIÓN
@@ -299,20 +348,11 @@ public class PerfilActivity extends AppCompatActivity {
         preferencias.edit().clear().apply();
 
         // ELIMINAR TOKEN DE RETROFIT
-        getSharedPreferences(
-                "ServiMatchPrefs",
-                MODE_PRIVATE
-        ).edit().clear().apply();
+        getSharedPreferences("ServiMatchPrefs", MODE_PRIVATE)
+                .edit().clear().apply();
 
-        Intent intent = new Intent(
-                PerfilActivity.this,
-                LoginActivity.class
-        );
-
-        intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
-        );
+        Intent intent = new Intent(PerfilActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         startActivity(intent);
         finish();
@@ -321,97 +361,52 @@ public class PerfilActivity extends AppCompatActivity {
     // OBTENEMOS EL TOKEN JWT
     private void buscarUsuario() {
 
-        String token = preferencias.getString(
-                "access_token",
-                null
-        );
+        String token = preferencias.getString("access_token", null);
 
         if (token == null || token.isEmpty()) {
-
             Log.e(TAG, "No se encontró el token JWT");
 
-            Toast.makeText(
-                    this,
+            Toast.makeText(this,
                     "La sesión no está activa. Iniciá sesión nuevamente.",
-                    Toast.LENGTH_LONG
-            ).show();
-
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
-        Log.d(
-                TAG,
-                "ID usuario: " + idUsuario
-                        + " | Token presente: true"
-        );
+        Log.d(TAG, "ID usuario: " + idUsuario + " | Token presente: true");
 
-        // CONSULTAMOS EL USUARIO MEDIANTE APISERVICE Y RETROFIC
-        ApiService apiService =
-                RetrofitClient.getClient(PerfilActivity.this)
-                        .create(ApiService.class);
+        // CONSULTAMOS EL USUARIO MEDIANTE APISERVICE Y RETROFIT
+        ApiService apiService = RetrofitClient.getClient(PerfilActivity.this)
+                .create(ApiService.class);
 
-        apiService.obtenerUsuario(
-                idUsuario,
-                "Bearer " + token
-        ).enqueue(new Callback<Usuario>() {
+        apiService.obtenerUsuario(idUsuario, "Bearer " + token)
+                .enqueue(new Callback<Usuario>() {
 
-            @Override
-            public void onResponse(
-                    Call<Usuario> call,
-                    Response<Usuario> response) {
+                    @Override
+                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                        Log.d(TAG, "Respuesta HTTP: " + response.code());
 
-                Log.d(
-                        TAG,
-                        "Respuesta HTTP: " + response.code()
-                );
+                        if (response.isSuccessful() && response.body() != null) {
+                            Usuario usuario = response.body();
+                            mostrarUsuario(usuario);
 
-                if (response.isSuccessful()
-                        && response.body() != null) {
+                        } else if (response.code() == 401) {
+                            mostrarError("Error 401: La sesión expiró o el token no es válido.");
+                        } else if (response.code() == 403) {
+                            mostrarError("Error 403: No tenés permisos para consultar este perfil.");
+                        } else if (response.code() == 404) {
+                            mostrarError("Error 404: No se encontró el usuario.");
+                        } else {
+                            mostrarError("Error al obtener el perfil. Código HTTP: "
+                                    + response.code());
+                        }
+                    }
 
-                    Usuario usuario = response.body();
-
-                    mostrarUsuario(usuario);
-
-                } else if (response.code() == 401) {
-
-                    mostrarError(
-                            "Error 401: La sesión expiró o el token no es válido."
-                    );
-
-                } else if (response.code() == 403) {
-
-                    mostrarError(
-                            "Error 403: No tenés permisos para consultar este perfil."
-                    );
-
-                } else if (response.code() == 404) {
-
-                    mostrarError(
-                            "Error 404: No se encontró el usuario."
-                    );
-
-                } else {
-
-                    mostrarError(
-                            "Error al obtener el perfil. Código HTTP: "
-                                    + response.code()
-                    );
-                }
-            }
-
-            @Override
-            public void onFailure(
-                    Call<Usuario> call,
-                    Throwable t) {
-
-                Log.e(TAG, "Error de conexión", t);
-
-                mostrarError(
-                        "Error de conexión con el servidor: "
-                                + t.getMessage()
-                );
-            }
-        });
+                    @Override
+                    public void onFailure(Call<Usuario> call, Throwable t) {
+                        Log.e(TAG, "Error de conexión", t);
+                        mostrarError("Error de conexión con el servidor: " + t.getMessage());
+                    }
+                });
     }
 
     // MOSTRAR DATOS DEL USUARIO
@@ -426,15 +421,10 @@ public class PerfilActivity extends AppCompatActivity {
         Integer rol = usuario.getRol();
 
         if (rol != null && rol == 10) {
-
             rolUsuario = "Administrador";
-
         } else if (rol != null && rol == 11) {
-
             rolUsuario = "Usuario estándar";
-
         } else if (rolUsuario == null || rolUsuario.isEmpty()) {
-
             rolUsuario = "Usuario";
         }
 
@@ -442,168 +432,107 @@ public class PerfilActivity extends AppCompatActivity {
 
         // CONSULTAR UBICACIÓN
         if (usuario.getUbicacion() != null) {
-
             buscarUbicacion(usuario.getUbicacion());
-
         } else {
-
             tvUbicacion.setText("Ubicación no disponible");
         }
 
         // CONSULTAR OFICIO
         if (usuario.getOficio() != null) {
-
             buscarOficio(usuario.getOficio());
-
         } else {
-
             tvOficio.setText("Sin oficio registrado");
         }
 
-        Log.d(
-                TAG,
-                "Datos del usuario cargados correctamente"
-        );
+        Log.d(TAG, "Datos del usuario cargados correctamente");
     }
 
     // OBTENER UBICACIÓN
     private void buscarUbicacion(int idUbicacion) {
 
-        ApiService apiService =
-                RetrofitClient.getClient(PerfilActivity.this)
-                        .create(ApiService.class);
+        ApiService apiService = RetrofitClient.getClient(PerfilActivity.this)
+                .create(ApiService.class);
 
-        apiService.obtenerUbicaciones().enqueue(
-                new Callback<List<Ubicacion>>() {
+        apiService.obtenerUbicaciones().enqueue(new Callback<List<Ubicacion>>() {
 
-                    @Override
-                    public void onResponse(
-                            Call<List<Ubicacion>> call,
-                            Response<List<Ubicacion>> response) {
+            @Override
+            public void onResponse(Call<List<Ubicacion>> call,
+                                   Response<List<Ubicacion>> response) {
 
-                        if (response.isSuccessful()
-                                && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null) {
+                    boolean encontrada = false;
 
-                            boolean encontrada = false;
+                    for (Ubicacion ubicacion : response.body()) {
+                        if (ubicacion.getId() == idUbicacion) {
+                            tvUbicacion.setText(ubicacion.getCiudad()
+                                    + ", " + ubicacion.getProvincia());
 
-                            for (Ubicacion ubicacion : response.body()) {
-
-                                if (ubicacion.getId() == idUbicacion) {
-
-                                    tvUbicacion.setText(
-                                            ubicacion.getCiudad()
-                                                    + ", "
-                                                    + ubicacion.getProvincia()
-                                    );
-
-                                    encontrada = true;
-                                    break;
-                                }
-                            }
-
-                            if (!encontrada) {
-
-                                tvUbicacion.setText(
-                                        "Ubicación no disponible"
-                                );
-                            }
-
-                        } else {
-
-                            Log.e(
-                                    TAG,
-                                    "Error al consultar ubicaciones: "
-                                            + response.code()
-                            );
-
-                            tvUbicacion.setText(
-                                    "Ubicación no disponible"
-                            );
+                            encontrada = true;
+                            break;
                         }
                     }
 
-                    @Override
-                    public void onFailure(
-                            Call<List<Ubicacion>> call,
-                            Throwable t) {
-
-                        Log.e(
-                                TAG,
-                                "Error al consultar ubicación",
-                                t
-                        );
-
-                        tvUbicacion.setText(
-                                "Ubicación no disponible"
-                        );
+                    if (!encontrada) {
+                        tvUbicacion.setText("Ubicación no disponible");
                     }
-                });
+
+                } else {
+                    Log.e(TAG, "Error al consultar ubicaciones: " + response.code());
+                    tvUbicacion.setText("Ubicación no disponible");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Ubicacion>> call, Throwable t) {
+                Log.e(TAG, "Error al consultar ubicación", t);
+                tvUbicacion.setText("Ubicación no disponible");
+            }
+        });
     }
 
     // OBTENER OFICIO
     private void buscarOficio(int idOficio) {
 
-        ApiService apiService =
-                RetrofitClient.getClient(PerfilActivity.this)
-                        .create(ApiService.class);
+        ApiService apiService = RetrofitClient.getClient(PerfilActivity.this)
+                .create(ApiService.class);
 
-        apiService.obtenerOficios().enqueue(
-                new Callback<List<Oficio>>() {
+        apiService.obtenerOficios().enqueue(new Callback<List<Oficio>>() {
 
-                    @Override
-                    public void onResponse(
-                            Call<List<Oficio>> call,
-                            Response<List<Oficio>> response) {
+            @Override
+            public void onResponse(Call<List<Oficio>> call,
+                                   Response<List<Oficio>> response) {
 
-                        if (response.isSuccessful()
-                                && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null) {
+                    boolean encontrado = false;
 
-                            boolean encontrado = false;
-
-                            for (Oficio oficio : response.body()) {
-
-                                if (oficio.getId() == idOficio) {
-
-                                    tvOficio.setText(
-                                            oficio.getNombre_oficio()
-                                    );
-
-                                    encontrado = true;
-                                    break;
-                                }
-                            }
-
-                            if (!encontrado) {
-                                tvOficio.setText("Oficio no disponible");
-                            }
-
-                        } else {
-                            tvOficio.setText("Oficio no disponible");
+                    for (Oficio oficio : response.body()) {
+                        if (oficio.getId() == idOficio) {
+                            tvOficio.setText(oficio.getNombre_oficio());
+                            encontrado = true;
+                            break;
                         }
                     }
 
-                    @Override
-                    public void onFailure(
-                            Call<List<Oficio>> call,
-                            Throwable t) {
-
-                        Log.e(TAG, "Error al consultar oficio", t);
-
+                    if (!encontrado) {
                         tvOficio.setText("Oficio no disponible");
                     }
+
+                } else {
+                    tvOficio.setText("Oficio no disponible");
                 }
-        );
+            }
+
+            @Override
+            public void onFailure(Call<List<Oficio>> call, Throwable t) {
+                Log.e(TAG, "Error al consultar oficio", t);
+                tvOficio.setText("Oficio no disponible");
+            }
+        });
     }
 
     // MOSTRAR ERRORES
     private void mostrarError(String mensaje) {
-
         Log.e(TAG, mensaje);
-
-        Toast.makeText(
-                PerfilActivity.this,
-                mensaje,
-                Toast.LENGTH_LONG
-        ).show();
+        Toast.makeText(PerfilActivity.this, mensaje, Toast.LENGTH_LONG).show();
     }
 }
