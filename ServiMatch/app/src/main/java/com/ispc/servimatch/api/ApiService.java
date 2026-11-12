@@ -6,6 +6,7 @@ import com.ispc.servimatch.model.Oficio;
 import com.ispc.servimatch.model.Usuario;
 import com.ispc.servimatch.model.LoginRequest;
 import com.ispc.servimatch.model.LoginResponse;
+import com.ispc.servimatch.model.Rol;
 
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,7 @@ public interface ApiService {
             @Body Map<String, Object> datos
     );
 
-    // ELIMINAR USUARIO (SOLO ADMINISTRADOR)
+    // ELIMINAR USUARIO (ADMINISTRADOR O PROPIETARIO DE LA CUENTA)
     @DELETE("api/usuarios/{id}/")
     Call<Void> eliminarUsuario(
             @Path("id") int id,
@@ -132,4 +133,8 @@ public interface ApiService {
     Call<Map<String, Object>> enviarContacto(
             @Body Map<String, String> datos
     );
+
+    // OBTENER ROLES
+    @GET("api/roles/")
+    Call<List<Rol>> obtenerRoles();
 }
