@@ -68,6 +68,36 @@
 
     </LinearLayout>
 
+    <!-- GUARDADOS -->
+    <LinearLayout
+        android:id="@+id/navGuardados"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iconGuardados"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_bookmark_border"
+            android:contentDescription="Guardados"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/textoGuardados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Guardados"
+            android:textColor="@color/texto_secundario"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
     <!-- PERFIL -->
     <LinearLayout
         android:id="@+id/navPerfil"
