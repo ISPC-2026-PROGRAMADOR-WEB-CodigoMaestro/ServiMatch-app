@@ -35,7 +35,7 @@ public class PerfilActivity extends AppCompatActivity {
 
     private View barraNavigation, barraNavigationAdmin;
 
-    private LinearLayout navInicio, navContacto, navPerfil;
+    private LinearLayout navInicio, navContacto, navGuardados,  navPerfil;
     private LinearLayout navInicioAdmin, navUsuariosAdmin, navPerfilAdmin, navSalirAdmin;
 
     private int idUsuario, idRol;
@@ -71,7 +71,7 @@ public class PerfilActivity extends AppCompatActivity {
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
         // MOSTRAR BOTÓN SOLO A USUARIOS ESTÁNDAR
-        if (idRol == 11) {
+        if (idRol == 10 || idRol == 11) {
             btnEliminarPerfil.setVisibility(View.VISIBLE);
         } else {
             btnEliminarPerfil.setVisibility(View.GONE);
@@ -84,6 +84,7 @@ public class PerfilActivity extends AppCompatActivity {
         // VINCULAR MENÚ ESTÁNDAR
         navInicio = findViewById(R.id.navInicio);
         navContacto = findViewById(R.id.navContacto);
+        navGuardados = findViewById(R.id.navGuardados);
         navPerfil = findViewById(R.id.navPerfil);
 
         // VINCULAR MENÚ ADMINISTRADOR
@@ -198,6 +199,21 @@ public class PerfilActivity extends AppCompatActivity {
             finish();
         });
 
+
+        // GUARDADOS
+        navGuardados.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilActivity.this, FavoritosActivity.class);
+
+            intent.putExtra("usuario", nombreUsuario);
+            intent.putExtra("id_usuario", idUsuario);
+            intent.putExtra("id_rol", idRol);
+            intent.putExtra("rol", rolUsuario);
+
+            startActivity(intent);
+            finish();
+        });
+
+
         // PERFIL
         navPerfil.setOnClickListener(v -> {
             Toast.makeText(this, "Ya estás en Perfil", Toast.LENGTH_SHORT).show();
@@ -241,7 +257,7 @@ public class PerfilActivity extends AppCompatActivity {
             return;
         }
 
-        if (idRol != 11) {
+        if (idRol != 10 && idRol != 11) {
             mostrarError("No tenés permisos para eliminar esta cuenta.");
             return;
         }
@@ -275,7 +291,7 @@ public class PerfilActivity extends AppCompatActivity {
         int idRol = preferencias.getInt("id_rol", -1);
 
         // VALIDAR USUARIO ESTÁNDAR
-        if (idRol != 11 || idSesion <= 0 || idUsuario != idSesion) {
+        if (idRol != 10 && idRol != 11 || idSesion <= 0 || idUsuario != idSesion) {
             mostrarError("No tenés permisos para realizar esta eliminación.");
             return;
         }

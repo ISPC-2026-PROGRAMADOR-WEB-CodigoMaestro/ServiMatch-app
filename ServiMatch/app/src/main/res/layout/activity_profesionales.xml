@@ -68,6 +68,8 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tvSinProfesionales"
                     android:layout_width="match_parent"
@@ -88,8 +90,6 @@
                     android:orientation="vertical" />
 
             </LinearLayout>
-
-        </LinearLayout>
 
     </ScrollView>
 

@@ -1,4 +1,3 @@
-
 package com.ispc.servimatch;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,14 +8,21 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView;
+import android.content.Intent;
 
 import com.ispc.servimatch.api.ApiService;
 import com.ispc.servimatch.api.RetrofitClient;
 import com.ispc.servimatch.model.Oficio;
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Usuario;
+import com.ispc.servimatch.model.Favorito;
 
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,18 +33,80 @@ public class ProfesionalesActivity extends AppCompatActivity {
     private TextView tvTituloOficio;
     private TextView tvSinProfesionales;
     private LinearLayout contenedorProfesionales;
-
     private String oficioSeleccionado;
+    private final Set<Integer> favoritosGuardados = new HashSet<>();
+    private ApiService apiService;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesionales);
 
+        apiService = RetrofitClient.getClient(this)
+                .create(ApiService.class);
+
+        SharedPreferences preferencias = getSharedPreferences(
+                "ServiMatchSesion",
+                MODE_PRIVATE
+        );
+
+        token = preferencias.getString("access_token", null);
+
         tvTituloOficio = findViewById(R.id.tvTituloOficio);
         tvSinProfesionales = findViewById(R.id.tvSinProfesionales);
-        contenedorProfesionales =
-                findViewById(R.id.contenedorProfesionales);
+        contenedorProfesionales = findViewById(R.id.contenedorProfesionales);
+
+
+        // RECUPERAR DATOS DEL USUARIO
+        String usuario = getIntent().getStringExtra("usuario");
+        int idUsuario = preferencias.getInt("id_usuario", -1);
+        int idRol = preferencias.getInt("id_rol", -1);
+        String rol = getIntent().getStringExtra("rol");
+
+        // NAVEGACIÓN - INICIO
+        findViewById(R.id.navInicio).setOnClickListener(v -> {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.putExtra("usuario", usuario);
+            intent.putExtra("id_usuario", idUsuario);
+            intent.putExtra("id_rol", idRol);
+            intent.putExtra("rol", rol);
+            startActivity(intent);
+            finish();
+        });
+
+        // NAVEGACIÓN - CONTACTO
+        findViewById(R.id.navContacto).setOnClickListener(v -> {
+            Intent intent = new Intent(this, ContactoActivity.class);
+            intent.putExtra("usuario", usuario);
+            intent.putExtra("id_usuario", idUsuario);
+            intent.putExtra("id_rol", idRol);
+            intent.putExtra("rol", rol);
+            startActivity(intent);
+            finish();
+        });
+
+        // NAVEGACIÓN - GUARDADOS
+        findViewById(R.id.navGuardados).setOnClickListener(v -> {
+            Intent intent = new Intent(this, FavoritosActivity.class);
+            intent.putExtra("usuario", usuario);
+            intent.putExtra("id_usuario", idUsuario);
+            intent.putExtra("id_rol", idRol);
+            intent.putExtra("rol", rol);
+            startActivity(intent);
+            finish();
+        });
+
+        // NAVEGACIÓN - PERFIL
+        findViewById(R.id.navPerfil).setOnClickListener(v -> {
+            Intent intent = new Intent(this, PerfilActivity.class);
+            intent.putExtra("usuario", usuario);
+            intent.putExtra("id_usuario", idUsuario);
+            intent.putExtra("id_rol", idRol);
+            intent.putExtra("rol", rol);
+            startActivity(intent);
+            finish();
+        });
 
         oficioSeleccionado =
                 getIntent().getStringExtra("oficio");
@@ -183,9 +251,10 @@ public class ProfesionalesActivity extends AppCompatActivity {
                 if (response.isSuccessful()
                         && response.body() != null) {
 
-                    buscarUbicaciones(
-                            idOficio,
-                            response.body()
+                    List<Usuario> profesionales = response.body();
+
+                    obtenerFavoritos(() ->
+                            buscarUbicaciones(idOficio, profesionales)
                     );
 
                 } else if (response.code() == 401) {
@@ -249,11 +318,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         if (response.isSuccessful()
                                 && response.body() != null) {
 
-                            mostrarProfesionales(
-                                    idOficio,
-                                    usuarios,
-                                    response.body()
-                            );
+                            mostrarProfesionales(idOficio, usuarios, response.body());
 
                         } else {
 
@@ -275,6 +340,50 @@ public class ProfesionalesActivity extends AppCompatActivity {
                                 "Error de conexión con el servidor",
                                 Toast.LENGTH_LONG
                         ).show();
+                    }
+                });
+    }
+
+
+    // OBTENER FAVORITOS DEL USUARIO
+    private void obtenerFavoritos(Runnable alFinalizar) {
+
+        apiService.obtenerFavoritos("Bearer " + token)
+                .enqueue(new Callback<List<Favorito>>() {
+
+                    @Override
+                    public void onResponse(
+                            Call<List<Favorito>> call,
+                            Response<List<Favorito>> response) {
+
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            favoritosGuardados.clear();
+
+                            for (Favorito favorito : response.body()) {
+                                favoritosGuardados.add(favorito.getProfesional());
+                            }
+                        } else {
+                            Toast.makeText(
+                                    ProfesionalesActivity.this,
+                                    "No se pudieron cargar los favoritos",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+
+                        alFinalizar.run();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Favorito>> call, Throwable t) {
+
+                        Toast.makeText(
+                                ProfesionalesActivity.this,
+                                "Error de conexión al obtener favoritos",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        alFinalizar.run();
                     }
                 });
     }
@@ -323,6 +432,17 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         false
                 );
 
+                ImageView imgFavorito =
+                        card.findViewById(R.id.imgFavorito);
+
+                int idProfesional = usuario.getId();
+
+                actualizarIconoFavorito(imgFavorito, idProfesional);
+
+                imgFavorito.setOnClickListener(v -> {
+                    cambiarFavorito(idProfesional, imgFavorito);
+                });
+
                 TextView tvNombreProfesional =
                         card.findViewById(
                                 R.id.tvNombreProfesional
@@ -342,6 +462,8 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         card.findViewById(
                                 R.id.tvIconoOficio
                         );
+
+
 
                 tvNombreProfesional.setText(
                         usuario.getNombre()
@@ -427,6 +549,97 @@ public class ProfesionalesActivity extends AppCompatActivity {
             default:
                 tvIconoOficio.setText("🛠");
                 break;
+        }
+    }
+
+
+    // ACTUALIZAR ÍCONO DE FAVORITOS
+    private void actualizarIconoFavorito(ImageView imagen, int idProfesional) {
+
+        if (favoritosGuardados.contains(idProfesional)) {
+            imagen.setImageResource(R.drawable.ic_bookmark);
+            imagen.setContentDescription("Quitar de favoritos");
+        } else {
+            imagen.setImageResource(R.drawable.ic_bookmark_border);
+            imagen.setContentDescription("Agregar a favoritos");
+        }
+    }
+
+    // AGREGAR O ELIMINAR FAVORITO
+    private void cambiarFavorito(int idProfesional, ImageView imagen) {
+
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Iniciá sesión nuevamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (imagen.getTag() != null) {
+            return;
+        }
+
+        imagen.setTag(true);
+
+        if (favoritosGuardados.contains(idProfesional)) {
+
+            apiService.eliminarFavorito(idProfesional, "Bearer " + token)
+                    .enqueue(new Callback<Void>() {
+
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            imagen.setTag(null);
+
+                            if (response.isSuccessful()) {
+                                favoritosGuardados.remove(idProfesional);
+                                actualizarIconoFavorito(imagen, idProfesional);
+                            } else {
+                                Toast.makeText(ProfesionalesActivity.this,
+                                        "No se pudo eliminar el favorito",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            imagen.setTag(null);
+                            Toast.makeText(ProfesionalesActivity.this,
+                                    "Error de conexión",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        } else {
+
+            Map<String, Integer> datos = new HashMap<>();
+            datos.put("profesional", idProfesional);
+
+            apiService.agregarFavorito("Bearer " + token, datos)
+                    .enqueue(new Callback<Favorito>() {
+
+                        @Override
+                        public void onResponse(
+                                Call<Favorito> call,
+                                Response<Favorito> response) {
+
+                            imagen.setTag(null);
+
+                            if (response.isSuccessful()) {
+                                favoritosGuardados.add(idProfesional);
+                                actualizarIconoFavorito(imagen, idProfesional);
+                            } else {
+                                Toast.makeText(ProfesionalesActivity.this,
+                                        "No se pudo guardar el favorito",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Favorito> call, Throwable t) {
+                            imagen.setTag(null);
+                            Toast.makeText(ProfesionalesActivity.this,
+                                    "Error de conexión",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 }

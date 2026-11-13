@@ -93,15 +93,15 @@
 
     </LinearLayout>
 
-    <!-- FLECHA PARA VER EL PROFESIONAL -->
-    <TextView
-        android:id="@+id/tvVerProfesional"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="›"
-        android:textColor="@color/texto_principal"
-        android:textSize="36sp"
-        android:textStyle="bold" />
+    <!-- AGREGAR A FAVORITOS -->
+    <ImageView
+        android:id="@+id/imgFavorito"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_bookmark_border"
+        android:contentDescription="Agregar a favoritos"
+        android:clickable="true"
+        android:focusable="true" />
 
 </LinearLayout>
