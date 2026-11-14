@@ -63,7 +63,6 @@ public class FavoritosActivity extends AppCompatActivity {
         textoGuardados.setTextColor(colorSeleccionado);
         textoGuardados.setTypeface(null, Typeface.BOLD);
 
-
         // BARRA DE NAVEGACIÓN
 
         // INICIO
@@ -237,10 +236,12 @@ public class FavoritosActivity extends AppCompatActivity {
             TextView tvNombre = card.findViewById(R.id.tvNombreProfesional);
             TextView tvOficio = card.findViewById(R.id.tvOficioProfesional);
             TextView tvUbicacion = card.findViewById(R.id.tvUbicacionProfesional);
+            TextView tvContacto = card.findViewById(R.id.tvContactoProfesional);
             TextView tvIcono = card.findViewById(R.id.tvIconoOficio);
             ImageView imgFavorito = card.findViewById(R.id.imgFavorito);
 
             tvNombre.setText(usuario.getNombre());
+            tvContacto.setText(usuario.getEmail());
             tvOficio.setText(nombreOficio);
             tvUbicacion.setText(nombreUbicacion);
             tvIcono.setText(obtenerIconoOficio(nombreOficio));
