@@ -463,10 +463,17 @@ public class ProfesionalesActivity extends AppCompatActivity {
                                 R.id.tvIconoOficio
                         );
 
-
+                TextView tvContactoProfesional =
+                        card.findViewById(
+                                R.id.tvContactoProfesional
+                        );
 
                 tvNombreProfesional.setText(
                         usuario.getNombre()
+                );
+
+                tvContactoProfesional.setText(
+                        usuario.getEmail()
                 );
 
                 tvOficioProfesional.setText(
