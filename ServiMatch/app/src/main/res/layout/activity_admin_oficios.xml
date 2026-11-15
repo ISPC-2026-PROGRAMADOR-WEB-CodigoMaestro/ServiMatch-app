@@ -71,6 +71,34 @@
                 android:textColor="@color/texto_principal"
                 android:layout_marginBottom="20dp"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Ícono del oficio"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_principal"/>
+
+            <Spinner
+                android:id="@+id/spinnerIconoOficioAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="12dp"
+                android:spinnerMode="dropdown"
+                android:contentDescription="Seleccionar ícono del oficio"/>
+
+            <TextView
+                android:id="@+id/txtIconoSeleccionadoAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="🛠"
+                android:textSize="38sp"
+                android:contentDescription="Vista previa del ícono seleccionado"/>
+
+
             <Button
                 android:id="@+id/btnGuardarOficioAdmin"
                 android:layout_width="match_parent"
