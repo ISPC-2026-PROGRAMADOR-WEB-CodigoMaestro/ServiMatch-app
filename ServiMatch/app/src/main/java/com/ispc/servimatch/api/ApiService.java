@@ -101,8 +101,8 @@ public interface ApiService {
             @Body Usuario usuario
     );
 
-    // ACTUALIZAR USUARIO (ADMINISTRADOR)
-    @PATCH("api/usuarios/{id}/")
+    // ACTUALIZAR USUARIO (ADMINISTRADOR O PROPIETARIO DE LA CUENTA)
+    @PUT("api/usuarios/{id}/")
     Call<Usuario> actualizarUsuario(
             @Path("id") int id,
             @Header("Authorization") String token,
