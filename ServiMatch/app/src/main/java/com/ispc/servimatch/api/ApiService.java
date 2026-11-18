@@ -7,6 +7,7 @@ import com.ispc.servimatch.model.LoginRequest;
 import com.ispc.servimatch.model.LoginResponse;
 import com.ispc.servimatch.model.Rol;
 import com.ispc.servimatch.model.Favorito;
+import com.ispc.servimatch.model.ExperienciaLaboral;
 
 import java.util.List;
 import java.util.Map;
@@ -155,6 +156,41 @@ public interface ApiService {
     // ELIMINAR PROFESIONAL DE FAVORITOS
     @DELETE("api/favoritos/{id}/")
     Call<Void> eliminarFavorito(
+            @Path("id") int id,
+            @Header("Authorization") String token
+    );
+
+    // OBTENER MIS EXPERIENCIAS LABORALES
+    @GET("api/experiencias-laborales/")
+    Call<List<ExperienciaLaboral>> obtenerExperiencias(
+            @Header("Authorization") String token
+    );
+
+    // REGISTRAR EXPERIENCIA LABORAL
+    @POST("api/experiencias-laborales/")
+    Call<ExperienciaLaboral> registrarExperiencia(
+            @Header("Authorization") String token,
+            @Body Map<String, Object> datos
+    );
+
+    // MODIFICAR EXPERIENCIA LABORAL
+    @PUT("api/experiencias-laborales/{id}/")
+    Call<ExperienciaLaboral> actualizarExperiencia(
+            @Path("id") int id,
+            @Header("Authorization") String token,
+            @Body Map<String, Object> datos
+    );
+
+    // ELIMINAR EXPERIENCIA LABORAL
+    @DELETE("api/experiencias-laborales/{id}/")
+    Call<Void> eliminarExperiencia(
+            @Path("id") int id,
+            @Header("Authorization") String token
+    );
+
+    // OBTENER EXPERIENCIAS DE UN PROFESIONAL
+    @GET("api/profesionales/{id}/experiencias/")
+    Call<List<ExperienciaLaboral>> obtenerExperienciasProfesional(
             @Path("id") int id,
             @Header("Authorization") String token
     );

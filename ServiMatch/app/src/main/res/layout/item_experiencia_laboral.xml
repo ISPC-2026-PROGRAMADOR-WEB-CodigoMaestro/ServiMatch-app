@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@color/blanco"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- PUESTO DE TRABAJO -->
+    <TextView
+        android:id="@+id/tvPuestoExperiencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Puesto de trabajo"
+        android:textColor="@color/texto_principal"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- EMPRESA -->
+    <TextView
+        android:id="@+id/tvEmpresaExperiencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Empresa"
+        android:textColor="@color/texto_secundario"
+        android:textSize="16sp" />
+
+    <!-- PERÍODO LABORAL -->
+    <TextView
+        android:id="@+id/tvPeriodoExperiencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="2022 - Actualidad"
+        android:textColor="@color/texto_secundario"
+        android:textSize="14sp" />
+
+    <!-- DESCRIPCIÓN -->
+    <TextView
+        android:id="@+id/tvDescripcionExperiencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Descripción de la experiencia laboral"
+        android:textColor="@color/texto_principal"
+        android:textSize="15sp" />
+
+    <!-- ACCIONES -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <!-- BOTÓN EDITAR -->
+        <Button
+            android:id="@+id/btnEditarExperiencia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/color_primario_oscuro"
+            android:text="Editar"
+            android:textColor="@color/blanco" />
+
+        <!-- BOTÓN ELIMINAR -->
+        <Button
+            android:id="@+id/btnEliminarExperiencia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rojo"
+            android:text="Eliminar"
+            android:textColor="@color/blanco" />
+
+    </LinearLayout>
+
+</LinearLayout>

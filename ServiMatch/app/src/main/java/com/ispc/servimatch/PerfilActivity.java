@@ -31,7 +31,7 @@ public class PerfilActivity extends AppCompatActivity {
     private static final String TAG = "SERVIMATCH_PERFIL";
 
     private TextView tvNombre, tvRol, tvEmail, tvDni, tvUbicacion, tvOficio;
-    private Button btnEditarPerfil, btnEliminarPerfil, btnCerrarSesion;
+    private Button btnEditarPerfil, btnExperienciaLaboral, btnEliminarPerfil, btnCerrarSesion;
 
     private View barraNavigation, barraNavigationAdmin;
 
@@ -67,6 +67,7 @@ public class PerfilActivity extends AppCompatActivity {
         tvOficio = findViewById(R.id.tvOficio);
 
         btnEditarPerfil = findViewById(R.id.btnEditarPerfil);
+        btnExperienciaLaboral = findViewById(R.id.btnExperienciaLaboral);
         btnEliminarPerfil = findViewById(R.id.btnEliminarPerfil);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
@@ -115,6 +116,17 @@ public class PerfilActivity extends AppCompatActivity {
 
             Intent intent = new Intent(PerfilActivity.this, EditarPerfilActivity.class);
             intent.putExtra("id_usuario", idUsuario);
+            startActivity(intent);
+        });
+
+        // BOTÓN EXPERIENCIA LABORAL
+        btnExperienciaLaboral.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    PerfilActivity.this,
+                    ExperienciaLaboralActivity.class
+            );
+
             startActivity(intent);
         });
 
@@ -454,10 +466,17 @@ public class PerfilActivity extends AppCompatActivity {
         }
 
         // CONSULTAR OFICIO
-        if (usuario.getOficio() != null) {
+        if (usuario.getOficio() != null && idRol == 11) {
             buscarOficio(usuario.getOficio());
+            btnExperienciaLaboral.setVisibility(View.VISIBLE);
         } else {
-            tvOficio.setText("Sin oficio registrado");
+            if (usuario.getOficio() != null) {
+                buscarOficio(usuario.getOficio());
+            } else {
+                tvOficio.setText("Sin oficio registrado");
+            }
+
+            btnExperienciaLaboral.setVisibility(View.GONE);
         }
 
         Log.d(TAG, "Datos del usuario cargados correctamente");
