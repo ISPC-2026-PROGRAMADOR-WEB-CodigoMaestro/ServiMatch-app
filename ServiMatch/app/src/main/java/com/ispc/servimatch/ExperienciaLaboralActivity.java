@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
+import android.app.AlertDialog;
 
 import com.ispc.servimatch.api.ApiService;
 import com.ispc.servimatch.api.RetrofitClient;
@@ -241,25 +242,111 @@ public class ExperienciaLaboralActivity extends AppCompatActivity {
             // BOTÓN EDITAR EXPERIENCIA
             btnEditarExperiencia.setOnClickListener(v -> {
 
-                Toast.makeText(
+                Intent intent = new Intent(
                         ExperienciaLaboralActivity.this,
-                        "Próximamente podrás editar esta experiencia",
-                        Toast.LENGTH_SHORT
-                ).show();
+                        EditarExperienciaActivity.class
+                );
+
+                // ENVIAR DATOS DE LA EXPERIENCIA
+                intent.putExtra("id_experiencia", experiencia.getId());
+                intent.putExtra("puesto", experiencia.getPuesto());
+                intent.putExtra("empresa", experiencia.getEmpresa());
+                intent.putExtra("anio_inicio", experiencia.getAnio_inicio());
+
+                if (experiencia.getAnio_fin() != null) {
+                    intent.putExtra("anio_fin", experiencia.getAnio_fin().intValue());
+                }
+
+                intent.putExtra("descripcion", experiencia.getDescripcion());
+
+                startActivity(intent);
             });
 
             // BOTÓN ELIMINAR EXPERIENCIA
             btnEliminarExperiencia.setOnClickListener(v -> {
-
-                Toast.makeText(
-                        ExperienciaLaboralActivity.this,
-                        "Próximamente podrás eliminar esta experiencia",
-                        Toast.LENGTH_SHORT
-                ).show();
+                confirmarEliminacion(experiencia);
             });
 
             // AGREGAR TARJETA AL CONTENEDOR
             contenedorExperiencias.addView(card);
         }
+    }
+
+    // CONFIRMAR ELIMINACIÓN
+    private void confirmarEliminacion(ExperienciaLaboral experiencia) {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar experiencia laboral")
+                .setMessage(
+                        "¿Seguro que querés eliminar la experiencia \""
+                                + experiencia.getPuesto()
+                                + "\"?"
+                )
+                .setPositiveButton(
+                        "Eliminar",
+                        (dialog, which) ->
+                                eliminarExperiencia(experiencia.getId())
+                )
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    // ELIMINAR EXPERIENCIA LABORAL
+    private void eliminarExperiencia(int id) {
+
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "No hay una sesión activa", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        apiService.eliminarExperiencia(
+                id,
+                "Bearer " + token
+        ).enqueue(new Callback<Void>() {
+
+            @Override
+            public void onResponse(
+                    Call<Void> call,
+                    Response<Void> response) {
+
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(
+                            ExperienciaLaboralActivity.this,
+                            "Experiencia eliminada correctamente",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    obtenerExperiencias();
+
+                } else {
+
+                    Toast.makeText(
+                            ExperienciaLaboralActivity.this,
+                            "Error al eliminar experiencia: " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<Void> call,
+                    Throwable t) {
+
+                if (!isFinishing() && !isDestroyed()) {
+
+                    Toast.makeText(
+                            ExperienciaLaboralActivity.this,
+                            "Error de conexión al eliminar experiencia",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        });
     }
 }

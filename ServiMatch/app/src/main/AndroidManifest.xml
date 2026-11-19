@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".EditarExperienciaActivity"
+            android:exported="false" />
+        <activity
             android:name=".DetalleExperienciaActivity"
             android:exported="false" />
         <activity
