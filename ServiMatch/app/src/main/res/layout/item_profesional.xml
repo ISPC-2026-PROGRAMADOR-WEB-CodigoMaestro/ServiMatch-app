@@ -120,14 +120,14 @@
 
     </LinearLayout>
 
-    <!-- AGREGAR A FAVORITOS -->
+    <!-- VER EXPERIENCIA LABORAL -->
     <ImageView
         android:id="@+id/imgFavorito"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:padding="10dp"
-        android:src="@drawable/ic_bookmark_border"
-        android:contentDescription="Agregar a favoritos"
+        android:src="@drawable/ic_arrow_forward"
+        android:contentDescription="Ver experiencia laboral"
         android:clickable="true"
         android:focusable="true" />
 

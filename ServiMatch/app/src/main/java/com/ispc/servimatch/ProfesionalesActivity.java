@@ -432,15 +432,22 @@ public class ProfesionalesActivity extends AppCompatActivity {
                         false
                 );
 
-                ImageView imgFavorito =
+                // VER EXPERIENCIA LABORAL DEL PROFESIONAL
+                ImageView imgVerExperiencia =
                         card.findViewById(R.id.imgFavorito);
 
                 int idProfesional = usuario.getId();
 
-                actualizarIconoFavorito(imgFavorito, idProfesional);
+                imgVerExperiencia.setOnClickListener(v -> {
+                    Intent intent = new Intent(
+                            ProfesionalesActivity.this,
+                            DetalleExperienciaActivity.class
+                    );
 
-                imgFavorito.setOnClickListener(v -> {
-                    cambiarFavorito(idProfesional, imgFavorito);
+                    intent.putExtra("id_profesional", idProfesional);
+                    intent.putExtra("nombre_profesional", usuario.getNombre());
+
+                    startActivity(intent);
                 });
 
                 TextView tvNombreProfesional =
