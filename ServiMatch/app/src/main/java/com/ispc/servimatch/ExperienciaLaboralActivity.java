@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.ispc.servimatch.api.ApiService;
 import com.ispc.servimatch.api.RetrofitClient;
@@ -57,11 +58,13 @@ public class ExperienciaLaboralActivity extends AppCompatActivity {
         // BOTÓN AGREGAR EXPERIENCIA
         btnAgregarExperiencia.setOnClickListener(v -> {
 
-            Toast.makeText(
+            Intent intent = new Intent(
                     ExperienciaLaboralActivity.this,
-                    "Próximamente podrás agregar experiencias laborales",
-                    Toast.LENGTH_SHORT
-            ).show();
+                    RegistrarExperienciaActivity.class
+            );
+
+            startActivity(intent);
+            finish();
         });
     }
 
