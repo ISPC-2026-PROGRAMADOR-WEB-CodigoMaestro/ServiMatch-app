@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_principal">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ENCABEZADO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_primario_oscuro"
+                android:gravity="center"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Editar experiencia laboral"
+                    android:textColor="@color/blanco"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- FORMULARIO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="Modificá tu experiencia laboral"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!-- PUESTO DE TRABAJO -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Puesto de trabajo"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etPuestoEditar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: Electricista"
+                    android:inputType="textCapSentences"
+                    android:maxLength="100"
+                    android:singleLine="true"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textColor="@color/texto_secundario" />
+
+                <!-- EMPRESA -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Empresa"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etEmpresaEditar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: Instalaciones Córdoba"
+                    android:inputType="textCapSentences"
+                    android:maxLength="100"
+                    android:singleLine="true"
+                    android:textColor="@color/texto_secundario"
+                    android:textColorHint="@color/texto_secundario" />
+
+                <!-- AÑO DE INICIO -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Año de inicio"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAnioInicioEditar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: 2022"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:singleLine="true"
+                    android:textColor="@color/texto_secundario"
+                    android:textColorHint="@color/texto_secundario" />
+
+                <!-- AÑO DE FINALIZACIÓN -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Año de finalización (opcional)"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAnioFinEditar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: 2025"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:singleLine="true"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textColor="@color/texto_secundario" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Dejá este campo vacío si todavía trabajás allí."
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <!-- DESCRIPCIÓN -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Descripción"
+                    android:textColor="@color/texto_principal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etDescripcionEditar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:hint="Describí las tareas que realizaste..."
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="500"
+                    android:minLines="2"
+                    android:textColor="@color/texto_secundario"
+                    android:textColorHint="@color/texto_secundario" />
+
+                <!-- BOTÓN GUARDAR CAMBIOS -->
+                <Button
+                    android:id="@+id/btnGuardarCambiosExperiencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:backgroundTint="@color/color_primario_oscuro"
+                    android:text="Guardar cambios"
+                    android:textColor="@color/blanco" />
+
+                <!-- BOTÓN CANCELAR -->
+                <Button
+                    android:id="@+id/btnCancelarEditarExperiencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/color_primario"
+                    android:text="Cancelar"
+                    android:textColor="@color/blanco" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
