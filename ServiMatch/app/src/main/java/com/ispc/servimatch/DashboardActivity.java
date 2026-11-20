@@ -32,7 +32,6 @@ public class DashboardActivity extends AppCompatActivity {
     // BARRA DE NAVEGACIÓN
     private LinearLayout navInicio;
     private LinearLayout navContacto;
-    private LinearLayout navGuardados;
     private LinearLayout navPerfil;
 
     // ELEMENTOS VISUALES DE INICIO
@@ -64,7 +63,6 @@ public class DashboardActivity extends AppCompatActivity {
         // BARRA DE NAVEGACIÓN
         navInicio = findViewById(R.id.navInicio);
         navContacto = findViewById(R.id.navContacto);
-        navGuardados = findViewById(R.id.navGuardados);
         navPerfil = findViewById(R.id.navPerfil);
         iconInicio = findViewById(R.id.iconInicio);
         textoInicio = findViewById(R.id.textoInicio);
@@ -95,25 +93,6 @@ public class DashboardActivity extends AppCompatActivity {
                     DashboardActivity.this,
                     ContactoActivity.class
             );
-
-            if (usuario != null) {
-                intent.putExtra("usuario", usuario);
-            }
-
-            intent.putExtra("id_usuario", idUsuario);
-            intent.putExtra("id_rol", idRol);
-
-            if (rol != null) {
-                intent.putExtra("rol", rol);
-            }
-
-            startActivity(intent);
-        });
-
-
-        // NAVEGACIÓN - GUARDADOS
-        navGuardados.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, FavoritosActivity.class);
 
             if (usuario != null) {
                 intent.putExtra("usuario", usuario);

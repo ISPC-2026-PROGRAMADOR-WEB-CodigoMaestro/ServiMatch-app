@@ -24,7 +24,6 @@ public class ContactoActivity extends AppCompatActivity {
 
     private LinearLayout navInicio;
     private LinearLayout navContacto;
-    private LinearLayout navGuardados;
     private LinearLayout navPerfil;
 
     private TextView iconContacto;
@@ -42,7 +41,6 @@ public class ContactoActivity extends AppCompatActivity {
         // Vincular elementos de navegacion
         navInicio = findViewById(R.id.navInicio);
         navContacto = findViewById(R.id.navContacto);
-        navGuardados = findViewById(R.id.navGuardados);
         navPerfil = findViewById(R.id.navPerfil);
 
         iconContacto = findViewById(R.id.iconContacto);
@@ -218,23 +216,6 @@ public class ContactoActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT
             ).show();
 
-        });
-
-        // Navegacion - Guardados
-        navGuardados.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    ContactoActivity.this,
-                    FavoritosActivity.class
-            );
-
-            intent.putExtra("usuario", usuario);
-            intent.putExtra("id_usuario", idUsuario);
-            intent.putExtra("id_rol", idRol);
-            intent.putExtra("rol", rol);
-
-            startActivity(intent);
-            finish();
         });
 
         // Navegacion - Perfil
