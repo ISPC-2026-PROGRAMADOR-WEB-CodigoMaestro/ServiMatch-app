@@ -35,7 +35,7 @@ public class PerfilActivity extends AppCompatActivity {
 
     private View barraNavigation, barraNavigationAdmin;
 
-    private LinearLayout navInicio, navContacto, navGuardados,  navPerfil;
+    private LinearLayout navInicio, navContacto, navPerfil;
     private LinearLayout navInicioAdmin, navUsuariosAdmin, navPerfilAdmin, navSalirAdmin;
 
     private int idUsuario, idRol;
@@ -85,7 +85,6 @@ public class PerfilActivity extends AppCompatActivity {
         // VINCULAR MENÚ ESTÁNDAR
         navInicio = findViewById(R.id.navInicio);
         navContacto = findViewById(R.id.navContacto);
-        navGuardados = findViewById(R.id.navGuardados);
         navPerfil = findViewById(R.id.navPerfil);
 
         // VINCULAR MENÚ ADMINISTRADOR
@@ -210,21 +209,6 @@ public class PerfilActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-
-
-        // GUARDADOS
-        navGuardados.setOnClickListener(v -> {
-            Intent intent = new Intent(PerfilActivity.this, FavoritosActivity.class);
-
-            intent.putExtra("usuario", nombreUsuario);
-            intent.putExtra("id_usuario", idUsuario);
-            intent.putExtra("id_rol", idRol);
-            intent.putExtra("rol", rolUsuario);
-
-            startActivity(intent);
-            finish();
-        });
-
 
         // PERFIL
         navPerfil.setOnClickListener(v -> {

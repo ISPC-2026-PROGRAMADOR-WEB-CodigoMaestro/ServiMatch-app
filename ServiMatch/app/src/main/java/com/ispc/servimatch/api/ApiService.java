@@ -6,7 +6,6 @@ import com.ispc.servimatch.model.Usuario;
 import com.ispc.servimatch.model.LoginRequest;
 import com.ispc.servimatch.model.LoginResponse;
 import com.ispc.servimatch.model.Rol;
-import com.ispc.servimatch.model.Favorito;
 import com.ispc.servimatch.model.ExperienciaLaboral;
 
 import java.util.List;
@@ -138,27 +137,6 @@ public interface ApiService {
     // OBTENER ROLES
     @GET("api/roles/")
     Call<List<Rol>> obtenerRoles();
-
-
-    // OBTENER FAVORITOS
-    @GET("api/favoritos/")
-    Call<List<Favorito>> obtenerFavoritos(
-            @Header("Authorization") String token
-    );
-
-    // AGREGAR PROFESIONAL A FAVORITOS
-    @POST("api/favoritos/")
-    Call<Favorito> agregarFavorito(
-            @Header("Authorization") String token,
-            @Body Map<String, Integer> datos
-    );
-
-    // ELIMINAR PROFESIONAL DE FAVORITOS
-    @DELETE("api/favoritos/{id}/")
-    Call<Void> eliminarFavorito(
-            @Path("id") int id,
-            @Header("Authorization") String token
-    );
 
     // OBTENER MIS EXPERIENCIAS LABORALES
     @GET("api/experiencias-laborales/")

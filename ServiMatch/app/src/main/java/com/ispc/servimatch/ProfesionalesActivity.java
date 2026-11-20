@@ -16,13 +16,8 @@ import com.ispc.servimatch.api.RetrofitClient;
 import com.ispc.servimatch.model.Oficio;
 import com.ispc.servimatch.model.Ubicacion;
 import com.ispc.servimatch.model.Usuario;
-import com.ispc.servimatch.model.Favorito;
 
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.HashMap;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +29,6 @@ public class ProfesionalesActivity extends AppCompatActivity {
     private TextView tvSinProfesionales;
     private LinearLayout contenedorProfesionales;
     private String oficioSeleccionado;
-    private final Set<Integer> favoritosGuardados = new HashSet<>();
     private ApiService apiService;
     private String token;
 
@@ -78,17 +72,6 @@ public class ProfesionalesActivity extends AppCompatActivity {
         // NAVEGACIÓN - CONTACTO
         findViewById(R.id.navContacto).setOnClickListener(v -> {
             Intent intent = new Intent(this, ContactoActivity.class);
-            intent.putExtra("usuario", usuario);
-            intent.putExtra("id_usuario", idUsuario);
-            intent.putExtra("id_rol", idRol);
-            intent.putExtra("rol", rol);
-            startActivity(intent);
-            finish();
-        });
-
-        // NAVEGACIÓN - GUARDADOS
-        findViewById(R.id.navGuardados).setOnClickListener(v -> {
-            Intent intent = new Intent(this, FavoritosActivity.class);
             intent.putExtra("usuario", usuario);
             intent.putExtra("id_usuario", idUsuario);
             intent.putExtra("id_rol", idRol);
@@ -253,9 +236,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
 
                     List<Usuario> profesionales = response.body();
 
-                    obtenerFavoritos(() ->
-                            buscarUbicaciones(idOficio, profesionales)
-                    );
+                    buscarUbicaciones(idOficio, profesionales);
 
                 } else if (response.code() == 401) {
 
@@ -344,50 +325,6 @@ public class ProfesionalesActivity extends AppCompatActivity {
                 });
     }
 
-
-    // OBTENER FAVORITOS DEL USUARIO
-    private void obtenerFavoritos(Runnable alFinalizar) {
-
-        apiService.obtenerFavoritos("Bearer " + token)
-                .enqueue(new Callback<List<Favorito>>() {
-
-                    @Override
-                    public void onResponse(
-                            Call<List<Favorito>> call,
-                            Response<List<Favorito>> response) {
-
-                        if (response.isSuccessful() && response.body() != null) {
-
-                            favoritosGuardados.clear();
-
-                            for (Favorito favorito : response.body()) {
-                                favoritosGuardados.add(favorito.getProfesional());
-                            }
-                        } else {
-                            Toast.makeText(
-                                    ProfesionalesActivity.this,
-                                    "No se pudieron cargar los favoritos",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                        }
-
-                        alFinalizar.run();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Favorito>> call, Throwable t) {
-
-                        Toast.makeText(
-                                ProfesionalesActivity.this,
-                                "Error de conexión al obtener favoritos",
-                                Toast.LENGTH_SHORT
-                        ).show();
-
-                        alFinalizar.run();
-                    }
-                });
-    }
-
     // MOSTRAR PROFESIONALES DEL OFICIO SELECCIONADO
     private void mostrarProfesionales(
             int idOficio,
@@ -434,7 +371,7 @@ public class ProfesionalesActivity extends AppCompatActivity {
 
                 // VER EXPERIENCIA LABORAL DEL PROFESIONAL
                 ImageView imgVerExperiencia =
-                        card.findViewById(R.id.imgFavorito);
+                        card.findViewById(R.id.imgVerExperiencia);
 
                 int idProfesional = usuario.getId();
 
@@ -563,97 +500,6 @@ public class ProfesionalesActivity extends AppCompatActivity {
             default:
                 tvIconoOficio.setText("🛠");
                 break;
-        }
-    }
-
-
-    // ACTUALIZAR ÍCONO DE FAVORITOS
-    private void actualizarIconoFavorito(ImageView imagen, int idProfesional) {
-
-        if (favoritosGuardados.contains(idProfesional)) {
-            imagen.setImageResource(R.drawable.ic_bookmark);
-            imagen.setContentDescription("Quitar de favoritos");
-        } else {
-            imagen.setImageResource(R.drawable.ic_bookmark_border);
-            imagen.setContentDescription("Agregar a favoritos");
-        }
-    }
-
-    // AGREGAR O ELIMINAR FAVORITO
-    private void cambiarFavorito(int idProfesional, ImageView imagen) {
-
-        if (token == null || token.isEmpty()) {
-            Toast.makeText(this, "Iniciá sesión nuevamente", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (imagen.getTag() != null) {
-            return;
-        }
-
-        imagen.setTag(true);
-
-        if (favoritosGuardados.contains(idProfesional)) {
-
-            apiService.eliminarFavorito(idProfesional, "Bearer " + token)
-                    .enqueue(new Callback<Void>() {
-
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            imagen.setTag(null);
-
-                            if (response.isSuccessful()) {
-                                favoritosGuardados.remove(idProfesional);
-                                actualizarIconoFavorito(imagen, idProfesional);
-                            } else {
-                                Toast.makeText(ProfesionalesActivity.this,
-                                        "No se pudo eliminar el favorito",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            imagen.setTag(null);
-                            Toast.makeText(ProfesionalesActivity.this,
-                                    "Error de conexión",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-        } else {
-
-            Map<String, Integer> datos = new HashMap<>();
-            datos.put("profesional", idProfesional);
-
-            apiService.agregarFavorito("Bearer " + token, datos)
-                    .enqueue(new Callback<Favorito>() {
-
-                        @Override
-                        public void onResponse(
-                                Call<Favorito> call,
-                                Response<Favorito> response) {
-
-                            imagen.setTag(null);
-
-                            if (response.isSuccessful()) {
-                                favoritosGuardados.add(idProfesional);
-                                actualizarIconoFavorito(imagen, idProfesional);
-                            } else {
-                                Toast.makeText(ProfesionalesActivity.this,
-                                        "No se pudo guardar el favorito",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Favorito> call, Throwable t) {
-                            imagen.setTag(null);
-                            Toast.makeText(ProfesionalesActivity.this,
-                                    "Error de conexión",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
         }
     }
 }
