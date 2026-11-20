@@ -96,6 +96,14 @@ public class RegistrarExperienciaActivity extends AppCompatActivity {
             return;
         }
 
+        // VALIDAR PUESTO DE TRABAJO
+        if (!puesto.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+")) {
+            Toast.makeText(this,
+                    "El puesto de trabajo solo puede contener letras",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // VALIDAR FECHAS
         if (inicio.length() != 4 || (!fin.isEmpty() && fin.length() != 4)) {
             Toast.makeText(this, "Ingresá años válidos de 4 dígitos", Toast.LENGTH_SHORT).show();

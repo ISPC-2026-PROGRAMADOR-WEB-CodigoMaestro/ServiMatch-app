@@ -50,25 +50,50 @@
                 android:padding="24dp">
 
                 <!-- PUESTO DE TRABAJO -->
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Puesto de trabajo"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                <EditText
-                    android:id="@+id/etPuestoExperiencia"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Puesto de trabajo"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:hint="Ej: Electricista"
-                    android:inputType="textCapSentences"
-                    android:textColorHint="@color/texto_secundario"
-                    android:textColor="@color/texto_principal"
-                    android:maxLength="100" />
+                    android:layout_marginBottom="20dp">
+
+                    <EditText
+                        android:id="@+id/etPuestoExperiencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ej: Electricista"
+                        android:inputType="textCapSentences"
+                        android:textColorHint="@color/texto_secundario"
+                        android:textColor="@color/texto_principal"
+                        android:maxLength="100"
+                        android:paddingEnd="32dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="12dp"
+                        android:text="*"
+                        android:textColor="@color/rojo"
+                        android:textSize="18sp"
+                        android:importantForAccessibility="no" />
+
+                </FrameLayout>
 
                 <!-- EMPRESA -->
                 <TextView
@@ -80,16 +105,33 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/etEmpresaExperiencia"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:hint="Ej: Instalaciones Córdoba"
-                    android:inputType="textCapWords"
-                    android:textColorHint="@color/texto_secundario"
-                    android:textColor="@color/texto_principal"
-                    android:maxLength="100" />
+                    android:layout_marginBottom="20dp">
+
+                    <EditText
+                        android:id="@+id/etEmpresaExperiencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ej: Instalaciones Córdoba"
+                        android:inputType="textCapWords"
+                        android:textColorHint="@color/texto_secundario"
+                        android:textColor="@color/texto_principal"
+                        android:maxLength="100"
+                        android:paddingEnd="32dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="12dp"
+                        android:text="*"
+                        android:textColor="@color/rojo"
+                        android:textSize="18sp"
+                        android:importantForAccessibility="no" />
+
+                </FrameLayout>
 
                 <!-- AÑO DE INICIO -->
                 <TextView
@@ -101,16 +143,33 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/etAnioInicio"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:hint="Ej: 2022"
-                    android:inputType="number"
-                    android:textColorHint="@color/texto_secundario"
-                    android:textColor="@color/texto_principal"
-                    android:maxLength="4" />
+                    android:layout_marginBottom="20dp">
+
+                    <EditText
+                        android:id="@+id/etAnioInicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ej: 2022"
+                        android:inputType="number"
+                        android:textColorHint="@color/texto_secundario"
+                        android:textColor="@color/texto_principal"
+                        android:maxLength="4"
+                        android:paddingEnd="32dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="12dp"
+                        android:text="*"
+                        android:textColor="@color/rojo"
+                        android:textSize="18sp"
+                        android:importantForAccessibility="no" />
+
+                </FrameLayout>
 
                 <!-- AÑO DE FINALIZACIÓN -->
                 <TextView
@@ -151,17 +210,33 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <!-- DESCRIPCIÓN -->
-                <EditText
-                    android:id="@+id/etDescripcionExperiencia"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    android:hint="Describí las tareas que realizaste..."
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:textColorHint="@color/texto_secundario"
-                    android:textColor="@color/texto_principal"
-                    android:maxLength="500" />
+                    android:layout_marginBottom="24dp">
+
+                    <EditText
+                        android:id="@+id/etDescripcionExperiencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Describí las tareas que realizaste..."
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:textColorHint="@color/texto_secundario"
+                        android:textColor="@color/texto_principal"
+                        android:maxLength="500"
+                        android:paddingEnd="32dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="12dp"
+                        android:text="*"
+                        android:textColor="@color/rojo"
+                        android:textSize="18sp"
+                        android:importantForAccessibility="no" />
+
+                </FrameLayout>
 
                 <!-- BOTÓN GUARDAR -->
                 <Button
