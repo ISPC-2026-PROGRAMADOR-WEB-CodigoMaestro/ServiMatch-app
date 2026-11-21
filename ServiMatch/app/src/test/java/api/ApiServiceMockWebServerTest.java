@@ -1,5 +1,8 @@
 package api;
 
+import com.ispc.servimatch.model.LoginRequest;
+import com.ispc.servimatch.model.LoginResponse;
+import com.ispc.servimatch.model.Oficio;
 import com.ispc.servimatch.model.Ubicacion;
 
 import org.junit.After;
@@ -94,6 +97,75 @@ public class ApiServiceMockWebServerTest {
         assertEquals(500, response.code());
         assertFalse(response.isSuccessful());
         assertNull(response.body());
+        assertNotNull(response.errorBody());
+    }
+
+    // AUT - NET-03: Login exitoso - HTTP 200
+    @Test
+    public void login_respuesta200() throws IOException {
+
+        // Arrange: simular respuesta exitosa
+        mockWebServer.enqueue(
+                new MockResponse()
+                        .setResponseCode(200)
+                        .setBody("{\"id\":1,\"nombre\":\"Carlos\",\"access\":\"token123\"}")
+        );
+
+        // Act: realizar login
+        LoginRequest datos = new LoginRequest("test@gmail.com", "123456");
+
+        Response<LoginResponse> response =
+                apiService.login(datos).execute();
+
+        // Assert: verificar resultado
+        assertEquals(200, response.code());
+        assertTrue(response.isSuccessful());
+        assertNotNull(response.body());
+    }
+
+    // AUT - NET-04: Consulta de oficios - HTTP 200
+
+    @Test
+    public  void obtenerOficios_respuesta200() throws  IOException {
+
+        // Arrange: simular respuesta exitosa
+        mockWebServer.enqueue(
+                new MockResponse()
+                        .setResponseCode(200)
+                        .setBody("[{\"id\":1,\"nombre\":\"Electricista\"}]")
+        );
+
+        // Act: Obtener oficios
+        Response<List<Oficio>> response =
+                apiService.obtenerOficios().execute();
+
+        // Assert: verificar resultados
+        assertEquals(200, response.code());
+        assertTrue(response.isSuccessful());
+        assertNotNull(response.body());
+        assertEquals(1, response.body().size());
+    }
+
+    // AUT - NET-05: Login Invalido - HTTP 401
+    @Test
+    public  void login_respuesta401() throws IOException {
+
+        // Arrange: simular credenciales incorrectas
+        mockWebServer.enqueue(
+                new MockResponse()
+                .setResponseCode(401)
+                        .setBody("\"error\":\"Credenciales incorrectas\"}")
+        );
+
+        // Act: realizar login
+        LoginRequest datos = new LoginRequest("test@gmail.com", "incorrecta");
+
+        Response<LoginResponse> response =
+                apiService.login(datos).execute();
+
+        // Assert: verificar resultado
+        assertEquals(401, response.code());
+        assertFalse(response.isSuccessful());
         assertNotNull(response.errorBody());
     }
 }
