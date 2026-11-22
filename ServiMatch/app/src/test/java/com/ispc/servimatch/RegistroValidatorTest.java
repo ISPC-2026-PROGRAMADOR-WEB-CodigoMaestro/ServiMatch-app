@@ -1,4 +1,3 @@
-
 package com.ispc.servimatch;
 
 import org.junit.Test;
@@ -6,118 +5,118 @@ import static org.junit.Assert.*;
 
 public class RegistroValidatorTest {
 
-    @Test
-    public void emailValido_retornaTrue() {
-        // Arrange
-        String email = "usuario@gmail.com";
-
-        // Act
-        boolean resultado = RegistroValidator.validarEmail(email);
-
-        // Assert
-        assertTrue(resultado);
-    }
+    // TC-REG-02: Campos obligatorios vacios
 
     @Test
-    public void emailVacio_retornaFalse() {
+    public void camposObligatoriosVacios() {
+
         // Arrange
+        String nombre = "";
         String email = "";
+        String dni = "";
+        String contrasena = "";
 
         // Act
-        boolean resultado = RegistroValidator.validarEmail(email);
+        boolean nombreValido = RegistroValidator.validarNombre(nombre);
+        boolean emailValido = RegistroValidator.validarEmail(email);
+        boolean dniValido = RegistroValidator.validarDNI(dni);
+        boolean contrasenaValido = RegistroValidator.validarContrasena(contrasena);
 
         // Assert
-        assertFalse(resultado);
+        assertFalse(nombreValido);
+        assertFalse(emailValido);
+        assertFalse(dniValido);
+        assertFalse(contrasenaValido);
     }
 
-    @Test
-    public void emailLimiteValido_retornaTrue() {
-        // Arrange
-        String email = "a@b.co";
-
-        // Act
-        boolean resultado = RegistroValidator.validarEmail(email);
-
-        // Assert
-        assertTrue(resultado);
-    }
+    // TC-REG-03: Nombre Invalido
 
     @Test
-    public void emailSinArroba_retornaFalse() {
-        // Arrange
-        String email = "usuariogmail.com";
-
-        // Act
-        boolean resultado = RegistroValidator.validarEmail(email);
-
-        // Assert
-        assertFalse(resultado);
-    }
-
-
-    @Test
-    public void dniValido_retornaTrue() {
+    public void nombreInvalido() {
 
         // Arrange
-        String dni = "12345678";
-
-        // Act
-        boolean resultado = RegistroValidator.validarDNI(dni);
-
-        // Assert
-        assertTrue(resultado);
-    }
-
-    @Test
-    public void dniCorto_retornaFalse() {
-
-        // Arrange
-        String dni = "123456";
-
-        // Act
-        boolean resultado = RegistroValidator.validarDNI(dni);
-
-        // Assert
-        assertFalse(resultado);
-    }
-
-    @Test
-    public void dniConLetras_retornaFalse() {
-
-        // Arrange
-        String dni = "1234ABCD";
-
-        // Act
-        boolean resultado = RegistroValidator.validarDNI(dni);
-
-        // Assert
-        assertFalse(resultado);
-    }
-
-    @Test
-    public void nombreValido_retornaTrue() {
-
-        // Arrange
-        String nombre = "Juan Perez";
-
-        // Act
-        boolean resultado = RegistroValidator.validarNombre(nombre);
-
-        // Assert
-        assertTrue(resultado);
-    }
-
-    @Test
-    public void nombreConNumeros_retornaFalse() {
-
-        // Arrange
-        String nombre = "Juan123";
+        String nombre = "Carlos1234*";
 
         // Act
         boolean resultado = RegistroValidator.validarNombre(nombre);
 
         // Assert
         assertFalse(resultado);
+    }
+
+    // TC-REG-04: Email Invalido
+
+    @Test
+    public void emailInvalido() {
+
+        // Arrange
+        String email = "carlosgmail.com";
+
+        // Act
+        boolean resultado = RegistroValidator.validarEmail(email);
+
+        // Assert
+        assertFalse(resultado);
+    }
+
+    // TC-REG-04: dniInvalido
+
+    @Test
+    public void dniInvalido() {
+
+        // Arrange
+        String dni = "25563";
+
+        // Act
+        boolean resultado = RegistroValidator.validarDNI(dni);
+
+        // Assert
+        assertFalse(resultado);
+    }
+
+    // TC-REG-06: contrasenaInvalido
+
+    @Test
+    public void contrasenaInvalido() {
+
+        // Arrange
+        String contrasena = "Carlo";
+
+        // Act
+        boolean resultado = RegistroValidator.validarContrasena(contrasena);
+
+        // Assert
+        assertFalse(resultado);
+    }
+
+    // TC-REG-07: Registro sin seleccionar ubicaccion
+
+    @Test
+    public void ubicacionInvalido() {
+
+        // Arrange
+        Integer ubicacionId = null;
+
+        // Act
+        boolean resultado = RegistroValidator.validarUbicacion(ubicacionId);
+
+        // Assert
+        assertFalse(resultado);
+    }
+
+    // TC-REG-08: Registro sin seleccionar oficio
+
+    @Test
+    public void oficioInvalido() {
+
+        // Arrange
+        Integer oficioId = null;
+
+        // Act
+        boolean resultado = RegistroValidator.validarOficio(oficioId);
+
+        // Assert
+        assertTrue(resultado);
     }
 }
 

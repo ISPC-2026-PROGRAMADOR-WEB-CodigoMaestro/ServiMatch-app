@@ -1,11 +1,14 @@
-
 package com.ispc.servimatch;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -16,13 +19,22 @@ public class LoginViewModelTest {
     public InstantTaskExecutorRule rule =
             new InstantTaskExecutorRule();
 
+    @Mock
     private LoginRepository repository;
+
     private LoginViewModel viewModel;
+
+    private AutoCloseable mocks;
 
     @Before
     public void setUp() {
-        repository = mock(LoginRepository.class);
+        mocks = MockitoAnnotations.openMocks(this);
         viewModel = new LoginViewModel(repository);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        mocks.close();
     }
 
     @Test
