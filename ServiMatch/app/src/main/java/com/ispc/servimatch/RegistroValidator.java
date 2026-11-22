@@ -1,4 +1,3 @@
-
 package com.ispc.servimatch;
 
 public class RegistroValidator {
@@ -54,5 +53,14 @@ public class RegistroValidator {
         return tieneMayuscula && tieneNumero && tieneCaracterEspecial;
     }
 
+    public static boolean validarUbicacion(Integer ubicacionId) {
+
+        return ubicacionId != null && ubicacionId > 0;
+    }
+
+    public static boolean validarOficio(Integer oficioId) {
+
+        return  oficioId == null || oficioId > 0;
+    }
 }
 

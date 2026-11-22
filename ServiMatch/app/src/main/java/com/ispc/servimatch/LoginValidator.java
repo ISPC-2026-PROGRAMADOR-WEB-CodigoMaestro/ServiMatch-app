@@ -1,4 +1,3 @@
-
 package com.ispc.servimatch;
 
 public class LoginValidator {
