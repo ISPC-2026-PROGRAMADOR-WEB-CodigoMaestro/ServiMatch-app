@@ -223,7 +223,8 @@
     <FrameLayout
         android:id="@+id/contenedorNavegacionPerfil"
         android:layout_width="0dp"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -233,7 +234,7 @@
             android:id="@+id/barraNavigation"
             layout="@layout/barra_navigation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <!-- BARRA DE NAVEGACIÓN ADMINISTRADOR -->
@@ -241,7 +242,7 @@
             android:id="@+id/barraNavigationAdmin"
             layout="@layout/barra_navigation_admin"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
     </FrameLayout>

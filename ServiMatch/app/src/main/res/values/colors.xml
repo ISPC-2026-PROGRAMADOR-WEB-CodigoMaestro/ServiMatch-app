@@ -10,11 +10,11 @@
 
     <!-- Textos -->
     <color name="texto_principal">#212121</color>
-    <color name="texto_secundario">#757575</color>
+    <color name="texto_secundario">#595959</color>
 
     <!-- Formularios -->
     <color name="fondo_input">#FFFFFF</color>
-    <color name="borde_input">#BDBDBD</color>
+    <color name="borde_input">#757575</color>
 
     <!-- Colores generales -->
     <color name="blanco">#FFFFFF</color>
