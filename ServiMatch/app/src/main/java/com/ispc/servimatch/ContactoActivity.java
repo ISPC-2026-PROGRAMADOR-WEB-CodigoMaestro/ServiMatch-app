@@ -53,11 +53,11 @@ public class ContactoActivity extends AppCompatActivity {
 
         // Marcar Contacto como seleccionado
         iconContacto.setTextColor(
-                getResources().getColor(R.color.color_primario)
+                getResources().getColor(R.color.color_primario_oscuro)
         );
 
         textoContacto.setTextColor(
-                getResources().getColor(R.color.color_primario)
+                getResources().getColor(R.color.color_primario_oscuro)
         );
 
         textoContacto.setTypeface(null, Typeface.BOLD);
